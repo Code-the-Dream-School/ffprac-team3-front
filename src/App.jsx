@@ -24,17 +24,20 @@ function App() {
   const LandingPage = () => {
     return (
       <>
-      <h1>Pet Project</h1>
-        <Link to='/mission'>
-          Mission
-        </Link>
-        <Link to='/adopt'>
-          Adopt
-        </Link>
-        <Link to='/faq'>
-          FAQ
-        </Link>
-        {message ? <h3>back end active</h3> : <h3>back end inactive</h3>}
+        <div className='nav'>
+          <h1>Pet Project</h1>
+          <Link to='/mission'>
+            Mission
+          </Link>
+          <Link to='/adopt'>
+            Adopt
+          </Link>
+          <Link to='/faq'>
+            FAQ
+          </Link>
+        </div>
+        {message ? <h3>back end active</h3>
+          : <h3 style={{ color: "red" }}>back end inactive</h3>}
       </>
     )
   }
