@@ -88,7 +88,7 @@ function App() {
     return (
       <>
         <Box sx={{ flexGrow: 1, }}>
-          <AppBar position="static">
+          <AppBar position="static" color="success">
             <Toolbar>
               <IconButton
                 size="large"
@@ -179,4 +179,4 @@ function App() {
   );
           }
 
-export default App
+export default App;
