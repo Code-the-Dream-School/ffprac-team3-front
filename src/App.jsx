@@ -88,7 +88,9 @@ function App() {
     return (
       <>
         <Box sx={{ flexGrow: 1, }}>
-          <AppBar position="static" color="success">
+          <AppBar position="static" style={ 
+                          { backgroundColor: "#81B29A",  
+                            borderColor: "#81B29A" }} >
             <Toolbar>
               <IconButton
                 size="large"
@@ -108,17 +110,21 @@ function App() {
                 sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
               >
                 Pet Project
-                <Link to='/mission'>
-                  <Button variant="contained" color="success">Mission</Button>
-               </Link>
+              
                <Link to='/mission'>
-                <Button variant="contained" color="success">Mission</Button>
+                <Button variant="contained" style={ 
+                          { backgroundColor: "#81B29A",  
+                            borderColor: "#81B29A" }}  >Mission</Button>
                 </Link>
                 <Link to='/adopt'>
-                <Button variant="contained" color="success">Adopt</Button>
+                <Button variant="contained" style={ 
+                          { backgroundColor: "#81B29A",  
+                            borderColor: "#81B29A" }} >Adopt</Button>
                 </Link>
                 <Link to='/faq'>
-                <Button variant="contained" color="success">FAQ</Button>
+                <Button variant="contained" style={ 
+                          { backgroundColor: "#81B29A",  
+                            borderColor: "#81B29A" }} >FAQ</Button>
                 </Link>
               </Typography>
               <Search>
