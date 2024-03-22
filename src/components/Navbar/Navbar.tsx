@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import PetsIcon from "@mui/icons-material/Pets";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import Divider from "@mui/material/Divider";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import styles from "./Navbar.module.css";
@@ -47,7 +48,12 @@ export const Navbar = () => {
             <Button color="inherit">
               <FavoriteIcon />
             </Button>
-
+            <Divider
+              color="#F8AF3F"
+              orientation="vertical"
+              variant="middle"
+              flexItem
+            />
             <Button
               color="inherit"
               id="account-button"
