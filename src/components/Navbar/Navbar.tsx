@@ -37,6 +37,7 @@ export const Navbar = () => {
             edge="start"
             color="inherit"
             aria-label="logo"
+            href="/"
           >
             <PetsIcon />
           </IconButton>
@@ -45,7 +46,7 @@ export const Navbar = () => {
           </Typography>
 
           <Stack direction="row" spacing={2}>
-            <Button color="inherit">
+            <Button color="inherit" href="/favorites">
               <FavoriteIcon />
             </Button>
             <Divider
@@ -85,29 +86,29 @@ export const Navbar = () => {
             }}
           >
             <MenuItem onClick={handleClose}>
-              <Link href="#" color="#0E2728" underline="none">
+              <Link href="/login" color="#0E2728" underline="none">
                 Login
               </Link>
             </MenuItem>
 
             {/* These options will be hidden when logged out */}
             <MenuItem onClick={handleClose}>
-              <Link href="#" color="#0E2728" underline="none">
+              <Link href="/about" color="#0E2728" underline="none">
                 About Me
               </Link>
             </MenuItem>
             <MenuItem onClick={handleClose}>
-              <Link href="#" color="#0E2728" underline="none">
+              <Link href="/adopter-profile" color="#0E2728" underline="none">
                 Adopter Profile
               </Link>
             </MenuItem>
             <MenuItem onClick={handleClose}>
-              <Link href="#" color="#0E2728" underline="none">
+              <Link href="/settings" color="#0E2728" underline="none">
                 Account Settings
               </Link>
             </MenuItem>
             <MenuItem onClick={handleClose}>
-              <Link href="#" color="#0E2728" underline="none">
+              <Link href="/logout" color="#0E2728" underline="none">
                 Logout
               </Link>
             </MenuItem>

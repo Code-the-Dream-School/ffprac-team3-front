@@ -19,11 +19,11 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <>
       <Navbar />
 
       {/* <h1>{message}</h1> */}
-    </div>
+    </>
   );
 }
 
