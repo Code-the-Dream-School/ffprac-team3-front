@@ -16,7 +16,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import Divider from "@mui/material/Divider";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import styles from "./Navbar.module.css";
 
 export const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -30,8 +29,15 @@ export const Navbar = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar className={styles.Toolbar}>
+      <AppBar
+        position="static"
+        style={{
+          backgroundColor: "#506c60",
+          borderColor: "none",
+          color: "#f7f4f0",
+        }}
+      >
+        <Toolbar>
           <IconButton
             size="large"
             edge="start"
