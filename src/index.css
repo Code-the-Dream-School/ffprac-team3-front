@@ -1,5 +1,3 @@
-.nav{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+:root {
+  background-color: #f4f2ea;
 }
