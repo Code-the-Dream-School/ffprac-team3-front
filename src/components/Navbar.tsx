@@ -4,14 +4,14 @@ import {
   AppBar,
   Toolbar,
   IconButton,
-  Typography,
   Stack,
   Button,
   Menu,
   MenuItem,
   Link,
+  MenuList,
 } from "@mui/material";
-import PetsIcon from "@mui/icons-material/Pets";
+import { PetLogoIcon } from "../img/PetLogoIcon";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Divider from "@mui/material/Divider";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -41,27 +41,29 @@ export const Navbar: React.FC = () => {
         }}
       >
         <Toolbar>
-          <Box>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="logo"
-              href="/"
+          <Button
+            aria-label="logo"
+            href="/"
+            sx={{
+              height: "1rem",
+              "&:hover": {
+                backgroundColor: "none",
+              },
+            }}
+          >
+            <PetLogoIcon
               sx={{
-                "&:hover": {
-                  bgcolor: "transparent",
-                },
+                fontSize: "7rem",
               }}
-            >
-              <PetsIcon />
-            </IconButton>
-          </Box>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            PetPals App
-          </Typography>
+            />
+          </Button>
 
-          <Stack direction="row" spacing={2}>
+          <Stack
+            direction="row"
+            spacing={2}
+            justifyContent="flex-end"
+            sx={{ flexGrow: 1 }}
+          >
             <IconButton
               id="favorites"
               color="inherit"
@@ -69,7 +71,7 @@ export const Navbar: React.FC = () => {
               sx={{
                 "&:hover": {
                   color: "#F8AF3F",
-                  bgcolor: "transparent",
+                  backgroundColor: "transparent",
                 },
               }}
             >
@@ -94,7 +96,7 @@ export const Navbar: React.FC = () => {
                 sx={{
                   "&:hover": {
                     color: "#F8AF3F",
-                    bgcolor: "transparent",
+                    backgroundColor: "transparent",
                   },
                 }}
               >
@@ -120,33 +122,36 @@ export const Navbar: React.FC = () => {
               horizontal: "right",
             }}
           >
-            <MenuItem onClick={handleClose}>
-              <Link href="/login" color="#0E2728" underline="none">
-                Login
-              </Link>
-            </MenuItem>
+            <MenuList dense>
+              <MenuItem onClick={handleClose}>
+                <Link href="/login" underline="none">
+                  Login
+                </Link>
+              </MenuItem>
 
-            {/* These options will be hidden when logged out */}
-            <MenuItem onClick={handleClose}>
-              <Link href="/about" color="#0E2728" underline="none">
-                About Me
-              </Link>
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <Link href="/adopter-profile" color="#0E2728" underline="none">
-                Adopter Profile
-              </Link>
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <Link href="/settings" color="#0E2728" underline="none">
-                Account Settings
-              </Link>
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <Link href="/logout" color="#0E2728" underline="none">
-                Logout
-              </Link>
-            </MenuItem>
+              {/* These options will be hidden when logged out */}
+              <MenuItem onClick={handleClose}>
+                <Link href="/about" color="#0E2728" underline="none">
+                  About Me
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Link href="/adopter-profile" color="#0E2728" underline="none">
+                  Adopter Profile
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Link href="/settings" color="#0E2728" underline="none">
+                  Account Settings
+                </Link>
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={handleClose}>
+                <Link href="/logout" color="#0E2728" underline="none">
+                  Logout
+                </Link>
+              </MenuItem>
+            </MenuList>
           </Menu>
         </Toolbar>
       </AppBar>

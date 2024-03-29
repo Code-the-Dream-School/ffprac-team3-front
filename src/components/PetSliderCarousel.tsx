@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import AspectRatio from "@mui/joy/AspectRatio";
 import { Button, IconButton, Typography, Box } from "@mui/material";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import FavoriteButton from "./FavoriteButton";
 import PetsIcon from "@mui/icons-material/Pets";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 interface Animal {
   id: number;
@@ -82,6 +84,38 @@ export const PetSliderCarousel: React.FC = () => {
     setFavoriteAnimals(updatedFavoriteAnimals);
   };
 
+  const [scrollPosition, setScrollPosition] = useState<number>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleScrollLeft = () => {
+    if (containerRef.current) {
+      const scrollWidth = containerRef.current.scrollWidth;
+      const scrollLeft = containerRef.current.scrollLeft;
+      const newScrollPosition = Math.max(0, scrollLeft - scrollWidth / 2);
+      containerRef.current.scrollTo({
+        left: newScrollPosition,
+        behavior: "smooth",
+      });
+      setScrollPosition(newScrollPosition);
+    }
+  };
+
+  const handleScrollRight = () => {
+    if (containerRef.current) {
+      const scrollWidth = containerRef.current.scrollWidth;
+      const scrollLeft = containerRef.current.scrollLeft;
+      const newScrollPosition = Math.min(
+        scrollWidth,
+        scrollLeft + scrollWidth / 2
+      );
+      containerRef.current.scrollTo({
+        left: newScrollPosition,
+        behavior: "smooth",
+      });
+      setScrollPosition(newScrollPosition);
+    }
+  };
+
   return (
     <>
       <Box sx={{ p: 5 }}>
@@ -97,6 +131,7 @@ export const PetSliderCarousel: React.FC = () => {
         </Typography>
 
         <Box
+          ref={containerRef}
           sx={{
             display: "flex",
             gap: 2,
@@ -187,6 +222,43 @@ export const PetSliderCarousel: React.FC = () => {
               </CardContent>
             </Card>
           ))}
+
+          <IconButton
+            onClick={handleScrollLeft}
+            disableRipple
+            sx={{
+              color: "#EE633E",
+              position: "absolute",
+              alignSelf: "center",
+              left: "1rem",
+              top: "50%",
+              transform: "translateY(-50%)",
+              "&:hover ": {
+                color: "#F8AF3F",
+                backgroundColor: "transparent",
+              },
+            }}
+          >
+            <ArrowBackIosIcon fontSize="large" />
+          </IconButton>
+          <IconButton
+            disableRipple
+            onClick={handleScrollRight}
+            sx={{
+              color: "#EE633E",
+              position: "absolute",
+              alignSelf: "center",
+              right: "1rem",
+              top: "50%",
+              transform: "translateY(-50%)",
+              "&:hover": {
+                color: "#F8AF3F",
+                backgroundColor: "transparent",
+              },
+            }}
+          >
+            <ArrowForwardIosIcon fontSize="large" />
+          </IconButton>
         </Box>
       </Box>
     </>
