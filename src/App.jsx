@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getAllData } from "./util/index";
 import { Navbar } from "./components/Navbar";
+import { HeroBanner } from "./components/HeroBanner/HeroBanner";
 import { PetSliderCarousel } from "./components/PetSliderCarousel";
 
 const URL = "http://localhost:8000/api/v1/";
@@ -22,6 +23,7 @@ function App() {
   return (
     <>
       <Navbar />
+      <HeroBanner />
       <PetSliderCarousel />
 
       {/* <h1>{message}</h1> */}

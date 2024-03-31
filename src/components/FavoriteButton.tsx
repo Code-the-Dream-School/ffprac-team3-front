@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
@@ -27,7 +27,7 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({
   };
 
   return (
-    <>
+    <Box>
       <IconButton
         sx={{
           color: isHovered ? "#f7f4f0" : "#F8AF3F",
@@ -53,7 +53,7 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({
           />
         )}
       </IconButton>
-    </>
+    </Box>
   );
 };
 

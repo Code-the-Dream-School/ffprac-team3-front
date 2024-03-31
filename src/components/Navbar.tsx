@@ -31,10 +31,10 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, mb: "6rem" }}>
       <AppBar
-        position="static"
-        style={{
+        position="fixed"
+        sx={{
           backgroundColor: "#506c60",
           borderColor: "none",
           color: "#f7f4f0",
