@@ -17,12 +17,15 @@ import Divider from "@mui/material/Divider";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
-export const Navbar = () => {
+export const Navbar: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
   const handleAccountClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -38,40 +41,66 @@ export const Navbar = () => {
         }}
       >
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="logo"
-            href="/"
-          >
-            <PetsIcon />
-          </IconButton>
+          <Box>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="logo"
+              href="/"
+              sx={{
+                "&:hover": {
+                  bgcolor: "transparent",
+                },
+              }}
+            >
+              <PetsIcon />
+            </IconButton>
+          </Box>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             PetPals App
           </Typography>
 
           <Stack direction="row" spacing={2}>
-            <Button color="inherit" href="/favorites">
+            <IconButton
+              id="favorites"
+              color="inherit"
+              href="/favorites"
+              sx={{
+                "&:hover": {
+                  color: "#F8AF3F",
+                  bgcolor: "transparent",
+                },
+              }}
+            >
               <FavoriteIcon />
-            </Button>
+            </IconButton>
+
             <Divider
               color="#F8AF3F"
               orientation="vertical"
               variant="middle"
               flexItem
             />
-            <Button
-              color="inherit"
-              id="account-button"
-              onClick={handleAccountClick}
-              aria-controls={open ? "account-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              endIcon={<KeyboardArrowDownIcon />}
-            >
-              <AccountCircleIcon />
-            </Button>
+            <>
+              <Button
+                color="inherit"
+                id="account-button"
+                onClick={handleAccountClick}
+                aria-controls={open ? "account-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+                endIcon={<KeyboardArrowDownIcon />}
+                sx={{
+                  "&:hover": {
+                    color: "#F8AF3F",
+                    bgcolor: "transparent",
+                  },
+                }}
+              >
+                <AccountCircleIcon />
+              </Button>
+            </>
           </Stack>
 
           <Menu
