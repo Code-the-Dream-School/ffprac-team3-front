@@ -3,7 +3,6 @@ import { getAllData } from "./util/index";
 import { Navbar } from "./components/Navbar";
 import { HeroBanner } from "./components/HeroBanner/HeroBanner";
 import { PetSliderCarousel } from "./components/PetSliderCarousel";
->>>>>>>>> Temporary merge branch 2
 
 const URL = "http://localhost:8000/api/v1/";
 
