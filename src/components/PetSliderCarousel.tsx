@@ -1,10 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import AspectRatio from "@mui/joy/AspectRatio";
-import { Button, IconButton, Typography, Box } from "@mui/material";
+import {
+  Container,
+  Box,
+  Typography,
+  IconButton,
+  Button,
+  CardActionArea,
+  CardActions,
+} from "@mui/material";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import FavoriteButton from "./FavoriteButton";
 import PetsIcon from "@mui/icons-material/Pets";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 interface Animal {
   id: number;
@@ -82,8 +92,53 @@ export const PetSliderCarousel: React.FC = () => {
     setFavoriteAnimals(updatedFavoriteAnimals);
   };
 
+  const [scrollPosition, setScrollPosition] = useState<number>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [showLeftScroll, setShowLeftScroll] = useState<boolean>(false);
+  const [showRightScroll, setShowRightScroll] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      const scrollWidth = containerRef.current.scrollWidth;
+      const clientWidth = containerRef.current.clientWidth;
+      setShowLeftScroll(containerRef.current.scrollLeft > 0);
+      setShowRightScroll(
+        scrollWidth > clientWidth + containerRef.current.scrollLeft
+      );
+    }
+  }, [scrollPosition]);
+
+  const handleScrollLeft = () => {
+    if (containerRef.current) {
+      const scrollWidth = containerRef.current.scrollWidth;
+      const scrollLeft = containerRef.current.scrollLeft;
+      const newScrollPosition = Math.max(0, scrollLeft - scrollWidth / 2);
+      containerRef.current.scrollTo({
+        left: newScrollPosition,
+        behavior: "smooth",
+      });
+      setScrollPosition(newScrollPosition);
+    }
+  };
+
+  const handleScrollRight = () => {
+    if (containerRef.current) {
+      const scrollWidth = containerRef.current.scrollWidth;
+      const scrollLeft = containerRef.current.scrollLeft;
+      const newScrollPosition = Math.min(
+        scrollWidth,
+        scrollLeft + scrollWidth / 2
+      );
+      containerRef.current.scrollTo({
+        left: newScrollPosition,
+        behavior: "smooth",
+      });
+      setScrollPosition(newScrollPosition);
+    }
+  };
+
   return (
-    <>
+    <Container fixed>
       <Box sx={{ p: 5 }}>
         <Typography
           variant="h3"
@@ -97,6 +152,7 @@ export const PetSliderCarousel: React.FC = () => {
         </Typography>
 
         <Box
+          ref={containerRef}
           sx={{
             display: "flex",
             gap: 2,
@@ -119,76 +175,117 @@ export const PetSliderCarousel: React.FC = () => {
               size="lg"
               sx={{ width: "auto" }}
             >
-              <>
-                <AspectRatio ratio="1" sx={{ width: 200 }}>
-                  <img
-                    src="https://https://cdn.mos.cms.futurecdn.net/ASHH5bDmsp6wnK6mEfZdcU-1200-80.jpg"
-                    srcSet="https://cdn.mos.cms.futurecdn.net/ASHH5bDmsp6wnK6mEfZdcU-1200-80.jpg 2x"
-                    loading="lazy"
-                    alt=""
-                  />
-                </AspectRatio>
+              <AspectRatio ratio="1" sx={{ width: 200 }}>
+                <img
+                  src="https://https://cdn.mos.cms.futurecdn.net/ASHH5bDmsp6wnK6mEfZdcU-1200-80.jpg"
+                  srcSet="https://cdn.mos.cms.futurecdn.net/ASHH5bDmsp6wnK6mEfZdcU-1200-80.jpg 2x"
+                  loading="lazy"
+                  alt=""
+                />
+              </AspectRatio>
 
-                <IconButton
-                  onClick={() => handleToggleFavorite(animal.id)}
-                  aria-label="heart icon"
-                  sx={{
-                    position: "absolute",
-                    top: "1.5rem",
-                    right: "1.5rem",
-                    "&:hover": {
-                      color: "#F8AF3F",
-                    },
-                  }}
-                >
-                  <FavoriteButton
-                    isFavorite={animal.isFavorite}
-                    onToggleFavorite={() => handleToggleFavorite(animal.id)}
-                  />
-                </IconButton>
-              </>
+              <IconButton
+                onClick={() => handleToggleFavorite(animal.id)}
+                aria-label="heart icon"
+                sx={{
+                  position: "absolute",
+                  top: "1.5rem",
+                  right: "1.5rem",
+                  "&:hover": {
+                    color: "#F8AF3F",
+                  },
+                }}
+              >
+                <FavoriteButton
+                  isFavorite={animal.isFavorite}
+                  onToggleFavorite={() => handleToggleFavorite(animal.id)}
+                />
+              </IconButton>
+
               <CardContent
                 sx={{
                   pb: 2,
                   color: "#0F2117",
                 }}
               >
-                <Typography variant="h6" component="h5">
-                  {animal.name}
-                </Typography>
+                <CardActionArea>
+                  <Typography variant="h6" component="h5">
+                    {animal.name}
+                  </Typography>
 
-                <Typography variant="overline">
-                  {animal.type} &nbsp;|&nbsp; {animal.age} &nbsp;|&nbsp;{" "}
-                  {animal.gender}
-                </Typography>
-                <Typography variant="body2">{animal.description}</Typography>
-
-                <Button
-                  href="/pet-profile"
-                  variant="contained"
-                  size="medium"
-                  aria-label="pet profile"
-                  endIcon={<PetsIcon />}
-                  sx={{
-                    mt: 2,
-                    px: 5,
-                    alignSelf: "center",
-                    fontWeight: 500,
-                    color: "#F7F4F0",
-                    backgroundColor: "#EE633E",
-
-                    "&:hover": {
-                      backgroundColor: "#F8AF3F",
-                    },
-                  }}
-                >
-                  Profile
-                </Button>
+                  <Typography variant="overline">
+                    {animal.type} &nbsp;|&nbsp; {animal.age} &nbsp;|&nbsp;{" "}
+                    {animal.gender}
+                  </Typography>
+                  <Typography variant="body2">{animal.description}</Typography>
+                </CardActionArea>
+                <CardActions>
+                  <Button
+                    href="/pet-profile"
+                    variant="contained"
+                    size="medium"
+                    aria-label="pet profile"
+                    endIcon={<PetsIcon />}
+                    sx={{
+                      mt: 2,
+                      px: 6,
+                      alignSelf: "center",
+                      fontWeight: 500,
+                      color: "#F7F4F0",
+                      backgroundColor: "#EE633E",
+                      "&:hover": {
+                        backgroundColor: "#F8AF3F",
+                      },
+                    }}
+                  >
+                    Profile
+                  </Button>
+                </CardActions>
               </CardContent>
             </Card>
           ))}
+          <Box
+            sx={{
+              display: "flex",
+            }}
+          >
+            <IconButton
+              onClick={handleScrollLeft}
+              disableRipple
+              sx={{
+                color: "#EE633E",
+                position: "absolute",
+                alignSelf: "center",
+                left: "2.5rem",
+                transform: "translateY(-50%)",
+                "&:hover ": {
+                  color: "#F8AF3F",
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
+              <ArrowBackIosIcon fontSize="large" />
+            </IconButton>
+            <IconButton
+              disableRipple
+              onClick={handleScrollRight}
+              sx={{
+                color: "#EE633E",
+                position: "absolute",
+                alignSelf: "center",
+                right: "2.5rem",
+                transform: "translateY(-50%)",
+                "&:hover": {
+                  color: "#F8AF3F",
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
+              <ArrowForwardIosIcon fontSize="large" />
+            </IconButton>
+          </Box>
         </Box>
       </Box>
-    </>
+    </Container>
   );
 };
