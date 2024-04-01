@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { getAllData } from "./util/index";
 import { Navbar } from "./components/Navbar/Navbar";
 import { HeroBanner } from "./components/HeroBanner/HeroBanner";
+import { Footer } from "./components/Footer";
+
 
 const URL = "http://localhost:8000/api/v1/";
 
@@ -23,6 +25,7 @@ function App() {
     <>
       <Navbar />
       <HeroBanner />
+      <Footer />
 
       {/* <h1>{message}</h1> */}
     </>
@@ -30,4 +33,3 @@ function App() {
 }
 
 export default App;
-     
