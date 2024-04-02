@@ -25,6 +25,7 @@ function App() {
       <Navbar />
       <HeroBanner />
       <PetSliderCarousel />
+      <Footer />
 
       {/* <h1>{message}</h1> */}
     </>
