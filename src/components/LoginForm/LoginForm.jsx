@@ -7,7 +7,6 @@ import {
   Button,
   Link,
 } from '@mui/material';
-import React, { useState } from 'react';
 
 export const LoginForm = () => {
   const handleSubmit = (event) => {
