@@ -5,6 +5,7 @@ import { HeroBanner } from './components/HeroBanner/HeroBanner';
 import { PetSliderCarousel } from './components/PetSliderCarousel';
 import { SignUpForm } from './components/SignUpForm/SignUpForm';
 import { Login } from '@mui/icons-material';
+import { LoginForm } from './components/LoginForm/LoginForm';
 
 const URL = 'http://localhost:8000/api/v1/';
 
@@ -25,7 +26,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <SignUpForm />
+      <LoginForm />
       {/* <HeroBanner />
       <PetSliderCarousel />
        */}
