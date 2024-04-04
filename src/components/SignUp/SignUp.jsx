@@ -7,19 +7,29 @@ import {
   Button,
   Link,
 } from '@mui/material';
+import React, { useState } from 'react';
 
 export const SignUp = () => {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('firstName'),
-      lastName: data.get('lastName'),
-      email: data.get('email'),
-      password: data.get('password'),
-      password2: data.get('password2'),
-      zipCode: data.get('zipCode'),
-    });
+
+    if (password === confirmPassword) {
+      const data = new FormData(event.currentTarget);
+      console.log({
+        name: data.get('firstName'),
+        lastName: data.get('lastName'),
+        email: data.get('email'),
+        password: data.get('password'),
+        password2: data.get('confirmPassword'),
+        zipCode: data.get('zipCode'),
+      });
+    } else {
+      setError('Passwords do not match');
+    }
   };
 
   return (
@@ -94,17 +104,23 @@ export const SignUp = () => {
               type="password"
               id="password"
               autoComplete="new-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
               required
               fullWidth
-              name="password2"
+              name="confirmPassword"
               label="Confirm Password"
               type="password"
-              id="password2"
+              id="confirmPassword"
               autoComplete="new-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              error={!!error}
+              helperText={error}
             />
           </Grid>
         </Grid>
