@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 
-export const SignUp = () => {
+export const SignUpForm = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -81,7 +81,7 @@ export const SignUp = () => {
             />
             <Grid item>
               <Typography variant="body2" sx={{ marginTop: 2 }}>
-                You will user your email to login
+                You will use your email to login
               </Typography>
             </Grid>
           </Grid>
