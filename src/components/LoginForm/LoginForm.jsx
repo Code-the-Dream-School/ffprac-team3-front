@@ -15,12 +15,8 @@ export const LoginForm = () => {
 
     const data = new FormData(event.currentTarget);
     console.log({
-      name: data.get('firstName'),
-      lastName: data.get('lastName'),
       email: data.get('email'),
       password: data.get('password'),
-      password2: data.get('confirmPassword'),
-      zipCode: data.get('zipCode'),
     });
   };
 
