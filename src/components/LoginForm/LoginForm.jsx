@@ -8,15 +8,11 @@ import {
   Link,
 } from '@mui/material';
 
-export const LoginForm = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
+import { loginUser } from '../../util';
 
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+export const LoginForm = () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
   };
 
   return (

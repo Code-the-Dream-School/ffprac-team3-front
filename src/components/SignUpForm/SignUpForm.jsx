@@ -8,25 +8,26 @@ import {
   Link,
 } from '@mui/material';
 import React, { useState } from 'react';
+import { registerUser } from '../../util';
 
 export const SignUpForm = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (password === confirmPassword) {
-      const data = new FormData(event.currentTarget);
-      console.log({
-        name: data.get('firstName'),
-        lastName: data.get('lastName'),
-        email: data.get('email'),
-        password: data.get('password'),
-        password2: data.get('confirmPassword'),
-        zipCode: data.get('zipCode'),
-      });
+      const formData = new FormData(event.currentTarget);
+      const formProps = Object.fromEntries(formData);
+      formRef.current.reset();
+      const response = await registerUser(formProps);
+
+      if (response && response.status === 201) {
+        console.log('Successfully registered');
+      }
+      console.log(response);
     } else {
       setError('Passwords do not match');
     }
