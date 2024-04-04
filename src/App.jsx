@@ -3,7 +3,7 @@ import { getAllData } from './util/index';
 import { Navbar } from './components/Navbar';
 import { HeroBanner } from './components/HeroBanner/HeroBanner';
 import { PetSliderCarousel } from './components/PetSliderCarousel';
-import { SignUpForm } from './components/SignUp/SignUpForm';
+import { SignUpForm } from './components/SignUpForm/SignUpForm';
 import { Login } from '@mui/icons-material';
 
 const URL = 'http://localhost:8000/api/v1/';
