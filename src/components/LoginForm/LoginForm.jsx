@@ -13,6 +13,19 @@ import { loginUser } from '../../util';
 export const LoginForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const formProps = Object.fromEntries(formData);
+    const response = await loginUser(formProps);
+    formRef.current.reset();
+
+    if (response && response.status === 200) {
+      const token = response.data.token;
+      const name = response.data.user.name;
+      localStorage.setItem('jwtToken', token);
+      localStorage.setItem('userName', name);
+    } else {
+      console.log(response);
+    }
   };
 
   return (
