@@ -41,7 +41,7 @@ export const Navbar: React.FC = () => {
         }}
       >
         <Toolbar>
-          <Button
+          <IconButton
             aria-label="logo"
             href="/"
             sx={{
@@ -56,7 +56,7 @@ export const Navbar: React.FC = () => {
                 fontSize: "7rem",
               }}
             />
-          </Button>
+          </IconButton>
 
           <Stack
             direction="row"
@@ -67,7 +67,7 @@ export const Navbar: React.FC = () => {
             <IconButton
               id="favorites"
               color="inherit"
-              href="/favorites"
+              href="#favorites"
               sx={{
                 "&:hover": {
                   color: "#F8AF3F",
@@ -84,25 +84,24 @@ export const Navbar: React.FC = () => {
               variant="middle"
               flexItem
             />
-            <>
-              <Button
-                color="inherit"
-                id="account-button"
-                onClick={handleAccountClick}
-                aria-controls={open ? "account-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                endIcon={<KeyboardArrowDownIcon />}
-                sx={{
-                  "&:hover": {
-                    color: "#F8AF3F",
-                    backgroundColor: "transparent",
-                  },
-                }}
-              >
-                <AccountCircleIcon />
-              </Button>
-            </>
+
+            <IconButton
+              color="inherit"
+              id="account-button"
+              onClick={handleAccountClick}
+              aria-controls={open ? "account-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              sx={{
+                "&:hover": {
+                  color: "#F8AF3F",
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
+              <AccountCircleIcon />
+              <KeyboardArrowDownIcon />
+            </IconButton>
           </Stack>
 
           <Menu
@@ -131,12 +130,12 @@ export const Navbar: React.FC = () => {
 
               {/* These options will be hidden when logged out */}
               <MenuItem onClick={handleClose}>
-                <Link href="/about" color="#0E2728" underline="none">
+                <Link href="/profile" color="#0E2728" underline="none">
                   About Me
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <Link href="/adopter-profile" color="#0E2728" underline="none">
+                <Link href="/profile" color="#0E2728" underline="none">
                   Adopter Profile
                 </Link>
               </MenuItem>
