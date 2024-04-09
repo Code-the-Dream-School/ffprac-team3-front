@@ -9,7 +9,6 @@ import {
 } from '@mui/material';
 
 import { useRef } from 'react';
-
 import { loginUser } from '../../util';
 
 export const LoginForm = () => {
@@ -86,7 +85,7 @@ export const LoginForm = () => {
         </Button>
         <Grid container justifyContent="center">
           <Grid item>
-            <Link href="#" variant="body2">
+            <Link href="/register" variant="body2">
               Don't have an account? Sign up
             </Link>
           </Grid>
