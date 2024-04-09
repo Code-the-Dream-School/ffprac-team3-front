@@ -23,8 +23,10 @@ export const SignUpForm = () => {
       const formData = new FormData(event.currentTarget);
       const formProps = Object.fromEntries(formData);
       formRef.current.reset();
+      setPassword('');
+      setConfirmPassword('');
+      console.log(formProps);
       const response = await registerUser(formProps);
-
       if (response && response.status === 201) {
         console.log('Successfully registered');
       }
@@ -59,10 +61,10 @@ export const SignUpForm = () => {
           <Grid item xs={12}>
             <TextField
               autoComplete="given-name"
-              name="name"
+              name="firstName"
               required
               fullWidth
-              id="name"
+              id="firstName"
               label="First Name"
               autoFocus
             />
@@ -80,11 +82,10 @@ export const SignUpForm = () => {
           <Grid item xs={12}>
             <TextField
               name="zipCode"
-              required
               fullWidth
               id="zipCode"
               type="number"
-              label="Zip Code"
+              label="Zip Code (optional)"
               inputProps={{ maxLength: 5 }}
             />
             <Grid item>
