@@ -3,8 +3,6 @@ import { getAllData } from './util/index';
 import { Navbar } from './components/Navbar';
 import { HeroBanner } from './components/HeroBanner/HeroBanner';
 import { PetSliderCarousel } from './components/PetSliderCarousel';
-import { SignUpForm } from './components/SignUpForm/SignUpForm';
-import { Login } from '@mui/icons-material';
 
 const URL = 'http://localhost:8000/api/v1/';
 
@@ -25,12 +23,10 @@ function App() {
   return (
     <>
       <Navbar />
-      <SignUpForm />
-      {/* <HeroBanner />
+      <HeroBanner />
       <PetSliderCarousel />
-       */}
 
-      {/* <h1>{message}</h1> */}
+      <h1>{message}</h1>
     </>
   );
 }
