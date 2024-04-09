@@ -26,7 +26,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <LoginForm />
+      <SignUpForm />
       {/* <HeroBanner />
       <PetSliderCarousel />
        */}

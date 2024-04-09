@@ -7,10 +7,11 @@ import {
   Button,
   Link,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { registerUser } from '../../util';
 
 export const SignUpForm = () => {
+  const formRef = useRef(null);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -47,15 +48,21 @@ export const SignUpForm = () => {
           Sign Up
         </Typography>
       </Box>
-      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+      <Box
+        component="form"
+        ref={formRef}
+        noValidate
+        onSubmit={handleSubmit}
+        sx={{ mt: 3 }}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
               autoComplete="given-name"
-              name="firstName"
+              name="name"
               required
               fullWidth
-              id="firstName"
+              id="name"
               label="First Name"
               autoFocus
             />
