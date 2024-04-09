@@ -8,9 +8,13 @@ import {
   Link,
 } from '@mui/material';
 
+import { useRef } from 'react';
+
 import { loginUser } from '../../util';
 
 export const LoginForm = () => {
+  const formRef = useRef(null);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -42,7 +46,13 @@ export const LoginForm = () => {
           Sign In
         </Typography>
       </Box>
-      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+      <Box
+        component="form"
+        ref={formRef}
+        noValidate
+        onSubmit={handleSubmit}
+        sx={{ mt: 3 }}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField

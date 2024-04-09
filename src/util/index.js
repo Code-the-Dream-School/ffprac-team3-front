@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = '/api/v1';
+const baseURL = 'https://ffprac-team3-back.onrender.com/api/v1';
 const registerUserRoute = 'users/register';
 const loginUserRoute = 'users/loginUser';
 
