@@ -1,18 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import AspectRatio from "@mui/joy/AspectRatio";
-import {
-  Container,
-  Box,
-  Typography,
-  IconButton,
-  Button,
-  CardActionArea,
-  CardActions,
-} from "@mui/material";
-import Card from "@mui/joy/Card";
-import CardContent from "@mui/joy/CardContent";
-import FavoriteButton from "./FavoriteButton";
-import PetsIcon from "@mui/icons-material/Pets";
+import initialAnimals from "./shared/PetData";
+import PetCard from "./shared/PetCard";
+import { Container, Box, Typography, IconButton } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
@@ -20,59 +9,11 @@ interface Animal {
   id: number;
   type: string;
   age: string;
-  gender: string;
+  sex: string;
   name: string;
   description: string;
   isFavorite: boolean;
 }
-
-const initialAnimals: Animal[] = [
-  {
-    id: 0,
-    type: "Dog",
-    age: "7yrs",
-    gender: "Female",
-    name: "Pip",
-    description: "Pip is an amazing dog...",
-    isFavorite: true,
-  },
-  {
-    id: 1,
-    type: "Cat",
-    age: "9yrs",
-    gender: "Male",
-    name: "Kelvin",
-    description: "Kelvin is a great lap cat...",
-    isFavorite: true,
-  },
-  {
-    id: 2,
-    type: "Cat",
-    age: "Young",
-    gender: "Male",
-    name: "Toast",
-    description: "Toast is a nervous kitty...",
-    isFavorite: true,
-  },
-  {
-    id: 3,
-    type: "Cat",
-    age: "Young",
-    gender: "Female",
-    name: "Maus",
-    description: "Maus is a very vocal kitty...",
-    isFavorite: true,
-  },
-  {
-    id: 4,
-    type: "Dog",
-    age: "Senior",
-    gender: "Male",
-    name: "Cooper",
-    description: "Cooper is a mommy's boy...",
-    isFavorite: true,
-  },
-];
 
 export const PetSliderCarousel: React.FC = () => {
   const [animals, setAnimals] = useState<Animal[]>(initialAnimals);
@@ -138,7 +79,7 @@ export const PetSliderCarousel: React.FC = () => {
   };
 
   return (
-    <Container fixed>
+    <Container fixed id="favorites">
       <Box sx={{ p: 5 }}>
         <Typography
           variant="h3"
@@ -168,81 +109,11 @@ export const PetSliderCarousel: React.FC = () => {
           }}
         >
           {favoriteAnimals.map((animal) => (
-            <Card
-              variant="plain"
+            <PetCard
               key={animal.id}
-              orientation="vertical"
-              size="lg"
-              sx={{ width: "auto" }}
-            >
-              <AspectRatio ratio="1" sx={{ width: 200 }}>
-                <img
-                  src="https://https://cdn.mos.cms.futurecdn.net/ASHH5bDmsp6wnK6mEfZdcU-1200-80.jpg"
-                  srcSet="https://cdn.mos.cms.futurecdn.net/ASHH5bDmsp6wnK6mEfZdcU-1200-80.jpg 2x"
-                  loading="lazy"
-                  alt=""
-                />
-              </AspectRatio>
-
-              <IconButton
-                onClick={() => handleToggleFavorite(animal.id)}
-                aria-label="heart icon"
-                sx={{
-                  position: "absolute",
-                  top: "1.5rem",
-                  right: "1.5rem",
-                  "&:hover": {
-                    color: "#F8AF3F",
-                  },
-                }}
-              >
-                <FavoriteButton
-                  isFavorite={animal.isFavorite}
-                  onToggleFavorite={() => handleToggleFavorite(animal.id)}
-                />
-              </IconButton>
-
-              <CardContent
-                sx={{
-                  pb: 2,
-                  color: "#0F2117",
-                }}
-              >
-                <CardActionArea>
-                  <Typography variant="h6" component="h5">
-                    {animal.name}
-                  </Typography>
-
-                  <Typography variant="overline">
-                    {animal.type} &nbsp;|&nbsp; {animal.age} &nbsp;|&nbsp;{" "}
-                    {animal.gender}
-                  </Typography>
-                  <Typography variant="body2">{animal.description}</Typography>
-                </CardActionArea>
-                <CardActions>
-                  <Button
-                    href="/pet-profile"
-                    variant="contained"
-                    size="medium"
-                    aria-label="pet profile"
-                    endIcon={<PetsIcon />}
-                    sx={{
-                      mt: 2,
-                      px: 6,
-                      alignSelf: "center",
-                      fontWeight: 500,
-                      color: "#F7F4F0",
-                      backgroundColor: "#EE633E",
-                      "&:hover": {
-                        backgroundColor: "#F8AF3F",
-                      },
-                    }}
-                  >
-                    Profile
-                  </Button>
-                </CardActions>
-              </CardContent>
-            </Card>
+              animal={animal}
+              onToggleFavorite={handleToggleFavorite}
+            />
           ))}
           <Box
             sx={{
