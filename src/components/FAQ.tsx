@@ -6,14 +6,15 @@ import {
     AccordionDetails,
     AccordionSummary
 } from "@mui/material";
-import { KeyboardArrowDown } from "@mui/icons-material";
+import { KeyboardArrowDown, Margin } from "@mui/icons-material";
 
 const FAQAccordion = ({ question, answer }) => {
     return (
         <>
-            <Accordion>
+            <Accordion disableGutters sx={{margin:1}}>
                 <AccordionSummary
                     expandIcon={<KeyboardArrowDown />}
+                    sx={{margin:3}}
                 >
                     <Typography>{question}</Typography>
                 </AccordionSummary>
@@ -32,13 +33,14 @@ const FAQ = () => {
             <Typography
                 variant="h2"
                 textAlign="center"
-                mt={5}
+                my={4}
             >
                 FAQ
             </Typography>
 
-            <Box display="flex" justifyContent="center">
-                <Box>
+            <Box display="flex" pb={10} my={3}>
+
+                <Box display="flex" flexDirection="column">
                     <FAQAccordion
                         question={"Should I adopt?"}
                         answer={"Answer..."}
@@ -55,8 +57,7 @@ const FAQ = () => {
                     />
                 </Box>
 
-
-                <Box>
+                <Box display="flex" flexDirection="column" >
                     <FAQAccordion
                         question={"What if I want to return my pet?"}
                         answer={"Answer..."}
@@ -72,6 +73,7 @@ const FAQ = () => {
                         answer={"Answer..."}
                     />
                 </Box>
+
             </Box >
         </>
     )
