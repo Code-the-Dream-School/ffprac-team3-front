@@ -43,17 +43,17 @@ const loginUser = async (user) => {
 // * || PET DATA *
 
 // note: not used, but could be used with GET with params
-const getData = async (url, params) => {
+const getData = async () => {
   try {
-    let res = await axios.get(url, params);
-    let data = await res.data;
+    // let res = await axios.get(url, params);
+    let data = 'Hello world';
     return data;
   } catch (error) {
     console.log(error, `error - getData in ${url} route`);
   }
 };
 
-const getAllData = async (url) => {
+const getAllPetData = async (url) => {
   try {
     let res = await axios.get(url);
     let data = await res.data;
@@ -63,4 +63,4 @@ const getAllData = async (url) => {
   }
 };
 
-export { registerUser, loginUser, getData, getAllData };
+export { registerUser, loginUser, getData, getAllPetData };

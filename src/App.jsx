@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllData } from './util/index';
+import { getData } from './util/index';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { HeroBanner } from './components/HeroBanner';
@@ -8,14 +8,13 @@ import { SearchPets } from './components/SearchPets';
 import { SignUpForm } from './components/SignUpForm/SignUpForm';
 import { LoginForm } from './components/LoginForm/LoginForm';
 
-const URL = 'http://localhost:8000/api/v1/';
-
 function App() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     (async () => {
-      const myData = await getAllData(URL);
+      const myData = await getData();
+      console.log(myData);
       setMessage(myData.data);
     })();
 
