@@ -1,6 +1,16 @@
 import React from "react";
 import { Box, Card, CardContent, Typography } from "@mui/material"
 
+const CustomCard = () => {
+    return (
+        <Card square variant="outlined">
+            <CardContent sx={{ width: 200, height: 170 }}>
+                <Typography>Checklist by pet type</Typography>
+            </CardContent>
+        </Card>
+    )
+}
+
 const ChecklistCards = () => {
     return (
 
@@ -12,29 +22,10 @@ const ChecklistCards = () => {
             justifyContent="space-evenly"
             alignItems="center"
         >
-            <Card square variant="outlined">
-                <CardContent sx={{ width: 200, height: 170 }}>
-                    <Typography>Checklist by pet type</Typography>
-                </CardContent>
-            </Card>
-
-            <Card square variant="outlined">
-                <CardContent sx={{ width: 200, height: 170 }}>
-                    <Typography>Checklist by pet type</Typography>
-                </CardContent>
-            </Card>
-
-            <Card square variant="outlined">
-                <CardContent sx={{ width: 200, height: 170 }}>
-                    <Typography>Checklist by pet type</Typography>
-                </CardContent>
-            </Card>
-
-            <Card square variant="outlined">
-                <CardContent sx={{ width: 200, height: 170 }}>
-                    <Typography>Checklist by pet type</Typography>
-                </CardContent>
-            </Card>
+            <CustomCard />
+            <CustomCard />
+            <CustomCard />
+            <CustomCard />
         </Box>
     )
 }
