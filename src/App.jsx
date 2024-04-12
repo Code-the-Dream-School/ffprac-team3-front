@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { getAllData } from "./util/index";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Navbar } from "./components/Navbar";
-import { HeroBanner } from "./components/HeroBanner";
-import { PetSliderCarousel } from "./components/PetSliderCarousel";
-import { SearchPets } from "./components/SearchPets";
+import React, { useState, useEffect } from 'react';
+import { getAllData } from './util/index';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Navbar } from './components/Navbar';
+import { HeroBanner } from './components/HeroBanner';
+import { PetSliderCarousel } from './components/PetSliderCarousel';
+import { SearchPets } from './components/SearchPets';
+import { SignUpForm } from './components/SignUpForm/SignUpForm';
 
-const URL = "http://localhost:8000/api/v1/";
+const URL = 'http://localhost:8000/api/v1/';
 
 function App() {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -18,7 +19,7 @@ function App() {
     })();
 
     return () => {
-      console.log("unmounting");
+      console.log('unmounting');
     };
   }, []);
 
@@ -70,6 +71,16 @@ function App() {
             <>
               <Navbar />
               /* <h1>{message}</h1> */
+            </>
+          }
+        />
+
+        <Route
+          path="/register"
+          element={
+            <>
+              <Navbar />
+              <SignUpForm />
             </>
           }
         />
