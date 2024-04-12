@@ -1,16 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { Box, IconButton, Button, Stack, TextField, Card } from "@mui/material";
+import { Box, Button, Stack, TextField, Card } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterDropdowns from "./FilterDropdowns";
 import { SelectChangeEvent } from "@mui/material/Select";
+import { useNavigate } from "react-router-dom";
+
 
 interface Location {
   state: string;
   city: string;
   zip: string;
 }
-
+interface Animal {
+  id: number;
+  type: string;
+  age: string;
+  sex: string;
+  name: string;
+  description: string;
+  isFavorite: boolean;
+  location: Location;
+  breed: string;
+}
 interface SearchInputProps {
   onFilterChange: (filters: {
     keyword: string;
@@ -18,11 +30,23 @@ interface SearchInputProps {
     type: string;
     sex: string;
     age: string;
+    breed: string;
+    favorite: boolean;
   }) => void;
+  availableStates: string[];
+  initialAnimals: Animal[];
+  initialKeyword: string; //  initialKeyword prop from homepage search
+  initialLocation: string; // initialLocation prop from homepage search
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({ onFilterChange }) => {
-  const [keyword, setKeyword] = useState("");
+const SearchInput: React.FC<SearchInputProps> = ({
+  onFilterChange,
+  availableStates,
+  initialAnimals,
+  initialKeyword,
+  initialLocation,
+}) => {
+  const [keyword, setKeyword] = useState(initialKeyword);
   const [location, setLocation] = useState<Location>({
     state: "",
     city: "",
@@ -31,17 +55,20 @@ const SearchInput: React.FC<SearchInputProps> = ({ onFilterChange }) => {
   const [type, setType] = useState("");
   const [sex, setSex] = useState("");
   const [age, setAge] = useState("");
+  const [breed, setBreed] = useState("");
+  const [favorite, setFavorite] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // Prevent default form submission
-    onFilterChange({
-      keyword,
-      location,
-      type,
-      sex,
-      age,
+  useEffect(() => {
+    const [initialCity, initialState, initialZip] = initialLocation
+      .split(",")
+      .map((item) => item.trim());
+    setLocation({
+      state: initialState || "",
+      city: initialCity || "",
+      zip: initialZip || "",
     });
-  };
+  }, [initialLocation]);
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -49,10 +76,20 @@ const SearchInput: React.FC<SearchInputProps> = ({ onFilterChange }) => {
     const { name, value } = event.target;
     if (name === "keyword") {
       setKeyword(value);
-    } else if (name === "location") {
+    } else if (name === "city") {
       setLocation((prevLocation) => ({
         ...prevLocation,
-        [name]: value,
+        city: value,
+      }));
+    } else if (name === "state") {
+      setLocation((prevLocation) => ({
+        ...prevLocation,
+        state: value,
+      }));
+    } else if (name === "zip") {
+      setLocation((prevLocation) => ({
+        ...prevLocation,
+        zip: value,
       }));
     }
   };
@@ -62,15 +99,38 @@ const SearchInput: React.FC<SearchInputProps> = ({ onFilterChange }) => {
     setLocation((prevLocation) => ({
       ...prevLocation,
       city: value,
+      state: value,
+      zip: value,
     }));
+  };
+
+  const handleBreedChange = (event: SelectChangeEvent<string>) => {
+    const { value } = event.target;
+    setBreed(value);
+  };
+
+  const handleFavoriteChange = (event: SelectChangeEvent<string>) => {
+    const value = event.target.value === "true";
+    setFavorite(value);
   };
 
   const handleSelectChange = (
     event: SelectChangeEvent<string>,
     setFunction: React.Dispatch<React.SetStateAction<string>>
   ) => {
-    const { value } = event.target;
+    const { name, value } = event.target;
     setFunction(value);
+    if (name === "age") {
+      onFilterChange({
+        keyword,
+        location,
+        type,
+        sex,
+        age: value,
+        breed,
+        favorite,
+      });
+    }
   };
 
   const clearFilters = () => {
@@ -79,13 +139,18 @@ const SearchInput: React.FC<SearchInputProps> = ({ onFilterChange }) => {
     setType("");
     setSex("");
     setAge("");
+    setBreed("");
+    setFavorite(false);
     onFilterChange({
       keyword: "",
       location: { state: "", city: "", zip: "" },
       type: "",
       sex: "",
       age: "",
+      breed: "",
+      favorite: false,
     });
+    navigate("/search"); // Reset URL to default after clearing filters
   };
 
   useEffect(() => {
@@ -95,18 +160,20 @@ const SearchInput: React.FC<SearchInputProps> = ({ onFilterChange }) => {
       type,
       sex,
       age,
+      breed,
+      favorite,
     });
-  }, [keyword, location, type, sex, age, onFilterChange]);
+  }, [keyword, location, type, sex, age, breed, favorite]);
 
   return (
-    <Box component="form">
-      <Stack spacing={4} sx={{ pt: "2rem" }}>
-        {/* <Stack spacing={2} direction="row"> */}
+    <Box sx={{ mx: "1rem" }}>
+      <Stack spacing={2} sx={{ ml: "1rem", pt: "2rem" }}>
         <TextField
           variant="outlined"
           id="search-by-keyword"
           name="keyword"
           label="Search by Keyword"
+          fullWidth
           value={keyword}
           onChange={handleInputChange}
           InputProps={{
@@ -119,42 +186,8 @@ const SearchInput: React.FC<SearchInputProps> = ({ onFilterChange }) => {
             ),
           }}
         />
-
-        {/* SEARCH BY LOCATION - Not working at the moment
-        <TextField
-            variant="outlined"
-            id="search-by-location"
-            name="location"
-            label="Enter City, State, or ZIP"
-            value={location.city || location.state || location.zip}
-            onChange={handleInputChange}
-            InputProps={{
-              endAdornment: (
-                <SearchIcon
-                  sx={{
-                    color: "#506C60",
-                  }}
-                />
-              ),
-            }}
-          /> */}
-
-        {/* <IconButton
-            type="submit"
-            aria-label="Search"
-            sx={{
-              color: "#F8AF3F",
-              backgroundColor: "transparent",
-              "&:hover": {
-                color: "#EE633E",
-                backgroundColor: "transparent",
-              },
-            }}
-          >
-            <SearchIcon />
-          </IconButton> */}
-        {/* </Stack> */}
       </Stack>
+
       <Button
         variant="contained"
         size="small"
@@ -162,6 +195,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onFilterChange }) => {
         aria-label="Clear Filters"
         sx={{
           mt: 2,
+          ml: "1rem",
           px: 3,
           py: 1,
           alignSelf: "center",
@@ -176,18 +210,27 @@ const SearchInput: React.FC<SearchInputProps> = ({ onFilterChange }) => {
         New Search
       </Button>
 
-      <Card sx={{ marginTop: "2rem", p: 2, backgroundColor: "#0E2728" }}>
-        <Stack gap={2}>
+      <Card
+        sx={{ marginTop: "2rem", py: 5, px: 3, backgroundColor: "#0E2728" }}
+      >
+        <Stack gap={3}>
           <FilterDropdowns
             type={type}
             sex={sex}
             age={age}
+            breed={breed}
             location={location}
+            favorite={favorite}
             handleTypeChange={(event) => handleSelectChange(event, setType)}
             handleSexChange={(event) => handleSelectChange(event, setSex)}
             handleAgeChange={(event) => handleSelectChange(event, setAge)}
+            handleBreedChange={handleBreedChange}
             handleLocationChange={handleLocationChange}
+            handleFavoriteChange={handleFavoriteChange}
             handleClearFilters={clearFilters}
+            setLocation={setLocation}
+            availableStates={availableStates}
+            initialAnimals={initialAnimals}
           />
         </Stack>
       </Card>

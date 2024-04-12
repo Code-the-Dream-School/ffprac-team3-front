@@ -5,6 +5,7 @@ import { Navbar } from "./components/Navbar";
 import { HeroBanner } from "./components/HeroBanner";
 import { PetSliderCarousel } from "./components/PetSliderCarousel";
 import { SearchPets } from "./components/SearchPets";
+import { Footer } from "./components/footer";
 
 const URL = "http://localhost:8000/api/v1/";
 
@@ -13,8 +14,14 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      const myData = await getAllData(URL);
-      setMessage(myData.data);
+      try {
+        const myData = await getAllData(URL);
+        if (myData) {
+          setMessage(myData.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     })();
 
     return () => {
@@ -32,6 +39,7 @@ function App() {
               <Navbar />
               <HeroBanner />
               <PetSliderCarousel />
+              <Footer />
             </>
           }
         />
@@ -42,6 +50,7 @@ function App() {
             <>
               <Navbar />
               <SearchPets />
+              <Footer />
             </>
           }
         />
@@ -51,6 +60,8 @@ function App() {
           element={
             <>
               <Navbar />
+              {/* Profile component */}
+              <Footer />
             </>
           }
         />
@@ -60,6 +71,8 @@ function App() {
           element={
             <>
               <Navbar />
+              {/* Settings component */}
+              <Footer />
             </>
           }
         />
@@ -69,7 +82,8 @@ function App() {
           element={
             <>
               <Navbar />
-              /* <h1>{message}</h1> */
+              {/* Login component */}
+              <Footer />
             </>
           }
         />
@@ -79,6 +93,8 @@ function App() {
           element={
             <>
               <Navbar />
+              {/* Logout component */}
+              <Footer />
             </>
           }
         />
