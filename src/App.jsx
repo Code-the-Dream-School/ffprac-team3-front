@@ -5,6 +5,7 @@ import { Navbar } from "./components/Navbar";
 import { HeroBanner } from "./components/HeroBanner";
 import { PetSliderCarousel } from "./components/PetSliderCarousel";
 import { SearchPets } from "./components/SearchPets";
+import { SignUpForm } from "./components/SignUpForm/SignUpForm";
 import { ContactForm } from "./components/ContactForm";
 
 const URL = "http://localhost:8000/api/v1/";
@@ -71,6 +72,16 @@ function App() {
             <>
               <Navbar />
               /* <h1>{message}</h1> */
+            </>
+          }
+        />
+
+        <Route
+          path="/register"
+          element={
+            <>
+              <Navbar />
+              <SignUpForm />
             </>
           }
         />
