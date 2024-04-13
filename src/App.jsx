@@ -6,8 +6,36 @@ import { HeroBanner } from './components/HeroBanner';
 import { PetSliderCarousel } from './components/PetSliderCarousel';
 import { SearchPets } from './components/SearchPets';
 import { SignUpForm } from './components/SignUpForm/SignUpForm';
+import ResourcesPage from './pages/ResourcesPage.tsx'
+import { Box, Button } from '@mui/material';
 
 const URL = 'http://localhost:8000/api/v1/';
+
+const TempResourcesLink = () => {
+  return (
+    <Box
+      display={"flex"}
+      justifyContent={"center"}
+    >
+      <Button
+        href="/resources"
+        variant="contained"
+        sx={{
+          mt: 4,
+          textTransform: "none",
+          fontStyle: "italic",
+          color: "#F7F4F0",
+          backgroundColor: "#EE633E",
+          "&:hover": {
+            backgroundColor: "#F8AF3F",
+          }
+        }}
+      >
+        Temporary shortcut to Resources page
+      </Button>
+    </Box>
+  )
+}
 
 function App() {
   const [message, setMessage] = useState('');
@@ -32,6 +60,7 @@ function App() {
             <>
               <Navbar />
               <HeroBanner />
+              <TempResourcesLink />
               <PetSliderCarousel />
             </>
           }
@@ -92,6 +121,11 @@ function App() {
               <Navbar />
             </>
           }
+        />
+
+        <Route
+          path="/resources"
+          element={ <ResourcesPage /> }
         />
       </Routes>
     </BrowserRouter>
