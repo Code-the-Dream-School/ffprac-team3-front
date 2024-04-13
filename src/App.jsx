@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { getAllData } from "./util/index";
-import { Navbar } from "./components/Navbar";
-import { HeroBanner } from "./components/HeroBanner";
-import { PetSliderCarousel } from "./components/PetSliderCarousel";
-import { Button, Box } from "@mui/material";
+import React, { useState, useEffect } from 'react';
+import { getAllData } from './util/index';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Navbar } from './components/Navbar';
+import { HeroBanner } from './components/HeroBanner';
+import { PetSliderCarousel } from './components/PetSliderCarousel';
+import { SearchPets } from './components/SearchPets';
+import { SignUpForm } from './components/SignUpForm/SignUpForm';
 
-const URL = "http://localhost:8000/api/v1/";
+const URL = 'http://localhost:8000/api/v1/';
 
 function App() {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -17,41 +19,82 @@ function App() {
     })();
 
     return () => {
-      console.log("unmounting");
+      console.log('unmounting');
     };
   }, []);
 
   return (
-    <>
-      <Navbar />
-      <HeroBanner />
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Navbar />
+              <HeroBanner />
+              <PetSliderCarousel />
+            </>
+          }
+        />
 
-      <Box
-        display={"flex"}
-        justifyContent={"center"}
-      >
-        <Button
-          href="/resources"
-          variant="contained"
-          sx={{
-            mt: 2,
-            textTransform:"none",
-            fontStyle:"italic",
-            color: "#F7F4F0",
-            backgroundColor: "#EE633E",
-            "&:hover": {
-              backgroundColor: "#F8AF3F",
-            }
-          }}
-        >
-          Temporary shortcut to Resources page
-        </Button>
-      </Box>
-      
-      <PetSliderCarousel />
+        <Route
+          path="/search"
+          element={
+            <>
+              <Navbar />
+              <SearchPets />
+            </>
+          }
+        />
 
-      {/* <h1>{message}</h1> */}
-    </>
+        <Route
+          path="/profile"
+          element={
+            <>
+              <Navbar />
+            </>
+          }
+        />
+
+        <Route
+          path="/settings"
+          element={
+            <>
+              <Navbar />
+            </>
+          }
+        />
+
+        <Route
+          path="/login"
+          element={
+            <>
+              <Navbar />
+              /* <h1>{message}</h1> */
+            </>
+          }
+        />
+
+        <Route
+          path="/register"
+          element={
+            <>
+              <Navbar />
+              <SignUpForm />
+            </>
+          }
+        />
+
+        <Route
+          path="/logout"
+          element={
+            <>
+              <Navbar />
+            </>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
