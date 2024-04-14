@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { getAllData } from './util/index';
+import { getData } from './util/index';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { HeroBanner } from './components/HeroBanner';
 import { PetSliderCarousel } from './components/PetSliderCarousel';
 import { SearchPets } from './components/SearchPets';
 import { SignUpForm } from './components/SignUpForm/SignUpForm';
-
-const URL = 'http://localhost:8000/api/v1/';
+import { LoginForm } from './components/LoginForm/LoginForm';
 
 function App() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     (async () => {
-      const myData = await getAllData(URL);
+      const myData = await getData();
+      console.log(myData);
       setMessage(myData.data);
     })();
 
@@ -70,7 +70,7 @@ function App() {
           element={
             <>
               <Navbar />
-              /* <h1>{message}</h1> */
+              <LoginForm />
             </>
           }
         />

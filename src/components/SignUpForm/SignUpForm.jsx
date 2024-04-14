@@ -7,26 +7,30 @@ import {
   Button,
   Link,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { registerUser } from '../../util';
 
 export const SignUpForm = () => {
+  const formRef = useRef(null);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (password === confirmPassword) {
-      const data = new FormData(event.currentTarget);
-      console.log({
-        name: data.get('firstName'),
-        lastName: data.get('lastName'),
-        email: data.get('email'),
-        password: data.get('password'),
-        password2: data.get('confirmPassword'),
-        zipCode: data.get('zipCode'),
-      });
+      const formData = new FormData(event.currentTarget);
+      const formProps = Object.fromEntries(formData);
+      formRef.current.reset();
+      setPassword('');
+      setConfirmPassword('');
+      console.log(formProps);
+      const response = await registerUser(formProps);
+      if (response && response.status === 201) {
+        console.log('Successfully registered');
+      }
+      console.log(response);
     } else {
       setError('Passwords do not match');
     }
@@ -46,7 +50,13 @@ export const SignUpForm = () => {
           Sign Up
         </Typography>
       </Box>
-      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+      <Box
+        component="form"
+        ref={formRef}
+        noValidate
+        onSubmit={handleSubmit}
+        sx={{ mt: 3 }}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
@@ -72,11 +82,10 @@ export const SignUpForm = () => {
           <Grid item xs={12}>
             <TextField
               name="zipCode"
-              required
               fullWidth
               id="zipCode"
               type="number"
-              label="Zip Code"
+              label="Zip Code (optional)"
               inputProps={{ maxLength: 5 }}
             />
             <Grid item>
@@ -134,7 +143,7 @@ export const SignUpForm = () => {
         </Button>
         <Grid container justifyContent="center">
           <Grid item>
-            <Link href="#" variant="body2">
+            <Link href="/login" variant="body2">
               Already have an account? Sign in
             </Link>
           </Grid>
