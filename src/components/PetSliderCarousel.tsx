@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import initialAnimals from "./shared/PetData/PetData";
-import PetCard from "./shared/PetCard";
+import initialAnimals from "./PetComponents/PetData/PetData";
+import PetCard from "./PetComponents/PetCard";
 import { Container, Box, Typography, IconButton } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";

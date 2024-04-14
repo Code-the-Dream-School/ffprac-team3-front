@@ -65,7 +65,7 @@ interface FilterDropdownsProps {
     event: SelectChangeEvent<string>,
     filteredPets: Animal[]
   ) => void;
-  handleLocationChange: (event: SelectChangeEvent<string>) => void;
+  // handleLocationChange: (event: SelectChangeEvent<string>) => void;
   handleFavoriteChange: (event: SelectChangeEvent<string>) => void;
   handleClearFilters: () => void;
   setLocation: React.Dispatch<React.SetStateAction<Location>>;
@@ -228,8 +228,49 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
     const selectedState = event.target.value;
     setLocation((prevLocation) => ({
       ...prevLocation,
+      
       state: selectedState, // Update the state in the location object
     }));
+
+    // Update filter counts based on selected state
+    const filteredAnimalsByState = initialAnimals.filter(
+      (animal) => animal.location.state === selectedState
+    );
+    setTypeCounts(
+      countFilterOptions(
+        filteredAnimalsByState.map((animal) => animal.type),
+        "type"
+      )
+    );
+    setBreedCounts(
+      countFilterOptions(
+        filteredAnimalsByState.map((animal) => animal.breed),
+        "breed"
+      )
+    );
+    let filteredAnimalsByType = filteredAnimalsByState;
+    if (type) {
+      filteredAnimalsByType = filteredAnimalsByState.filter(
+        (animal) => animal.type === type
+      );
+    }
+
+    setSexCounts(
+      countFilterOptions(
+        filteredAnimalsByType.map((animal) => animal.sex),
+        "sex"
+      )
+    );
+
+    // Calculate age counts for filtered animals
+    const filteredAges = filteredAnimalsByType.map((animal) => animal.age);
+    const ageCountsByType = countAgeGroups(filteredAges);
+    setAgeCounts(ageCountsByType);
+
+    const favoriteCount = filteredAnimalsByState.filter(
+      (animal) => animal.isFavorite
+    ).length;
+    setFavoriteCount(favoriteCount);
   };
 
   return (
@@ -270,8 +311,8 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
               Species
             </MenuItem>
             {types.map((type) => (
-              <MenuItem key={type} value={type}>
-                {`${type} (${typeCounts[type]})`}
+              <MenuItem key={type} value={type} disabled={!typeCounts[type]}>
+                {`${type} (${typeCounts[type] || 0})`}
               </MenuItem>
             ))}
           </Select>
@@ -290,8 +331,12 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
                 Breed
               </MenuItem>
               {breeds.map((breed) => (
-                <MenuItem key={breed} value={breed}>
-                  {`${breed} (${breedCounts[breed]})`}
+                <MenuItem
+                  key={breed}
+                  value={breed}
+                  disabled={!breedCounts[breed]}
+                >
+                  {`${breed} (${breedCounts[breed] || 0})`}
                 </MenuItem>
               ))}
             </Select>

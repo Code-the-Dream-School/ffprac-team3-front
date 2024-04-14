@@ -6,7 +6,6 @@ import FilterDropdowns from "./FilterDropdowns";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useNavigate } from "react-router-dom";
 
-
 interface Location {
   state: string;
   city: string;
@@ -60,14 +59,29 @@ const SearchInput: React.FC<SearchInputProps> = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    const [initialCity, initialState, initialZip] = initialLocation
-      .split(",")
-      .map((item) => item.trim());
-    setLocation({
-      state: initialState || "",
-      city: initialCity || "",
-      zip: initialZip || "",
+    // Split initialLocation and map each item to trim leading/trailing whitespaces
+    const locationParts = initialLocation.split(",").map((part) => part.trim());
+    // Create a copy of the current location state
+    const newLocation = { ...location };
+    // Iterate over each location part and update the corresponding property in the location state
+    locationParts.forEach((part) => {
+      // Check format of a state abbreviation
+      if (/^[a-zA-Z]{2}$/.test(part)) {
+        newLocation.state = part;
+      }
+      // Check format of a ZIP code
+      else if (/^\d{5}$/.test(part)) {
+        newLocation.zip = part;
+      }
+      // Assume it's part of the city
+      else {
+        newLocation.city += part + " ";
+      }
     });
+    // Trim any trailing whitespaces from the city
+    newLocation.city = newLocation.city.trim();
+    // Update the location state with the new values
+    setLocation(newLocation);
   }, [initialLocation]);
 
   const handleInputChange = (
@@ -76,32 +90,12 @@ const SearchInput: React.FC<SearchInputProps> = ({
     const { name, value } = event.target;
     if (name === "keyword") {
       setKeyword(value);
-    } else if (name === "city") {
+    } else {
       setLocation((prevLocation) => ({
         ...prevLocation,
-        city: value,
-      }));
-    } else if (name === "state") {
-      setLocation((prevLocation) => ({
-        ...prevLocation,
-        state: value,
-      }));
-    } else if (name === "zip") {
-      setLocation((prevLocation) => ({
-        ...prevLocation,
-        zip: value,
+        [name]: value, // Dynamically update the location state based on the input name
       }));
     }
-  };
-
-  const handleLocationChange = (event: SelectChangeEvent<string>) => {
-    const { value } = event.target;
-    setLocation((prevLocation) => ({
-      ...prevLocation,
-      city: value,
-      state: value,
-      zip: value,
-    }));
   };
 
   const handleBreedChange = (event: SelectChangeEvent<string>) => {
@@ -225,7 +219,6 @@ const SearchInput: React.FC<SearchInputProps> = ({
             handleSexChange={(event) => handleSelectChange(event, setSex)}
             handleAgeChange={(event) => handleSelectChange(event, setAge)}
             handleBreedChange={handleBreedChange}
-            handleLocationChange={handleLocationChange}
             handleFavoriteChange={handleFavoriteChange}
             handleClearFilters={clearFilters}
             setLocation={setLocation}

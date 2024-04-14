@@ -1,20 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, TextField, Button, Typography, Grid, Stack } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
-import { parseLocation } from "./shared/utils";
+// import { parseLocation } from "./SearchComponents/parseLocation";
 
 export const HeroBanner: React.FC = () => {
+  const [searchPets, setSearchPets] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [location, setLocation] = useState("");
   const navigate = useNavigate();
 
   const handleKeywordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setKeyword(event.target.value);
+    setKeyword(event.target.value.toLowerCase());
   };
 
   const handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(event.target.value);
+    setLocation(event.target.value.toUpperCase());
   };
 
   const handleButtonClick = () => {
@@ -25,12 +26,22 @@ export const HeroBanner: React.FC = () => {
       )}`;
     }
     if (location.trim()) {
-      const parsedLocation = parseLocation(location);
-      if (parsedLocation.city || parsedLocation.state || parsedLocation.zip) {
-        searchQuery += `&location=${encodeURIComponent(
-          parsedLocation.state || parsedLocation.city || parsedLocation.zip
-        )}`;
-      }
+      const locationParts = location.split(",").map((part) => part.trim());
+      const newLocation: any = { state: "", city: "", zip: "" };
+      locationParts.forEach((part) => {
+        if (/^[a-zA-Z]{2}$/.test(part)) {
+          newLocation.state = part;
+        } else if (/^\d{5}$/.test(part)) {
+          newLocation.zip = part;
+        } else {
+          newLocation.city += part + " ";
+        }
+      });
+      newLocation.city = newLocation.city.trim();
+      const parsedLocation = `${newLocation.state || ""}${
+        newLocation.city || ""
+      }${newLocation.zip || ""}`;
+      searchQuery += `location=${encodeURIComponent(parsedLocation)}`;
     }
     console.log("Search query:", searchQuery);
     navigate(searchQuery ? `/search?${searchQuery}` : "/search");
@@ -47,17 +58,28 @@ export const HeroBanner: React.FC = () => {
     return keyword;
   };
 
-  const pluralizeKeyword = (keyword: string): string => {
-    if (!keyword.endsWith("s")) {
-      return keyword + "s"; // Add "s" to make it plural
-    }
-    return keyword;
-  };
+  // const pluralizeKeyword = (keyword: string): string => {
+  //   if (!keyword.endsWith("s")) {
+  //     return keyword + "s"; // Add "s" to make it plural
+  //   }
+  //   return keyword;
+  // };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       handleButtonClick();
     }
+  };
+
+  useEffect(() => {
+    if (searchPets) {
+      window.location.href = "/search";
+      console.log("Button clicked!");
+    }
+  }, [searchPets]);
+
+  const handleSearchPets = () => {
+    setSearchPets(true);
   };
 
   return (
@@ -150,7 +172,7 @@ export const HeroBanner: React.FC = () => {
               fullWidth
               variant="contained"
               size="large"
-              href="/search"
+              onClick={handleSearchPets}
               sx={{
                 mt: 3,
                 py: 2,
