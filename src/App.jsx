@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllData } from './util/index';
+import { getData } from './util/index';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { HeroBanner } from './components/HeroBanner';
@@ -8,8 +8,7 @@ import { SearchPets } from './components/SearchPets';
 import { SignUpForm } from './components/SignUpForm/SignUpForm';
 import ResourcesPage from './pages/ResourcesPage.tsx'
 import { Box, Button } from '@mui/material';
-
-const URL = 'http://localhost:8000/api/v1/';
+import { LoginForm } from './components/LoginForm/LoginForm';
 
 const TempResourcesLink = () => {
   return (
@@ -42,7 +41,8 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      const myData = await getAllData(URL);
+      const myData = await getData();
+      console.log(myData);
       setMessage(myData.data);
     })();
 
@@ -99,7 +99,7 @@ function App() {
           element={
             <>
               <Navbar />
-              /* <h1>{message}</h1> */
+              <LoginForm />
             </>
           }
         />
