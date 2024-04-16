@@ -1,21 +1,47 @@
 import React, { useState, useEffect } from "react";
-import { getAllData } from "./util/index";
+import { getData } from "./util/index";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { HeroBanner } from "./components/HeroBanner";
 import { PetSliderCarousel } from "./components/PetSliderCarousel";
 import { SearchPets } from "./components/SearchPets";
 import { SignUpForm } from "./components/SignUpForm/SignUpForm";
+import ResourcesPage from "./pages/ResourcesPage.tsx";
+import { Box, Button } from "@mui/material";
+import { LoginForm } from "./components/LoginForm/LoginForm";
 import { ContactForm } from "./components/ContactForm";
 
 const URL = "http://localhost:8000/api/v1/";
+const TempResourcesLink = () => {
+  return (
+    <Box display={"flex"} justifyContent={"center"}>
+      <Button
+        href="/resources"
+        variant="contained"
+        sx={{
+          mt: 4,
+          textTransform: "none",
+          fontStyle: "italic",
+          color: "#F7F4F0",
+          backgroundColor: "#EE633E",
+          "&:hover": {
+            backgroundColor: "#F8AF3F",
+          },
+        }}
+      >
+        Temporary shortcut to Resources page
+      </Button>
+    </Box>
+  );
+};
 
 function App() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
     (async () => {
-      const myData = await getAllData(URL);
+      const myData = await getData();
+      console.log(myData);
       setMessage(myData.data);
     })();
 
@@ -33,6 +59,7 @@ function App() {
             <>
               <Navbar />
               <HeroBanner />
+              <TempResourcesLink />
               <PetSliderCarousel />
             </>
           }
@@ -71,7 +98,7 @@ function App() {
           element={
             <>
               <Navbar />
-              /* <h1>{message}</h1> */
+              <LoginForm />
             </>
           }
         />
@@ -104,6 +131,8 @@ function App() {
             </>
           }
         />
+
+        <Route path="/resources" element={<ResourcesPage />} />
       </Routes>
     </BrowserRouter>
   );
