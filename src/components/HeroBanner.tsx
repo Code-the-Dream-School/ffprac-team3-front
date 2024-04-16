@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Box, TextField, Button, Typography, Grid, Stack } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
-// import { parseLocation } from "./SearchComponents/parseLocation";
+
+interface Location {
+  state: string;
+  city: string;
+  zip: string;
+}
 
 export const HeroBanner: React.FC = () => {
   const [searchPets, setSearchPets] = useState(false);
@@ -15,7 +20,7 @@ export const HeroBanner: React.FC = () => {
   };
 
   const handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(event.target.value.toUpperCase());
+    setLocation(event.target.value.toLowerCase());
   };
 
   const handleButtonClick = () => {
@@ -57,13 +62,6 @@ export const HeroBanner: React.FC = () => {
     }
     return keyword;
   };
-
-  // const pluralizeKeyword = (keyword: string): string => {
-  //   if (!keyword.endsWith("s")) {
-  //     return keyword + "s"; // Add "s" to make it plural
-  //   }
-  //   return keyword;
-  // };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {

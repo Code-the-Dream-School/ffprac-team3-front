@@ -4,7 +4,6 @@ import SearchInput from "./SearchInput";
 import initialAnimals from "../PetComponents/PetData/PetData";
 import PetCard from "../PetComponents/PetCard";
 import { useLocation, useNavigate } from "react-router-dom";
-// import { parseLocation } from "./parseLocation";
 
 interface Location {
   state: string;
@@ -33,8 +32,8 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
   const [pageTitle, setPageTitle] = useState<string>("Search Results"); // State to hold the title
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
-  const initialKeyword = searchParams.get("keyword") || ""; // Define initialKeyword
-  const initialLocation = searchParams.get("location") || ""; // Define initialLocation
+  const initialKeyword = searchParams.get("keyword") || "";
+  const initialLocation = searchParams.get("location") || "";
   const [animals, setAnimals] = useState<Animal[]>(initialAnimals);
   const [filteredAnimals, setFilteredAnimals] =
     useState<Animal[]>(initialAnimals);
@@ -57,8 +56,12 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
     sex: "",
     age: "",
     breed: "",
-    location: { state: "", city: "", zip: "" },
-    favorite: searchParams.get("favorites") === "true",
+    location: {
+      state: "",
+      city: "",
+      zip: "",
+    },
+    favorite: false,
   });
 
   // Function to handle changes in filter values
@@ -71,7 +74,58 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
     location: Location;
     favorite: boolean;
   }) => {
-    setFilters(newFilters);
+    // Check if any new filters are active
+    const filtersActive =
+      newFilters.keyword ||
+      newFilters.type ||
+      newFilters.sex ||
+      newFilters.age ||
+      newFilters.breed ||
+      newFilters.location.city ||
+      newFilters.location.state ||
+      newFilters.location.zip ||
+      newFilters.favorite;
+
+    // Check if filters are different from current and if any filter is active
+    if (
+      filtersActive &&
+      JSON.stringify(newFilters) !== JSON.stringify(filters)
+    ) {
+      setFilters(newFilters);
+      updateUrl(newFilters); // Call to update URL with new filters
+
+      // Apply filters and update filtered animals
+      const filtered = applyFilters(); // Apply filters to animal list
+      setFilteredAnimals(filtered); // Update the filtered animals state
+      updateTitle(); // Update the page title
+    } else {
+      // Reset animals when filters are cleared or new search is performed
+      setFilteredAnimals(animals);
+      updateTitle();
+    }
+  };
+  const updateUrl = (newFilters: {
+    keyword: string;
+    type: string;
+    sex: string;
+    age: string;
+    breed: string;
+    location: Location;
+    favorite: boolean;
+  }) => {
+    const params = new URLSearchParams();
+    if (newFilters.keyword) params.set("keyword", newFilters.keyword);
+    if (newFilters.type) params.set("type", newFilters.type);
+    if (newFilters.sex) params.set("sex", newFilters.sex);
+    if (newFilters.age) params.set("age", newFilters.age);
+    if (newFilters.breed) params.set("breed", newFilters.breed);
+    if (newFilters.location.city) params.set("city", newFilters.location.city);
+    if (newFilters.location.state)
+      params.set("state", newFilters.location.state);
+    if (newFilters.location.zip) params.set("zip", newFilters.location.zip);
+    if (newFilters.favorite)
+      params.set("favorites", newFilters.favorite.toString());
+    navigate(`?${params.toString()}`, { replace: true });
   };
 
   // Function to filter animals based on the current filters
@@ -81,10 +135,10 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
     const filtered = animalsToFilter.filter((animal) => {
       // Check if the keyword represents a location
       const isLocationKeyword =
-        // location.city.toLowerCase() === keyword.toLowerCase() ||
+        location.city.toLowerCase() === keyword.toLowerCase() ||
         location.state.toLowerCase() === keyword.toLowerCase() ||
-        // location.zip.toLowerCase() === keyword.toLowerCase();
-        console.log("Location:", location);
+        location.zip.toLowerCase() === keyword.toLowerCase();
+      // console.log("Location:", location);
 
       // Check if animal matches all filter criteria
       const nameAndTypeMatches =
@@ -93,7 +147,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
         animal.type
           .toLowerCase()
           .includes(pluralizeKeyword(keyword).toLowerCase());
-      console.log("Keyword:", animal);
+      // console.log("Keyword:", animal);
 
       const typeFilterMatches =
         !type || animal.type.toLowerCase() === type.toLowerCase();
@@ -116,6 +170,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
           animal.location.zip
             .toLowerCase()
             .includes(location.zip.toLowerCase()));
+      console.log("Location Matches:", locationMatches);
 
       const favoriteMatches = !favorite || animal.isFavorite === true;
 
@@ -206,22 +261,13 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
     newLocation.city = newLocation.city.trim();
     setFilters((prevFilters) => ({ ...prevFilters, location: newLocation }));
   }, [initialLocation]);
-  
 
   useEffect(() => {
     applyFilters();
     updateTitle(); // Call the function to update title whenever filters change
     setLoading(false); // Set loading to false after filtering
+    console.log("Filters State:", filters);
   }, [filters]);
-
-  useEffect(() => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      keyword: initialKeyword || "",
-    }));
-  }, [initialKeyword]);
-
-  useEffect(() => {}, [filters.favorite, navigate, searchParams]);
 
   return (
     <Box component="form">
@@ -241,11 +287,10 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
           <Grid container>
             <Grid item xs={12} md={4}>
               <SearchInput
+                filters={filters}
                 onFilterChange={handleFilterChange}
                 availableStates={availableStates}
                 initialAnimals={initialAnimals}
-                initialKeyword={initialKeyword}
-                initialLocation={initialLocation}
               />
             </Grid>
             <Grid item xs={10} md={8}>

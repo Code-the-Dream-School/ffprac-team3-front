@@ -34,55 +34,37 @@ interface SearchInputProps {
   }) => void;
   availableStates: string[];
   initialAnimals: Animal[];
-  initialKeyword: string; //  initialKeyword prop from homepage search
-  initialLocation: string; // initialLocation prop from homepage search
+  filters: {
+    keyword: string;
+    location: Location;
+    type: string;
+    sex: string;
+    age: string;
+    breed: string;
+    favorite: boolean;
+  };
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({
   onFilterChange,
   availableStates,
   initialAnimals,
-  initialKeyword,
-  initialLocation,
+  filters,
 }) => {
-  const [keyword, setKeyword] = useState(initialKeyword);
-  const [location, setLocation] = useState<Location>({
-    state: "",
-    city: "",
-    zip: "",
-  });
-  const [type, setType] = useState("");
-  const [sex, setSex] = useState("");
-  const [age, setAge] = useState("");
-  const [breed, setBreed] = useState("");
+  const [keyword, setKeyword] = useState(filters.keyword);
+  const [location, setLocation] = useState<Location>(filters.location);
+  const [type, setType] = useState(filters.type);
+  const [sex, setSex] = useState(filters.sex);
+  const [age, setAge] = useState(filters.age);
+  const [breed, setBreed] = useState(filters.breed);
   const [favorite, setFavorite] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Split initialLocation and map each item to trim leading/trailing whitespaces
-    const locationParts = initialLocation.split(",").map((part) => part.trim());
-    // Create a copy of the current location state
-    const newLocation = { ...location };
-    // Iterate over each location part and update the corresponding property in the location state
-    locationParts.forEach((part) => {
-      // Check format of a state abbreviation
-      if (/^[a-zA-Z]{2}$/.test(part)) {
-        newLocation.state = part;
-      }
-      // Check format of a ZIP code
-      else if (/^\d{5}$/.test(part)) {
-        newLocation.zip = part;
-      }
-      // Assume it's part of the city
-      else {
-        newLocation.city += part + " ";
-      }
-    });
-    // Trim any trailing whitespaces from the city
-    newLocation.city = newLocation.city.trim();
-    // Update the location state with the new values
-    setLocation(newLocation);
-  }, [initialLocation]);
+    // Parse the initial location data from filters.location
+    const { state, city, zip } = filters.location;
+    setLocation({ state: state || "", city: city || "", zip: zip || "" });
+  }, [filters.location]);
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -117,7 +99,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
     if (name === "age") {
       onFilterChange({
         keyword,
-        location,
+        location: { state: "", city: "", zip: "" },
         type,
         sex,
         age: value,
@@ -135,6 +117,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
     setAge("");
     setBreed("");
     setFavorite(false);
+
     onFilterChange({
       keyword: "",
       location: { state: "", city: "", zip: "" },
@@ -159,6 +142,23 @@ const SearchInput: React.FC<SearchInputProps> = ({
     });
   }, [keyword, location, type, sex, age, breed, favorite]);
 
+  useEffect(() => {
+    // Parse the initial location data from filters.location
+    const { state, city, zip } = filters.location;
+    setLocation({ state: state || "", city: city || "", zip: zip || "" });
+  }, [filters.location]);
+
+  useEffect(() => {
+    setKeyword(filters.keyword);
+    setLocation(filters.location);
+    setType(filters.type);
+    setSex(filters.sex);
+    setAge(filters.age);
+    setBreed(filters.breed);
+    setFavorite(filters.favorite);
+  }, [filters]);
+
+  
   return (
     <Box sx={{ mx: "1rem" }}>
       <Stack spacing={2} sx={{ ml: "1rem", pt: "2rem" }}>

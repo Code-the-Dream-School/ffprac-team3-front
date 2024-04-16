@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   MenuItem,
   FormControl,
@@ -51,6 +51,21 @@ function groupPetsByAge(pets: Animal[]): AgeGroup {
   return ageGroups;
 }
 
+// Define the checkAgeGroup function
+const checkAgeGroup = (animal: Animal, age: string): boolean => {
+  const ageValue = parseFloat(animal.age);
+  switch (age) {
+    case "Young":
+      return ageValue >= 0 && ageValue <= 1;
+    case "Adult":
+      return ageValue >= 2 && ageValue <= 5;
+    case "Senior":
+      return ageValue > 5;
+    default:
+      return false;
+  }
+};
+
 interface FilterDropdownsProps {
   type: string;
   sex: string;
@@ -65,7 +80,6 @@ interface FilterDropdownsProps {
     event: SelectChangeEvent<string>,
     filteredPets: Animal[]
   ) => void;
-  // handleLocationChange: (event: SelectChangeEvent<string>) => void;
   handleFavoriteChange: (event: SelectChangeEvent<string>) => void;
   handleClearFilters: () => void;
   setLocation: React.Dispatch<React.SetStateAction<Location>>;
@@ -87,113 +101,93 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
   handleFavoriteChange,
   handleClearFilters,
   setLocation,
-  availableStates,
+
   initialAnimals,
 }) => {
-  const types = [...new Set(initialAnimals.map((animal) => animal.type))];
-  const [ageGroups, setAgeGroups] = useState<AgeGroup>({
-    young: [],
-    adult: [],
-    senior: [],
-  });
-
-  const [breeds, setBreeds] = useState<string[]>([]);
   const [typeCounts, setTypeCounts] = useState<{ [key: string]: number }>({});
   const [breedCounts, setBreedCounts] = useState<{ [key: string]: number }>({});
-  const [stateCounts, setStateCounts] = useState<{ [key: string]: number }>({});
   const [sexCounts, setSexCounts] = useState<{ [key: string]: number }>({});
   const [ageCounts, setAgeCounts] = useState<{ [key: string]: number }>({});
+  const [stateCounts, setStateCounts] = useState<{ [key: string]: number }>({});
   const [favoriteCount, setFavoriteCount] = useState<number>(0);
 
-  useEffect(() => {
-    const groupedPets = groupPetsByAge(initialAnimals);
-    setAgeGroups((prevAgeGroups) => ({ ...prevAgeGroups, ...groupedPets }));
-  }, []);
+  // Memoize available states
+  const availableStates = useMemo(
+    () => [...new Set(initialAnimals.map((animal) => animal.location.state))],
+    [initialAnimals]
+  );
 
-  useEffect(() => {
-    setAgeCounts({
-      Young: ageGroups.young.length,
-      Adult: ageGroups.adult.length,
-      Senior: ageGroups.senior.length,
-    });
-  }, [ageGroups]);
-
-  // Update breeds when pet type changes
-  useEffect(() => {
+  // Memoize types and breeds
+  const types = useMemo(
+    () => [...new Set(initialAnimals.map((animal) => animal.type))],
+    [initialAnimals]
+  );
+  const breeds = useMemo(() => {
+    if (!type) return [];
     const typeBreeds = initialAnimals
       .filter((animal) => animal.type === type)
       .map((animal) => animal.breed);
-    setBreeds([...new Set(typeBreeds)]);
-  }, [type]);
-
-  // Filter Counts
-  useEffect(() => {
-    setBreedCounts(
-      countFilterOptions(
-        initialAnimals.map((animal) => animal.breed),
-        "breed"
-      )
-    );
-    setStateCounts(
-      countFilterOptions(
-        initialAnimals.map((animal) => animal.location.state),
-        "state"
-      )
-    );
-    setTypeCounts(
-      countFilterOptions(
-        initialAnimals.map((animal) => animal.type),
-        "type"
-      )
-    );
-
-    let filteredAnimalsByType = initialAnimals;
-    if (type) {
-      filteredAnimalsByType = initialAnimals.filter(
-        (animal) => animal.type === type
-      );
-    }
-
-    setSexCounts(
-      countFilterOptions(
-        filteredAnimalsByType.map((animal) => animal.sex),
-        "sex"
-      )
-    );
-
-    // Calculate age counts for filtered animals
-    const filteredAges = filteredAnimalsByType.map((animal) => animal.age);
-    const ageCountsByType = countAgeGroups(filteredAges);
-    setAgeCounts(ageCountsByType);
-    const favoriteCount = initialAnimals.filter(
-      (animal) => animal.isFavorite
-    ).length;
-    setFavoriteCount(favoriteCount);
+    return [...new Set(typeBreeds)];
   }, [type, initialAnimals]);
 
+  // Memoize filtered animals by type
+  const filteredAnimalsByType = useMemo(() => {
+    if (!type) return initialAnimals;
+    return initialAnimals.filter((animal) => animal.type === type);
+  }, [type, initialAnimals]);
+
+  // Memoize age groups
+  const ageGroups = useMemo(
+    () => groupPetsByAge(initialAnimals),
+    [initialAnimals]
+  );
+
+  // Memoize filter counts
+  useEffect(() => {
+    setTypeCounts(
+      countFilterOptions(initialAnimals.map((animal) => animal.type))
+    );
+    setBreedCounts(
+      countFilterOptions(initialAnimals.map((animal) => animal.breed))
+    );
+    setSexCounts(
+      countFilterOptions(filteredAnimalsByType.map((animal) => animal.sex))
+    );
+    setAgeCounts(
+      countAgeGroups(filteredAnimalsByType.map((animal) => animal.age))
+    );
+    setFavoriteCount(
+      initialAnimals.filter((animal) => animal.isFavorite).length
+    );
+    setStateCounts(
+      countFilterOptions(initialAnimals.map((animal) => animal.location.state))
+    );
+  }, [initialAnimals, filteredAnimalsByType]);
+
   // Function to count occurrences for filter options
-  const countFilterOptions = (items: string[], key: string) => {
-    const counts: { [key: string]: number } = {};
-    items.forEach((item) => {
+  const countFilterOptions = (items: string[]) => {
+    return items.reduce((counts: { [key: string]: number }, item) => {
       counts[item] = (counts[item] || 0) + 1;
-    });
-    return counts;
+      return counts;
+    }, {});
   };
 
   // Function to count occurrences for age groups
-  const countAgeGroups = (ages: string[]): { [key: string]: number } => {
-    const counts: { [key: string]: number } = { Young: 0, Adult: 0, Senior: 0 };
-    ages.forEach((age) => {
-      const ageValue = parseFloat(age);
-      if (ageValue >= 0 && ageValue <= 1) {
-        counts["Young"]++;
-      } else if (ageValue >= 2 && ageValue <= 5) {
-        counts["Adult"]++;
-      } else {
-        counts["Senior"]++;
-      }
-    });
-    return counts;
+  const countAgeGroups = (ages: string[]) => {
+    return ages.reduce(
+      (counts: { [key: string]: number }, age) => {
+        const ageValue = parseFloat(age);
+        if (ageValue >= 0 && ageValue <= 1) {
+          counts["Young"] = (counts["Young"] || 0) + 1;
+        } else if (ageValue >= 2 && ageValue <= 5) {
+          counts["Adult"] = (counts["Adult"] || 0) + 1;
+        } else {
+          counts["Senior"] = (counts["Senior"] || 0) + 1;
+        }
+        return counts;
+      },
+      { Young: 0, Adult: 0, Senior: 0 }
+    );
   };
 
   // Function to handle age change
@@ -218,7 +212,7 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
 
     handleAgeChange(event, filteredPets);
   };
-  // Function to handle breed change
+
   const handleBreedChangeWithFilters = (event: SelectChangeEvent<string>) => {
     const selectedBreed = event.target.value.split(" (")[0]; // Extract breed name without count
     handleBreedChange(event);
@@ -228,50 +222,63 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
     const selectedState = event.target.value;
     setLocation((prevLocation) => ({
       ...prevLocation,
-      
-      state: selectedState, // Update the state in the location object
+      state: selectedState,
     }));
 
+    handleFilterCounts(selectedState);
+  };
+
+  const handleFilterCounts = (selectedState: string) => {
     // Update filter counts based on selected state
     const filteredAnimalsByState = initialAnimals.filter(
       (animal) => animal.location.state === selectedState
     );
+    const filteredAnimalsByType = filteredAnimalsByState.filter(
+      (animal) => !type || animal.type === type
+    );
+
     setTypeCounts(
-      countFilterOptions(
-        filteredAnimalsByState.map((animal) => animal.type),
-        "type"
-      )
+      countFilterOptions(filteredAnimalsByState.map((animal) => animal.type))
     );
     setBreedCounts(
-      countFilterOptions(
-        filteredAnimalsByState.map((animal) => animal.breed),
-        "breed"
-      )
+      countFilterOptions(filteredAnimalsByState.map((animal) => animal.breed))
     );
-    let filteredAnimalsByType = filteredAnimalsByState;
-    if (type) {
-      filteredAnimalsByType = filteredAnimalsByState.filter(
-        (animal) => animal.type === type
-      );
-    }
-
     setSexCounts(
-      countFilterOptions(
-        filteredAnimalsByType.map((animal) => animal.sex),
-        "sex"
-      )
+      countFilterOptions(filteredAnimalsByType.map((animal) => animal.sex))
     );
-
-    // Calculate age counts for filtered animals
-    const filteredAges = filteredAnimalsByType.map((animal) => animal.age);
-    const ageCountsByType = countAgeGroups(filteredAges);
-    setAgeCounts(ageCountsByType);
+    setAgeCounts(
+      countAgeGroups(filteredAnimalsByType.map((animal) => animal.age))
+    );
 
     const favoriteCount = filteredAnimalsByState.filter(
       (animal) => animal.isFavorite
     ).length;
     setFavoriteCount(favoriteCount);
+
+    // Update state counts
+    setStateCounts(
+      countFilterOptions(
+        filteredAnimalsByState.map((animal) => animal.location.state)
+      )
+    );
   };
+
+  useEffect(() => {
+    // Calculate the favorite count based on the filtered animals
+    const filteredAnimals = initialAnimals.filter(
+      (animal) =>
+        (type === "" || animal.type === type) &&
+        (sex === "" || animal.sex === sex) &&
+        (age === "" || checkAgeGroup(animal, age)) &&
+        (breed === "" || animal.breed === breed) &&
+        (location.state === "" || animal.location.state === location.state) &&
+        (favorite || !favorite || animal.isFavorite)
+    );
+    const favoriteCount = filteredAnimals.filter(
+      (animal) => animal.isFavorite
+    ).length;
+    setFavoriteCount(favoriteCount);
+  }, [type, sex, age, breed, location, favorite, initialAnimals]);
 
   return (
     <FormControl variant="outlined" sx={{ gap: 2 }}>
