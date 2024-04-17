@@ -4,7 +4,6 @@ import SearchInput from "./SearchInput";
 import initialAnimals from "../PetComponents/PetData/PetData";
 import PetCard from "../PetComponents/PetCard";
 import { useLocation, useNavigate } from "react-router-dom";
-import pluralize from "pluralize";
 
 interface Location {
   state: string;
@@ -110,26 +109,37 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
     setPageTitle("");
   };
 
+  // Function to pluralize the keyword if more than one matching animal
+  const pluralizeKeyword = (keyword: string, count: number): string => {
+    return count === 1 ? keyword : `${keyword}s`;
+  };
+
   // Function to update the title based on user input
   const updateTitle = () => {
     let title = ""; // Default title
-    if (filters.keyword && !loading) {
+
+    // Check if no results found
+    if (noResults && !loading) {
+      title = "Sorry, no results found";
+    } else if (filters.keyword && !loading) {
       // Check if the keyword matches any animal type
       const matchingAnimals = filteredAnimals.filter(
         (animal) => animal.type.toLowerCase() === filters.keyword.toLowerCase()
       );
       if (matchingAnimals.length > 0) {
         if (matchingAnimals.length > 1) {
-          title = pluralize(filters.keyword); // Pluralize the keyword if more than one matching animal
+          title = pluralizeKeyword(filters.keyword, matchingAnimals.length); // Pluralize the keyword if more than one matching animal
         } else {
           title = filters.keyword; // Use the keyword as it is if only one matching animal
         }
       }
     }
+
     // Update title if the favorite filter is selected
     if (filters.favorite) {
       title = "Viewing Favorites";
     }
+
     // Reset title to "Search Results" if no keyword and favorite filter is not active
     if (!filters.keyword && !filters.favorite) {
       setPageTitle(title);
@@ -276,7 +286,9 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
               mt: "2rem",
             }}
           >
-            {filters.keyword && !filters.favorite && pageTitle !== ""
+            {noResults && pageTitle !== ""
+              ? pageTitle // Display pageTitle directly when noResults is true
+              : filters.keyword && !filters.favorite && pageTitle !== ""
               ? `Search Results for "${pageTitle}"`
               : filters.favorite && !filters.keyword && pageTitle !== ""
               ? "Viewing Favorites"
