@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect } from "react";
 import { getData } from './util/index';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Navbar } from './components/Navbar';
-import { HeroBanner } from './components/HeroBanner';
-import { PetSliderCarousel } from './components/PetSliderCarousel';
-import { SearchPets } from './components/SearchPets';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Navbar } from "./components/Navbar";
+import { HeroBanner } from "./components/HeroBanner";
+import { PetSliderCarousel } from "./components/PetSliderCarousel";
+import { SearchPets } from "./components/SearchComponents/SearchPets";
+import { Footer } from "./components/footer";
 import { SignUpForm } from './components/SignUpForm/SignUpForm';
 import ResourcesPage from './pages/ResourcesPage.tsx'
 import { Box, Button } from '@mui/material';
 import { LoginForm } from './components/LoginForm/LoginForm';
+
 
 const TempResourcesLink = () => {
   return (
@@ -41,9 +44,14 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      const myData = await getData();
-      console.log(myData);
-      setMessage(myData.data);
+      try {
+        const myData = await getAllData(URL);
+        if (myData) {
+          setMessage(myData.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     })();
 
     return () => {
@@ -62,6 +70,7 @@ function App() {
               <HeroBanner />
               <TempResourcesLink />
               <PetSliderCarousel />
+              <Footer />
             </>
           }
         />
@@ -72,6 +81,7 @@ function App() {
             <>
               <Navbar />
               <SearchPets />
+              <Footer />
             </>
           }
         />
@@ -81,6 +91,8 @@ function App() {
           element={
             <>
               <Navbar />
+              {/* Profile component */}
+              <Footer />
             </>
           }
         />
@@ -90,6 +102,8 @@ function App() {
           element={
             <>
               <Navbar />
+              {/* Settings component */}
+              <Footer />
             </>
           }
         />
@@ -110,6 +124,8 @@ function App() {
             <>
               <Navbar />
               <SignUpForm />
+             <Footer />
+
             </>
           }
         />
@@ -119,6 +135,8 @@ function App() {
           element={
             <>
               <Navbar />
+              {/* Logout component */}
+              <Footer />
             </>
           }
         />
