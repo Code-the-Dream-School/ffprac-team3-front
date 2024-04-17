@@ -5,6 +5,7 @@ import { Navbar } from './components/Navbar';
 import { HeroBanner } from './components/HeroBanner';
 import { PetSliderCarousel } from './components/PetSliderCarousel';
 import { SearchPets } from './components/SearchPets';
+import { Footer } from "./components/footer";
 import { SignUpForm } from './components/SignUpForm/SignUpForm';
 import ResourcesPage from './pages/ResourcesPage.tsx'
 import { Box, Button } from '@mui/material';
@@ -129,6 +130,7 @@ function App() {
             <>
               <Navbar />
               <ResourcesPage />
+              <Footer />
             </>
           }
         />
