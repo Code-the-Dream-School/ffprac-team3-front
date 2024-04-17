@@ -1,16 +1,46 @@
+
 import React, { useState, useEffect } from "react";
-import { getAllData } from "./util/index";
+import { getData } from './util/index';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { HeroBanner } from "./components/HeroBanner";
 import { PetSliderCarousel } from "./components/PetSliderCarousel";
 import { SearchPets } from "./components/SearchComponents/SearchPets";
 import { Footer } from "./components/footer";
+import { SignUpForm } from './components/SignUpForm/SignUpForm';
+import ResourcesPage from './pages/ResourcesPage.tsx'
+import { Box, Button } from '@mui/material';
+import { LoginForm } from './components/LoginForm/LoginForm';
 
-const URL = "http://localhost:8000/api/v1/";
+
+const TempResourcesLink = () => {
+  return (
+    <Box
+      display={"flex"}
+      justifyContent={"center"}
+    >
+      <Button
+        href="/resources"
+        variant="contained"
+        sx={{
+          mt: 4,
+          textTransform: "none",
+          fontStyle: "italic",
+          color: "#F7F4F0",
+          backgroundColor: "#EE633E",
+          "&:hover": {
+            backgroundColor: "#F8AF3F",
+          }
+        }}
+      >
+        Temporary shortcut to Resources page
+      </Button>
+    </Box>
+  )
+}
 
 function App() {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -25,7 +55,7 @@ function App() {
     })();
 
     return () => {
-      console.log("unmounting");
+      console.log('unmounting');
     };
   }, []);
 
@@ -38,6 +68,7 @@ function App() {
             <>
               <Navbar />
               <HeroBanner />
+              <TempResourcesLink />
               <PetSliderCarousel />
               <Footer />
             </>
@@ -82,8 +113,19 @@ function App() {
           element={
             <>
               <Navbar />
-              {/* Login component */}
-              <Footer />
+              <LoginForm />
+            </>
+          }
+        />
+
+        <Route
+          path="/register"
+          element={
+            <>
+              <Navbar />
+              <SignUpForm />
+             <Footer />
+
             </>
           }
         />
@@ -97,6 +139,11 @@ function App() {
               <Footer />
             </>
           }
+        />
+
+        <Route
+          path="/resources"
+          element={ <ResourcesPage /> }
         />
       </Routes>
     </BrowserRouter>
