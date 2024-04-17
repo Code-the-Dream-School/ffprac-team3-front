@@ -125,7 +125,12 @@ function App() {
 
         <Route
           path="/resources"
-          element={ <ResourcesPage /> }
+          element={
+            <>
+              <Navbar />
+              <ResourcesPage />
+            </>
+          }
         />
       </Routes>
     </BrowserRouter>
