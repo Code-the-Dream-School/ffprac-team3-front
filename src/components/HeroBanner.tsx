@@ -20,16 +20,20 @@ export const HeroBanner: React.FC = () => {
   };
 
   const handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(event.target.value.toLowerCase());
+    setLocation(event.target.value);
   };
 
   const handleButtonClick = () => {
     let searchQuery = "";
+
+    // Handle keyword
     if (keyword.trim()) {
       searchQuery += `keyword=${encodeURIComponent(
         pluralizeSingularKeyword(keyword)
-      )}`;
+      )}&`;
     }
+
+    // Handle location
     if (location.trim()) {
       const locationParts = location.split(",").map((part) => part.trim());
       const newLocation: any = { state: "", city: "", zip: "" };
@@ -42,13 +46,26 @@ export const HeroBanner: React.FC = () => {
           newLocation.city += part + " ";
         }
       });
+
       newLocation.city = newLocation.city.trim();
-      const parsedLocation = `${newLocation.state || ""}${
-        newLocation.city || ""
-      }${newLocation.zip || ""}`;
-      searchQuery += `location=${encodeURIComponent(parsedLocation)}`;
+
+      // Add separate query parameters for state, city, and zip
+      if (newLocation.state) {
+        searchQuery += `state=${encodeURIComponent(newLocation.state)}&`;
+      }
+      if (newLocation.city) {
+        searchQuery += `city=${encodeURIComponent(newLocation.city)}&`;
+      }
+      if (newLocation.zip) {
+        searchQuery += `zip=${encodeURIComponent(newLocation.zip)}&`;
+      }
     }
+
+    // Remove trailing "&" if it exists
+    searchQuery = searchQuery.replace(/&$/, "");
     console.log("Search query:", searchQuery);
+
+    // Navigate to the search page with the constructed query string
     navigate(searchQuery ? `/search?${searchQuery}` : "/search");
 
     // Reset the search fields

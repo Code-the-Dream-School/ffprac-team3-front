@@ -23,6 +23,15 @@ interface Animal {
   breed: string;
 }
 interface SearchInputProps {
+  filters: {
+    keyword: string;
+    type: string;
+    sex: string;
+    age: string;
+    breed: string;
+    location: Location;
+    favorite: boolean;
+  };
   onFilterChange: (filters: {
     keyword: string;
     location: Location;
@@ -34,37 +43,29 @@ interface SearchInputProps {
   }) => void;
   availableStates: string[];
   initialAnimals: Animal[];
-  filters: {
-    keyword: string;
-    location: Location;
-    type: string;
-    sex: string;
-    age: string;
-    breed: string;
-    favorite: boolean;
-  };
+  initialKeyword: string; //  initialKeyword prop from homepage search
+  location: Location; // location prop from homepage search
+  setPageTitle: React.Dispatch<React.SetStateAction<string>>; // Define setPageTitle prop
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({
+  filters,
   onFilterChange,
   availableStates,
   initialAnimals,
-  filters,
+  initialKeyword,
+  setPageTitle,
 }) => {
-  const [keyword, setKeyword] = useState(filters.keyword);
-  const [location, setLocation] = useState<Location>(filters.location);
-  const [type, setType] = useState(filters.type);
-  const [sex, setSex] = useState(filters.sex);
-  const [age, setAge] = useState(filters.age);
-  const [breed, setBreed] = useState(filters.breed);
+  const [keyword, setKeyword] = useState(
+    initialKeyword || filters.keyword || ""
+  );
+  const [location, setLocation] = useState<Location>(filters.location || "");
+  const [type, setType] = useState("");
+  const [sex, setSex] = useState("");
+  const [age, setAge] = useState("");
+  const [breed, setBreed] = useState("");
   const [favorite, setFavorite] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Parse the initial location data from filters.location
-    const { state, city, zip } = filters.location;
-    setLocation({ state: state || "", city: city || "", zip: zip || "" });
-  }, [filters.location]);
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -72,11 +73,32 @@ const SearchInput: React.FC<SearchInputProps> = ({
     const { name, value } = event.target;
     if (name === "keyword") {
       setKeyword(value);
+      onFilterChange({
+        keyword: value,
+        location,
+        type,
+        sex,
+        age,
+        breed,
+        favorite,
+      });
     } else {
       setLocation((prevLocation) => ({
         ...prevLocation,
         [name]: value, // Dynamically update the location state based on the input name
       }));
+      onFilterChange({
+        keyword,
+        location: {
+          ...location,
+          [name]: value, // Dynamically update the location state based on the input name
+        },
+        type,
+        sex,
+        age,
+        breed,
+        favorite,
+      });
     }
   };
 
@@ -99,7 +121,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
     if (name === "age") {
       onFilterChange({
         keyword,
-        location: { state: "", city: "", zip: "" },
+        location,
         type,
         sex,
         age: value,
@@ -110,6 +132,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
   };
 
   const clearFilters = () => {
+    console.log("Clearing Filters...");
     setKeyword("");
     setLocation({ state: "", city: "", zip: "" });
     setType("");
@@ -117,7 +140,6 @@ const SearchInput: React.FC<SearchInputProps> = ({
     setAge("");
     setBreed("");
     setFavorite(false);
-
     onFilterChange({
       keyword: "",
       location: { state: "", city: "", zip: "" },
@@ -127,7 +149,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
       breed: "",
       favorite: false,
     });
-    navigate("/search"); // Reset URL to default after clearing filters
+    navigate("/search", { replace: true }); // Reset URL to default after clearing filters
+    setPageTitle(""); // Reset the page title
   };
 
   useEffect(() => {
@@ -142,23 +165,6 @@ const SearchInput: React.FC<SearchInputProps> = ({
     });
   }, [keyword, location, type, sex, age, breed, favorite]);
 
-  useEffect(() => {
-    // Parse the initial location data from filters.location
-    const { state, city, zip } = filters.location;
-    setLocation({ state: state || "", city: city || "", zip: zip || "" });
-  }, [filters.location]);
-
-  useEffect(() => {
-    setKeyword(filters.keyword);
-    setLocation(filters.location);
-    setType(filters.type);
-    setSex(filters.sex);
-    setAge(filters.age);
-    setBreed(filters.breed);
-    setFavorite(filters.favorite);
-  }, [filters]);
-
-  
   return (
     <Box sx={{ mx: "1rem" }}>
       <Stack spacing={2} sx={{ ml: "1rem", pt: "2rem" }}>
@@ -210,9 +216,9 @@ const SearchInput: React.FC<SearchInputProps> = ({
         <Stack gap={3}>
           <FilterDropdowns
             type={type}
+            breed={breed}
             sex={sex}
             age={age}
-            breed={breed}
             location={location}
             favorite={favorite}
             handleTypeChange={(event) => handleSelectChange(event, setType)}
@@ -224,6 +230,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
             setLocation={setLocation}
             availableStates={availableStates}
             initialAnimals={initialAnimals}
+            setPageTitle={setPageTitle}
           />
         </Stack>
       </Card>

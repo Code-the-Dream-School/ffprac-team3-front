@@ -4,6 +4,7 @@ import SearchInput from "./SearchInput";
 import initialAnimals from "../PetComponents/PetData/PetData";
 import PetCard from "../PetComponents/PetCard";
 import { useLocation, useNavigate } from "react-router-dom";
+import pluralize from "pluralize";
 
 interface Location {
   state: string;
@@ -24,23 +25,26 @@ interface Animal {
 }
 interface SearchPetsProps {
   keyword: string;
-  location: string;
 }
 
 export const SearchPets: React.FC<SearchPetsProps> = () => {
   const [loading, setLoading] = useState(true);
   const [pageTitle, setPageTitle] = useState<string>("Search Results"); // State to hold the title
-  const { search } = useLocation();
-  const searchParams = new URLSearchParams(search);
-  const initialKeyword = searchParams.get("keyword") || "";
-  const initialLocation = searchParams.get("location") || "";
   const [animals, setAnimals] = useState<Animal[]>(initialAnimals);
   const [filteredAnimals, setFilteredAnimals] =
     useState<Animal[]>(initialAnimals);
   const [availableStates, setAvailableStates] = useState<string[]>([]);
   const [noResults, setNoResults] = useState(false); // State to track if no results found
-
   const navigate = useNavigate();
+
+  const { search } = useLocation();
+  const searchParams = new URLSearchParams(search);
+  const initialKeyword = searchParams.get("keyword") || "";
+  const location: Location = {
+    state: searchParams.get("state") || "",
+    city: searchParams.get("city") || "",
+    zip: searchParams.get("zip") || "",
+  };
 
   const [filters, setFilters] = useState<{
     keyword: string;
@@ -56,12 +60,8 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
     sex: "",
     age: "",
     breed: "",
-    location: {
-      state: "",
-      city: "",
-      zip: "",
-    },
-    favorite: false,
+    location: location,
+    favorite: searchParams.get("favorites") === "true",
   });
 
   // Function to handle changes in filter values
@@ -100,10 +100,43 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
       updateTitle(); // Update the page title
     } else {
       // Reset animals when filters are cleared or new search is performed
-      setFilteredAnimals(animals);
-      updateTitle();
+      setPageTitle("");
+      if (!filtersActive) {
+        // Update filtered animals only if there are active filters
+        setFilteredAnimals(animals);
+      }
+      updateTitle(); // Call to update title, clearing it
     }
+    setPageTitle("");
   };
+
+  // Function to update the title based on user input
+  const updateTitle = () => {
+    let title = ""; // Default title
+    if (filters.keyword && !loading) {
+      // Check if the keyword matches any animal type
+      const matchingAnimals = filteredAnimals.filter(
+        (animal) => animal.type.toLowerCase() === filters.keyword.toLowerCase()
+      );
+      if (matchingAnimals.length > 0) {
+        if (matchingAnimals.length > 1) {
+          title = pluralize(filters.keyword); // Pluralize the keyword if more than one matching animal
+        } else {
+          title = filters.keyword; // Use the keyword as it is if only one matching animal
+        }
+      }
+    }
+    // Update title if the favorite filter is selected
+    if (filters.favorite) {
+      title = "Viewing Favorites";
+    }
+    // Reset title to "Search Results" if no keyword and favorite filter is not active
+    if (!filters.keyword && !filters.favorite) {
+      setPageTitle(title);
+    }
+    setPageTitle(title);
+  };
+
   const updateUrl = (newFilters: {
     keyword: string;
     type: string;
@@ -136,17 +169,14 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
       // Check if the keyword represents a location
       const isLocationKeyword =
         location.city.toLowerCase() === keyword.toLowerCase() ||
-        location.state.toLowerCase() === keyword.toLowerCase() ||
+        location.state.toLowerCase() === keyword.toUpperCase() ||
         location.zip.toLowerCase() === keyword.toLowerCase();
       // console.log("Location:", location);
 
       // Check if animal matches all filter criteria
       const nameAndTypeMatches =
         animal.name.toLowerCase().includes(keyword.toLowerCase()) ||
-        animal.type.toLowerCase().includes(keyword.toLowerCase()) ||
-        animal.type
-          .toLowerCase()
-          .includes(pluralizeKeyword(keyword).toLowerCase());
+        animal.type.toLowerCase().includes(keyword.toLowerCase());
       // console.log("Keyword:", animal);
 
       const typeFilterMatches =
@@ -223,45 +253,6 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
     setFilteredAnimals(filtered);
   };
 
-  // Function to pluralize search keyword
-  const pluralizeKeyword = (keyword: string): string => {
-    if (keyword.endsWith("s")) {
-      return keyword; // Keep plural form if it's already plural
-    }
-    return `${keyword}s`; // Add "s" to make it plural
-  };
-
-  // Function to update the title based on user input
-  const updateTitle = () => {
-    let title = "Search Results"; // Default title
-    if (filters.keyword) {
-      const pluralizedKeyword = pluralizeKeyword(filters.keyword);
-      title = `${pluralizedKeyword}`; // Customize title based on pluralized keyword
-    }
-    // Update title if the favorite filter is selected
-    if (filters.favorite) {
-      title = "Viewing Favorites";
-    }
-    setPageTitle(title);
-  };
-
-  useEffect(() => {
-    // Updated location parsing logic
-    const locationParts = initialLocation.split(",").map((part) => part.trim());
-    const newLocation: Location = { state: "", city: "", zip: "" };
-    locationParts.forEach((part) => {
-      if (/^[a-zA-Z]{2}$/.test(part)) {
-        newLocation.state = part;
-      } else if (/^\d{5}$/.test(part)) {
-        newLocation.zip = part;
-      } else {
-        newLocation.city += part + " ";
-      }
-    });
-    newLocation.city = newLocation.city.trim();
-    setFilters((prevFilters) => ({ ...prevFilters, location: newLocation }));
-  }, [initialLocation]);
-
   useEffect(() => {
     applyFilters();
     updateTitle(); // Call the function to update title whenever filters change
@@ -277,31 +268,42 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
         </Typography>
       ) : (
         <>
-          <Typography variant="h3" align="center" gutterBottom>
-            {filters.keyword &&
-              !filters.favorite &&
-              `Search Results for "${pageTitle}"`}
-            {filters.favorite && !filters.keyword && "Viewing Favorites"}
+          <Typography
+            variant="h3"
+            align="center"
+            gutterBottom
+            sx={{
+              mt: "2rem",
+            }}
+          >
+            {filters.keyword && !filters.favorite && pageTitle !== ""
+              ? `Search Results for "${pageTitle}"`
+              : filters.favorite && !filters.keyword && pageTitle !== ""
+              ? "Viewing Favorites"
+              : ""}
           </Typography>
 
           <Grid container>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3} lg={3}>
               <SearchInput
                 filters={filters}
                 onFilterChange={handleFilterChange}
                 availableStates={availableStates}
                 initialAnimals={initialAnimals}
+                initialKeyword={initialKeyword}
+                location={location}
+                setPageTitle={setPageTitle}
               />
             </Grid>
-            <Grid item xs={10} md={8}>
+            <Grid item xs={12} md={8}>
               <Stack
                 direction="column"
                 sx={{
                   width: "90%",
                   display: "grid",
                   gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-                  gap: 2,
-                  p: 4,
+                  gap: 3,
+                  m: 4,
                   marginTop: "4rem",
                 }}
               >

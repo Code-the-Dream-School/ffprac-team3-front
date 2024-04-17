@@ -1,3 +1,5 @@
+//FILTERS
+
 import React, { useState, useEffect, useMemo } from "react";
 import {
   MenuItem,
@@ -82,6 +84,7 @@ interface FilterDropdownsProps {
   ) => void;
   handleFavoriteChange: (event: SelectChangeEvent<string>) => void;
   handleClearFilters: () => void;
+  setPageTitle: React.Dispatch<React.SetStateAction<string>>; // Add setPageTitle
   setLocation: React.Dispatch<React.SetStateAction<Location>>;
   availableStates: string[];
   initialAnimals: Animal[];
@@ -99,9 +102,8 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
   handleBreedChange,
   handleAgeChange,
   handleFavoriteChange,
-  handleClearFilters,
+  // handleClearFilters,
   setLocation,
-
   initialAnimals,
 }) => {
   const [typeCounts, setTypeCounts] = useState<{ [key: string]: number }>({});
@@ -262,6 +264,45 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
       )
     );
   };
+  // Function to reset filter counts
+  const resetFilterCounts = () => {
+    // Reset filter counts to initial values
+    setTypeCounts(
+      countFilterOptions(initialAnimals.map((animal) => animal.type))
+    );
+    setBreedCounts(
+      countFilterOptions(initialAnimals.map((animal) => animal.breed))
+    );
+    setSexCounts(
+      countFilterOptions(initialAnimals.map((animal) => animal.sex))
+    );
+    setAgeCounts(countAgeGroups(initialAnimals.map((animal) => animal.age)));
+
+    // Reset favorite count
+    setFavoriteCount(
+      initialAnimals.filter((animal) => animal.isFavorite).length
+    );
+
+    // Reset state counts
+    setStateCounts(
+      countFilterOptions(initialAnimals.map((animal) => animal.location.state))
+    );
+  };
+
+  const handleClearFilters = () => {
+    // Reset all filter values
+    handleTypeChange({ target: { value: "" } } as SelectChangeEvent<string>);
+    handleSexChange({ target: { value: "" } } as SelectChangeEvent<string>);
+    handleBreedChange({ target: { value: "" } } as SelectChangeEvent<string>);
+    handleAgeChange({ target: { value: "" } } as SelectChangeEvent<string>, []); // Reset age and filteredPets
+    handleFavoriteChange({
+      target: { value: "" },
+    } as SelectChangeEvent<string>);
+    setLocation({ state: "", city: "", zip: "" }); // Reset location state
+
+    // Reset filter counts
+    resetFilterCounts();
+  };
 
   useEffect(() => {
     // Calculate the favorite count based on the filtered animals
@@ -278,6 +319,26 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
       (animal) => animal.isFavorite
     ).length;
     setFavoriteCount(favoriteCount);
+ // Update the filter counts only if there are filtered animals
+  if (filteredAnimals.length > 0) {
+    setTypeCounts(
+      countFilterOptions(filteredAnimals.map((animal) => animal.type))
+    );
+    setBreedCounts(
+      countFilterOptions(filteredAnimals.map((animal) => animal.breed))
+    );
+    setSexCounts(
+      countFilterOptions(filteredAnimals.map((animal) => animal.sex))
+    );
+    setAgeCounts(
+      countAgeGroups(filteredAnimals.map((animal) => animal.age))
+    );
+    setStateCounts(
+      countFilterOptions(filteredAnimals.map((animal) => animal.location.state))
+    );
+  }
+
+
   }, [type, sex, age, breed, location, favorite, initialAnimals]);
 
   return (
@@ -363,7 +424,7 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
             </MenuItem>
             {Object.entries(sexCounts).map(([sex, count]) => (
               <MenuItem key={sex} value={sex}>
-                {`${sex} (${count})`}
+                {`${sex} (${sexCounts[sex]})`}
               </MenuItem>
             ))}
           </Select>
@@ -383,7 +444,7 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
             </MenuItem>
             {Object.entries(ageCounts).map(([ageGroup, count]) => (
               <MenuItem key={ageGroup} value={ageGroup}>
-                {`${ageGroup} (${count})`}
+                {`${ageGroup} (${ageCounts[ageGroup]})`}
               </MenuItem>
             ))}
           </Select>
@@ -393,7 +454,7 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
           <Select
             label="Favorites"
             value={favorite ? "true" : ""}
-            onChange={handleFavoriteChange} // New favorite filter change handler
+            onChange={handleFavoriteChange}
             displayEmpty
             sx={{ backgroundColor: "#fff" }}
           >
