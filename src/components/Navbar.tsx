@@ -67,7 +67,7 @@ export const Navbar: React.FC = () => {
             <IconButton
               id="favorites"
               color="inherit"
-              href="#favorites"
+              href="/search?favorites=true"
               sx={{
                 "&:hover": {
                   color: "#F8AF3F",

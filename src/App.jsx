@@ -40,9 +40,14 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      const myData = await getData();
-      console.log(myData);
-      setMessage(myData.data);
+      try {
+        const myData = await getAllData(URL);
+        if (myData) {
+          setMessage(myData.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     })();
 
     return () => {
@@ -61,6 +66,7 @@ function App() {
               <HeroBanner />
               <TempResourcesLink />
               <PetSliderCarousel />
+              <Footer />
             </>
           }
         />
@@ -71,6 +77,7 @@ function App() {
             <>
               <Navbar />
               <SearchPets />
+              <Footer />
             </>
           }
         />
@@ -80,6 +87,8 @@ function App() {
           element={
             <>
               <Navbar />
+              {/* Profile component */}
+              <Footer />
             </>
           }
         />
@@ -89,6 +98,8 @@ function App() {
           element={
             <>
               <Navbar />
+              {/* Settings component */}
+              <Footer />
             </>
           }
         />
@@ -109,6 +120,7 @@ function App() {
             <>
               <Navbar />
               <SignUpForm />
+              <Footer />
             </>
           }
         />
@@ -122,12 +134,13 @@ function App() {
             </>
           }
         />
-
         <Route
           path="/logout"
           element={
             <>
               <Navbar />
+              {/* Logout component */}
+              <Footer />
             </>
           }
         />
