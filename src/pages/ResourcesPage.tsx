@@ -26,7 +26,7 @@ const ResourceCards = () => {
                         image="https://www.aspca.org/sites/default/files/dog-care_general-dog-care_main-image.jpg"
                     />
                     <CardContent sx={{ width: 200, height: 170 }}>
-                        <Typography sx={{ textDecoration: "underline lightblue" }}>General Dog Care</Typography>
+                        <Typography color="primary" sx={{ textDecoration: "underline lightblue" }}>General Dog Care</Typography>
                         <Typography>A beginner's guide to preparing and caring for a dog.</Typography>
                     </CardContent>
                 </Card>
@@ -44,7 +44,7 @@ const ResourceCards = () => {
                         image="https://www.aspca.org/sites/default/files/cat-care_general-cat-care_body1-right.jpg"
                     />
                     <CardContent sx={{ width: 200, height: 170 }}>
-                        <Typography sx={{ textDecoration: "underline lightblue" }}>General Cat Care</Typography>
+                        <Typography color="primary" sx={{ textDecoration: "underline lightblue" }}>General Cat Care</Typography>
                         <Typography>A beginner's guide to preparing and caring for a cat.</Typography>
                     </CardContent>
                 </Card>
@@ -62,7 +62,7 @@ const ResourceCards = () => {
                         image="https://www.petfinder.com/static/e801888dd7dc3c3a735547036e840078/5a4d9/hamster-facts-about-small-mammals-as-pets-thinkstock-155233157-253x168_0.webp"
                     />
                     <CardContent sx={{ width: 200, height: 170 }}>
-                        <Typography sx={{ textDecoration: "underline lightblue" }}>Facts About Small Mammals as Pets</Typography>
+                        <Typography color="primary" sx={{ textDecoration: "underline lightblue" }}>Facts About Small Mammals as Pets</Typography>
                         <Typography>A guide for those smaller furry friends, complete with a handy characteristics chart.</Typography>
                     </CardContent>
                 </Card>
@@ -80,7 +80,7 @@ const ResourceCards = () => {
                         image="https://vetericyn.com/Vetericyn/wp-content/uploads/2020/10/Small-pet-tortoise-eating-lettuce-in-a-pet-shop-tank.jpg"
                     />
                     <CardContent sx={{ width: 200, height: 170 }}>
-                        <Typography sx={{ textDecoration: "underline lightblue" }}>Reptile Care for Beginners: A Helpful Guide</Typography>
+                        <Typography color="primary" sx={{ textDecoration: "underline lightblue" }}>Reptile Care for Beginners: A Helpful Guide</Typography>
                         <Typography>A comprehensive yet approachable beginner's guide to caring for your reptile friend(s).</Typography>
                     </CardContent>
                 </Card>
