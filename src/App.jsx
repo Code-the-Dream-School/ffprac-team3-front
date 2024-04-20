@@ -4,11 +4,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { HeroBanner } from "./components/HeroBanner";
 import { PetSliderCarousel } from "./components/PetSliderCarousel";
-import { SearchPets } from "./components/SearchPets";
+import { SearchPets } from "./components/SearchComponents/SearchPets";
 import { SignUpForm } from "./components/SignUpForm/SignUpForm";
 import ResourcesPage from "./pages/ResourcesPage.tsx";
 import { Box, Button } from "@mui/material";
 import { LoginForm } from "./components/LoginForm/LoginForm";
+import { Footer } from "./components/footer";
 import { ContactForm } from "./components/ContactForm";
 
 const URL = "http://localhost:8000/api/v1/";
@@ -131,6 +132,7 @@ function App() {
             <>
               <Navbar />
               <ContactForm />
+              <Footer />
             </>
           }
         />
