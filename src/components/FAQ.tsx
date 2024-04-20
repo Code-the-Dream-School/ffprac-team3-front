@@ -42,30 +42,30 @@ const FAQ = () => {
 
                 <Box display="flex" flexDirection="column">
                     <FAQAccordion
-                        question={"Should I adopt?"}
-                        answer={"Answer..."}
+                        question={"Am I ready to adopt a pet?"}
+                        answer={"We're glad you asked! Check out the Pet Readiness Checklists above for more information."}
                     />
 
                     <FAQAccordion
-                        question={"How do I take care of a Russian Tortoise?"}
-                        answer={"Answer..."}
+                        question={"Does PetPals cost anything?"}
+                        answer={"No, PetPals is completely free to use."}
                     />
 
                     <FAQAccordion
-                        question={"Why do cats purr?"}
-                        answer={"Answer..."}
+                        question={"I have a question about a specific pet..."}
+                        answer={"Please contact the adoption agency or breeder. PetPals makes it super easy to do this!"}
                     />
                 </Box>
 
                 <Box display="flex" flexDirection="column" >
                     <FAQAccordion
-                        question={"What if I want to return my pet?"}
-                        answer={"Answer..."}
+                       question={"Am I ready to adopt an animal?"}
+                       answer={"We're glad you asked! Check out the Pet Readiness Checklists above for more information."}
                     />
 
                     <FAQAccordion
-                        question={"Do parrots speak English?"}
-                        answer={"Answer..."}
+                        question={"I have a pet for adoption. Can I make a listing on your website?"}
+                        answer={"Coming soon..."}
                     />
 
                     <FAQAccordion
