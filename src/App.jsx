@@ -1,24 +1,21 @@
-
 import React, { useState, useEffect } from "react";
-import { getData } from './util/index';
+import { getData } from "./util/index";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { HeroBanner } from "./components/HeroBanner";
 import { PetSliderCarousel } from "./components/PetSliderCarousel";
 import { SearchPets } from "./components/SearchComponents/SearchPets";
+import { SignUpForm } from "./components/SignUpForm/SignUpForm";
+import ResourcesPage from "./pages/ResourcesPage.tsx";
+import { Box, Button } from "@mui/material";
+import { LoginForm } from "./components/LoginForm/LoginForm";
 import { Footer } from "./components/footer";
-import { SignUpForm } from './components/SignUpForm/SignUpForm';
-import ResourcesPage from './pages/ResourcesPage.tsx'
-import { Box, Button } from '@mui/material';
-import { LoginForm } from './components/LoginForm/LoginForm';
+import { ContactForm } from "./components/ContactForm";
 
-
+const URL = "http://localhost:8000/api/v1/";
 const TempResourcesLink = () => {
   return (
-    <Box
-      display={"flex"}
-      justifyContent={"center"}
-    >
+    <Box display={"flex"} justifyContent={"center"}>
       <Button
         href="/resources"
         variant="contained"
@@ -30,17 +27,17 @@ const TempResourcesLink = () => {
           backgroundColor: "#EE633E",
           "&:hover": {
             backgroundColor: "#F8AF3F",
-          }
+          },
         }}
       >
         Temporary shortcut to Resources page
       </Button>
     </Box>
-  )
-}
+  );
+};
 
 function App() {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -55,7 +52,7 @@ function App() {
     })();
 
     return () => {
-      console.log('unmounting');
+      console.log("unmounting");
     };
   }, []);
 
@@ -124,12 +121,21 @@ function App() {
             <>
               <Navbar />
               <SignUpForm />
-             <Footer />
-
+              <Footer />
             </>
           }
         />
 
+        <Route
+          path="/contactus"
+          element={
+            <>
+              <Navbar />
+              <ContactForm />
+              <Footer />
+            </>
+          }
+        />
         <Route
           path="/logout"
           element={
@@ -141,10 +147,7 @@ function App() {
           }
         />
 
-        <Route
-          path="/resources"
-          element={ <ResourcesPage /> }
-        />
+        <Route path="/resources" element={<ResourcesPage />} />
       </Routes>
     </BrowserRouter>
   );
