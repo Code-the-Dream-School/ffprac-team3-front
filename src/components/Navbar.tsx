@@ -91,28 +91,31 @@ export const Navbar: React.FC = () => {
             sx={{ flexGrow: 1 }}
           >
             {/* {isLoggedIn && ( // Render only if logged in */}
-              <>
-                <IconButton
-                  id="favorites"
-                  color="inherit"
-                  href="/search?favorites=true"
-                  sx={{
-                    "&:hover": {
-                      color: "#F8AF3F",
-                      backgroundColor: "transparent",
-                    },
-                  }}
-                >
-                  <FavoriteIcon />
-                </IconButton>
 
-                <Divider
-                  color="#F8AF3F"
-                  orientation="vertical"
-                  variant="middle"
-                  flexItem
-                />
-              </>
+            <>
+              <IconButton
+                id="favorites"
+                color="inherit"
+                onClick={(event) => {
+                  navigate("/search?favorites=true");
+                }}
+                sx={{
+                  "&:hover": {
+                    color: "#F8AF3F",
+                    backgroundColor: "transparent",
+                  },
+                }}
+              >
+                <FavoriteIcon />
+              </IconButton>
+            </>
+            <Divider
+              color="#F8AF3F"
+              orientation="vertical"
+              variant="middle"
+              flexItem
+            />
+
             {/* )} */}
 
             <IconButton
@@ -156,34 +159,34 @@ export const Navbar: React.FC = () => {
           >
             <MenuList dense>
               {/* {!isLoggedIn && ( // Render only if not logged in */}
-                <MenuItem onClick={handleClose}>
-                  <Link href="/login" underline="none">
-                    Login
-                  </Link>
-                </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Link href="/login" underline="none">
+                  Login
+                </Link>
+              </MenuItem>
               {/* )} */}
 
               {/* These options will be hidden when logged out */}
               {/* {isLoggedIn && ( // Render only if logged in */}
-                <>
-                  <MenuItem onClick={handleClose}>
-                    <Link href="/profile" color="#0E2728" underline="none">
-                      Profile
-                    </Link>
-                  </MenuItem>
+              <>
+                <MenuItem onClick={handleClose}>
+                  <Link href="/profile" color="#0E2728" underline="none">
+                    Profile
+                  </Link>
+                </MenuItem>
 
-                  <MenuItem onClick={handleClose}>
-                    <Link href="/settings" color="#0E2728" underline="none">
-                      Account Settings
-                    </Link>
-                  </MenuItem>
-                  <Divider />
-                  <MenuItem onClick={handleClose}>
-                    <Link href="/logout" color="#0E2728" underline="none">
-                      Logout
-                    </Link>
-                  </MenuItem>
-                </>
+                <MenuItem onClick={handleClose}>
+                  <Link href="/settings" color="#0E2728" underline="none">
+                    Account Settings
+                  </Link>
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleClose}>
+                  <Link href="/logout" color="#0E2728" underline="none">
+                    Logout
+                  </Link>
+                </MenuItem>
+              </>
               {/* )} */}
             </MenuList>
           </Menu>

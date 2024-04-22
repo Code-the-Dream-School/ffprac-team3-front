@@ -71,6 +71,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = event.target;
+
     if (name === "keyword") {
       setKeyword(value);
       onFilterChange({

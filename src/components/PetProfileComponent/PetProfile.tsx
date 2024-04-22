@@ -66,7 +66,7 @@ export const PetProfile: React.FC = () => {
     if (selectedAnimal) {
       // Check if the favorite status is stored in localStorage
       const storedFavorite = localStorage.getItem(`favorite_${id}`);
-      if (storedFavorite) {
+      if (storedFavorite !== null) {
         selectedAnimal.isFavorite = JSON.parse(storedFavorite);
       }
       setAnimal(selectedAnimal);
@@ -77,6 +77,19 @@ export const PetProfile: React.FC = () => {
       setLoading(false);
     }
   }, [id]);
+
+  useEffect(() => {
+    // Refresh favorite status on component mount
+    const storedFavorite = localStorage.getItem(`favorite_${id}`);
+    if (storedFavorite !== null) {
+      setAnimal((prevAnimal) => {
+        if (prevAnimal) {
+          return { ...prevAnimal, isFavorite: JSON.parse(storedFavorite) };
+        }
+        return prevAnimal;
+      });
+    }
+  }, []);
 
   useEffect(() => {
     // Remember scroll position when component unmounts
