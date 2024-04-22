@@ -1,5 +1,3 @@
-//FILTERS
-
 import React, { useState, useEffect, useMemo } from "react";
 import {
   MenuItem,
@@ -319,26 +317,24 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
       (animal) => animal.isFavorite
     ).length;
     setFavoriteCount(favoriteCount);
- // Update the filter counts only if there are filtered animals
-  if (filteredAnimals.length > 0) {
-    setTypeCounts(
-      countFilterOptions(filteredAnimals.map((animal) => animal.type))
-    );
-    setBreedCounts(
-      countFilterOptions(filteredAnimals.map((animal) => animal.breed))
-    );
-    setSexCounts(
-      countFilterOptions(filteredAnimals.map((animal) => animal.sex))
-    );
-    setAgeCounts(
-      countAgeGroups(filteredAnimals.map((animal) => animal.age))
-    );
-    setStateCounts(
-      countFilterOptions(filteredAnimals.map((animal) => animal.location.state))
-    );
-  }
-
-
+    // Update the filter counts only if there are filtered animals
+    if (filteredAnimals.length > 0) {
+      setTypeCounts(
+        countFilterOptions(filteredAnimals.map((animal) => animal.type))
+      );
+      setBreedCounts(
+        countFilterOptions(filteredAnimals.map((animal) => animal.breed))
+      );
+      setSexCounts(
+        countFilterOptions(filteredAnimals.map((animal) => animal.sex))
+      );
+      setAgeCounts(countAgeGroups(filteredAnimals.map((animal) => animal.age)));
+      setStateCounts(
+        countFilterOptions(
+          filteredAnimals.map((animal) => animal.location.state)
+        )
+      );
+    }
   }, [type, sex, age, breed, location, favorite, initialAnimals]);
 
   return (
@@ -461,8 +457,9 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
             <MenuItem value="" disabled>
               Favorites
             </MenuItem>
+            {/* <MenuItem value="true">{`Favorites (${favoriteCount})`}</MenuItem> */}
 
-            <MenuItem value="true">{`Favorites (${favoriteCount})`}</MenuItem>
+            <MenuItem value="true">{`Favorites`}</MenuItem>
           </Select>
         </FormControl>
       </Stack>

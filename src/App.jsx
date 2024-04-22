@@ -1,24 +1,20 @@
-
 import React, { useState, useEffect } from "react";
-import { getData } from './util/index';
+import { getData } from "./util/index";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
-import { HeroBanner } from "./components/HeroBanner";
-import { PetSliderCarousel } from "./components/PetSliderCarousel";
+import { HeroBanner } from "./components/HomePageComponents/HeroBanner";
+import { PetSliderCarousel } from "./components/HomePageComponents/PetSliderCarousel";
 import { SearchPets } from "./components/SearchComponents/SearchPets";
 import { Footer } from "./components/footer";
-import { SignUpForm } from './components/SignUpForm/SignUpForm';
-import ResourcesPage from './pages/ResourcesPage.tsx'
-import { Box, Button } from '@mui/material';
-import { LoginForm } from './components/LoginForm/LoginForm';
-
+import { SignUpForm } from "./components/SignUpForm/SignUpForm";
+import ResourcesPage from "./pages/ResourcesPage.tsx";
+import { Box, Button } from "@mui/material";
+import { LoginForm } from "./components/LoginForm/LoginForm";
+import { PetProfile } from "./components/PetProfileComponent/PetProfile";
 
 const TempResourcesLink = () => {
   return (
-    <Box
-      display={"flex"}
-      justifyContent={"center"}
-    >
+    <Box display={"flex"} justifyContent={"center"}>
       <Button
         href="/resources"
         variant="contained"
@@ -30,22 +26,22 @@ const TempResourcesLink = () => {
           backgroundColor: "#EE633E",
           "&:hover": {
             backgroundColor: "#F8AF3F",
-          }
+          },
         }}
       >
         Temporary shortcut to Resources page
       </Button>
     </Box>
-  )
-}
+  );
+};
 
 function App() {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     (async () => {
       try {
-        const myData = await getAllData(URL);
+        const myData = await getData(URL);
         if (myData) {
           setMessage(myData.data);
         }
@@ -55,7 +51,7 @@ function App() {
     })();
 
     return () => {
-      console.log('unmounting');
+      console.log("unmounting");
     };
   }, []);
 
@@ -81,6 +77,19 @@ function App() {
             <>
               <Navbar />
               <SearchPets />
+
+              <Footer />
+            </>
+          }
+        />
+
+        <Route
+          path="/pet-profile/:id/:type/:name"
+          element={
+            <>
+              <Navbar />
+              <PetProfile />
+
               <Footer />
             </>
           }
@@ -91,7 +100,7 @@ function App() {
           element={
             <>
               <Navbar />
-              {/* Profile component */}
+              {/* User Profile Component */}
               <Footer />
             </>
           }
@@ -102,7 +111,7 @@ function App() {
           element={
             <>
               <Navbar />
-              {/* Settings component */}
+              {/* Settings Component */}
               <Footer />
             </>
           }
@@ -114,6 +123,7 @@ function App() {
             <>
               <Navbar />
               <LoginForm />
+              <Footer />
             </>
           }
         />
@@ -124,8 +134,7 @@ function App() {
             <>
               <Navbar />
               <SignUpForm />
-             <Footer />
-
+              <Footer />
             </>
           }
         />
@@ -141,10 +150,7 @@ function App() {
           }
         />
 
-        <Route
-          path="/resources"
-          element={ <ResourcesPage /> }
-        />
+        <Route path="/resources" element={<ResourcesPage />} />
       </Routes>
     </BrowserRouter>
   );
