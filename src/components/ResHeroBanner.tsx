@@ -12,12 +12,16 @@ const ResHeroBanner = () => {
             my={4}
             width="60vw"
         >
-            <Box width={500} >
-                <Typography variant="h3" mb={4}>
+            <Box width={500}>
+                <Typography
+                    variant="h1"
+                    sx={{ letterSpacing: .5, fontWeight: 600 }}
+                    gutterBottom
+                >
                     Resources
                 </Typography>
 
-                <Typography variant="body2" mt={2} sx={{ fontSize: 16 }}>
+                <Typography variant="body2" sx={{ fontSize: 16 }}>
                     At PetPals, we believe that having an accessible portal to all available pets for adoption is so important. But equally important and sometimes overlooked in the excitement of bringing home a new Forever Friend, is how to properly care for them so that they stay a Friend, Forever. Here are additional resources to help you prepare to be a PetParent.
                 </Typography>
             </Box>
