@@ -80,14 +80,14 @@ export const PetSliderCarousel: React.FC = () => {
   };
 
   return (
-    <Container fixed id="favorites">
-      <Box sx={{ p: 5 }}>
+    <Container fixed sx={{ pb: "2rem" }}>
+      <Box sx={{ p: "2rem" }}>
         <Typography
           variant="h3"
           component="h2"
           color="#0F2117"
           textAlign="center"
-          sx={{ fontWeight: 600 }}
+          sx={{ fontWeight: 600, mt: "2rem", pb: "1rem" }}
           gutterBottom
         >
           Favorited Pets

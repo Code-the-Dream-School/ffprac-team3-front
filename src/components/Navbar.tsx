@@ -5,13 +5,12 @@ import {
   Toolbar,
   IconButton,
   Stack,
-  Button,
   Menu,
   MenuItem,
   Link,
   MenuList,
 } from "@mui/material";
-import { PetLogoIcon } from "../img/PetLogoIcon";
+import { PetLogoIcon } from "../img/icons/PetLogoIcon";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Divider from "@mui/material/Divider";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -168,25 +167,25 @@ export const Navbar: React.FC = () => {
 
               {/* These options will be hidden when logged out */}
               {/* {isLoggedIn && ( // Render only if logged in */}
-              <>
-                <MenuItem onClick={handleClose}>
-                  <Link href="/profile" color="#0E2728" underline="none">
-                    Profile
-                  </Link>
-                </MenuItem>
 
-                <MenuItem onClick={handleClose}>
-                  <Link href="/settings" color="#0E2728" underline="none">
-                    Account Settings
-                  </Link>
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={handleClose}>
-                  <Link href="/logout" color="#0E2728" underline="none">
-                    Logout
-                  </Link>
-                </MenuItem>
-              </>
+              <MenuItem onClick={handleClose}>
+                <Link href="/profile" color="#0E2728" underline="none">
+                  Profile
+                </Link>
+              </MenuItem>
+
+              <MenuItem onClick={handleClose}>
+                <Link href="/settings" color="#0E2728" underline="none">
+                  Account Settings
+                </Link>
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={handleClose}>
+                <Link href="/logout" color="#0E2728" underline="none">
+                  Logout
+                </Link>
+              </MenuItem>
+
               {/* )} */}
             </MenuList>
           </Menu>
