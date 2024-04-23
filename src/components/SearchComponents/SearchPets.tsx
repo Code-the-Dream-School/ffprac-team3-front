@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Box, Grid, Stack, Typography } from "@mui/material";
 import SearchInput from "./SearchInput";
-import initialAnimals from "../PetComponents/PetData/PetData";
-import PetCard from "../PetComponents/PetCard";
+import initialAnimals from "../../util/PetData/PetData";
+import PetCard from "../PetCardComponent/PetCard";
 import { useLocation, useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface Location {
   state: string;
@@ -21,6 +22,7 @@ interface Animal {
   description: string;
   isFavorite: boolean;
   location: Location;
+  imageUrl: string;
 }
 interface SearchPetsProps {
   keyword: string;
@@ -103,6 +105,8 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
       if (!filtersActive) {
         // Update filtered animals only if there are active filters
         setFilteredAnimals(animals);
+        // Clear the URL when filters are cleared
+        navigate("/search", { replace: true });
       }
       updateTitle(); // Call to update title, clearing it
     }
@@ -144,6 +148,17 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
     if (!filters.keyword && !filters.favorite) {
       setPageTitle(title);
     }
+
+    // Append active filters to the title when viewing favorites
+    if (filters.favorite) {
+      const activeFilters = Object.entries(filters)
+        .filter(([key, value]) => key !== "favorite" && value !== "")
+        .map(([key, value]) => `${key}: ${value}`);
+      if (activeFilters.length > 0) {
+        title = `${title} (${activeFilters.join(", ")})`;
+      }
+    }
+
     setPageTitle(title);
   };
 
@@ -271,11 +286,23 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
   }, [filters]);
 
   return (
-    <Box component="form">
+    <Box component="form" sx={{ mt: "5rem" }}>
       {loading ? (
-        <Typography variant="h3" align="center" gutterBottom>
-          Loading...
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "78vh",
+          }}
+        >
+          <CircularProgress
+            disableShrink
+            sx={{
+              color: "#EE633E",
+            }}
+          />
+        </Box>
       ) : (
         <>
           <Typography
@@ -283,7 +310,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
             align="center"
             gutterBottom
             sx={{
-              mt: "2rem",
+              mt: "3rem",
             }}
           >
             {noResults && pageTitle !== ""
@@ -307,16 +334,17 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
                 setPageTitle={setPageTitle}
               />
             </Grid>
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} md={6} lg={8}>
               <Stack
                 direction="column"
                 sx={{
-                  width: "90%",
+                  width: "auto",
                   display: "grid",
                   gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
                   gap: 3,
-                  m: 4,
-                  marginTop: "4rem",
+                  px: "5rem",
+                  mt: "4rem",
+                  mb: "4rem",
                 }}
               >
                 {filteredAnimals.map((animal) => (

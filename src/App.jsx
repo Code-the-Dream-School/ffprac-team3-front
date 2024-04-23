@@ -2,14 +2,19 @@ import React, { useState, useEffect } from "react";
 import { getData } from "./util/index";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
-import { HeroBanner } from "./components/HeroBanner";
-import { PetSliderCarousel } from "./components/PetSliderCarousel";
+import { HeroBanner } from "./components/HomePageComponents/HeroBanner";
+import { PetSliderCarousel } from "./components/HomePageComponents/PetSliderCarousel";
 import { SearchPets } from "./components/SearchComponents/SearchPets";
 import { SignUpForm } from "./components/SignUpForm/SignUpForm";
 import ResourcesPage from "./pages/ResourcesPage.tsx";
 import { Box, Button } from "@mui/material";
 import { LoginForm } from "./components/LoginForm/LoginForm";
 import { Footer } from "./components/footer";
+import { SignUpForm } from "./components/SignUpForm/SignUpForm";
+import ResourcesPage from "./pages/ResourcesPage.tsx";
+import { Box, Button } from "@mui/material";
+import { LoginForm } from "./components/LoginForm/LoginForm";
+import { PetProfile } from "./components/PetProfileComponent/PetProfile";
 import { ContactForm } from "./components/ContactForm";
 
 const URL = "http://localhost:8000/api/v1/";
@@ -42,7 +47,7 @@ function App() {
   useEffect(() => {
     (async () => {
       try {
-        const myData = await getAllData(URL);
+        const myData = await getData(URL);
         if (myData) {
           setMessage(myData.data);
         }
@@ -78,6 +83,19 @@ function App() {
             <>
               <Navbar />
               <SearchPets />
+
+              <Footer />
+            </>
+          }
+        />
+
+        <Route
+          path="/pet-profile/:id/:type/:name"
+          element={
+            <>
+              <Navbar />
+              <PetProfile />
+
               <Footer />
             </>
           }
@@ -88,7 +106,7 @@ function App() {
           element={
             <>
               <Navbar />
-              {/* Profile component */}
+              {/* User Profile Component */}
               <Footer />
             </>
           }
@@ -99,7 +117,7 @@ function App() {
           element={
             <>
               <Navbar />
-              {/* Settings component */}
+              {/* Settings Component */}
               <Footer />
             </>
           }
@@ -111,6 +129,7 @@ function App() {
             <>
               <Navbar />
               <LoginForm />
+              <Footer />
             </>
           }
         />
