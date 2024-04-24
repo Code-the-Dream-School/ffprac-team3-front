@@ -9,6 +9,7 @@ import {
   Typography,
   Stack,
 } from "@mui/material";
+import { ObjectId } from 'mongodb';
 
 interface Location {
   state: string;
@@ -16,7 +17,7 @@ interface Location {
   zip: string;
 }
 interface Animal {
-  id: number;
+  _id: ObjectId;
   type: string;
   age: string;
   sex: string;
@@ -87,7 +88,7 @@ interface FilterDropdownsProps {
   setPageTitle: React.Dispatch<React.SetStateAction<string>>; // Add setPageTitle
   setLocation: React.Dispatch<React.SetStateAction<Location>>;
   availableStates: string[];
-  initialAnimals: Animal[];
+  animals: Animal[];
 }
 
 const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
@@ -104,7 +105,7 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
   handleFavoriteChange,
   // handleClearFilters,
   setLocation,
-  initialAnimals,
+  animals,
 }) => {
   const [typeCounts, setTypeCounts] = useState<{ [key: string]: number }>({});
   const [breedCounts, setBreedCounts] = useState<{ [key: string]: number }>({});
@@ -115,42 +116,42 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
 
   // Memoize available states
   const availableStates = useMemo(
-    () => [...new Set(initialAnimals.map((animal) => animal.location.state))],
-    [initialAnimals]
+    () => [...new Set(animals.map((animal) => animal.location.state))],
+    [animals]
   );
 
   // Memoize types and breeds
   const types = useMemo(
-    () => [...new Set(initialAnimals.map((animal) => animal.type))],
-    [initialAnimals]
+    () => [...new Set(animals.map((animal) => animal.type))],
+    [animals]
   );
   const breeds = useMemo(() => {
     if (!type) return [];
-    const typeBreeds = initialAnimals
+    const typeBreeds = animals
       .filter((animal) => animal.type === type)
       .map((animal) => animal.breed);
     return [...new Set(typeBreeds)];
-  }, [type, initialAnimals]);
+  }, [type, animals]);
 
   // Memoize filtered animals by type
   const filteredAnimalsByType = useMemo(() => {
-    if (!type) return initialAnimals;
-    return initialAnimals.filter((animal) => animal.type === type);
-  }, [type, initialAnimals]);
+    if (!type) return animals;
+    return animals.filter((animal) => animal.type === type);
+  }, [type, animals]);
 
   // Memoize age groups
   const ageGroups = useMemo(
-    () => groupPetsByAge(initialAnimals),
-    [initialAnimals]
+    () => groupPetsByAge(animals),
+    [animals]
   );
 
   // Memoize filter counts
   useEffect(() => {
     setTypeCounts(
-      countFilterOptions(initialAnimals.map((animal) => animal.type))
+      countFilterOptions(animals.map((animal) => animal.type))
     );
     setBreedCounts(
-      countFilterOptions(initialAnimals.map((animal) => animal.breed))
+      countFilterOptions(animals.map((animal) => animal.breed))
     );
     setSexCounts(
       countFilterOptions(filteredAnimalsByType.map((animal) => animal.sex))
@@ -159,12 +160,12 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
       countAgeGroups(filteredAnimalsByType.map((animal) => animal.age))
     );
     setFavoriteCount(
-      initialAnimals.filter((animal) => animal.isFavorite).length
+      animals.filter((animal) => animal.isFavorite).length
     );
     setStateCounts(
-      countFilterOptions(initialAnimals.map((animal) => animal.location.state))
+      countFilterOptions(animals.map((animal) => animal.location.state))
     );
-  }, [initialAnimals, filteredAnimalsByType]);
+  }, [animals, filteredAnimalsByType]);
 
   // Function to count occurrences for filter options
   const countFilterOptions = (items: string[]) => {
@@ -232,7 +233,7 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
 
   const handleFilterCounts = (selectedState: string) => {
     // Update filter counts based on selected state
-    const filteredAnimalsByState = initialAnimals.filter(
+    const filteredAnimalsByState = animals.filter(
       (animal) => animal.location.state === selectedState
     );
     const filteredAnimalsByType = filteredAnimalsByState.filter(
@@ -268,24 +269,24 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
   const resetFilterCounts = () => {
     // Reset filter counts to initial values
     setTypeCounts(
-      countFilterOptions(initialAnimals.map((animal) => animal.type))
+      countFilterOptions(animals.map((animal) => animal.type))
     );
     setBreedCounts(
-      countFilterOptions(initialAnimals.map((animal) => animal.breed))
+      countFilterOptions(animals.map((animal) => animal.breed))
     );
     setSexCounts(
-      countFilterOptions(initialAnimals.map((animal) => animal.sex))
+      countFilterOptions(animals.map((animal) => animal.sex))
     );
-    setAgeCounts(countAgeGroups(initialAnimals.map((animal) => animal.age)));
+    setAgeCounts(countAgeGroups(animals.map((animal) => animal.age)));
 
     // Reset favorite count
     setFavoriteCount(
-      initialAnimals.filter((animal) => animal.isFavorite).length
+      animals.filter((animal) => animal.isFavorite).length
     );
 
     // Reset state counts
     setStateCounts(
-      countFilterOptions(initialAnimals.map((animal) => animal.location.state))
+      countFilterOptions(animals.map((animal) => animal.location.state))
     );
   };
 
@@ -306,7 +307,7 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
 
   useEffect(() => {
     // Calculate the favorite count based on the filtered animals
-    const filteredAnimals = initialAnimals.filter(
+    const filteredAnimals = animals.filter(
       (animal) =>
         (type === "" || animal.type === type) &&
         (sex === "" || animal.sex === sex) &&
@@ -339,7 +340,7 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
   }
 
 
-  }, [type, sex, age, breed, location, favorite, initialAnimals]);
+  }, [type, sex, age, breed, location, favorite, animals]);
 
   return (
     <FormControl variant="outlined" sx={{ gap: 2 }}>

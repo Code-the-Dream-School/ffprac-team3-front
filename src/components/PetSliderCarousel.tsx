@@ -1,29 +1,78 @@
 import React, { useState, useRef, useEffect } from "react";
-import initialAnimals from "./PetComponents/PetData/PetData";
 import PetCard from "./PetComponents/PetCard";
 import { Container, Box, Typography, IconButton } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { getAllPetData } from "../util/index.js";
+import { ObjectId } from 'mongodb';
+import  getBreedListByType from '../components/PetComponents/PetData/PetData.js'
 
 interface Animal {
-  id: number;
+  _id: ObjectId;
   type: string;
+  breed: string;
   age: string;
   sex: string;
   name: string;
   description: string;
   isFavorite: boolean;
+  fileImages: FileImages;
+  location: Location; 
+}
+
+interface FileImages {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  id: ObjectId;
+  filename: string;
+  metadata: null;
+  bucketName: string;
+  chunkSize: number;
+  size: number;
+  uploadDate: Date;
+  contentType: string;
+}
+
+interface Location {
+  state: string;
+  city: string;
+  zip: string;
 }
 
 export const PetSliderCarousel: React.FC = () => {
-  const [animals, setAnimals] = useState<Animal[]>(initialAnimals);
-  const [favoriteAnimals, setFavoriteAnimals] = useState<Animal[]>(
-    initialAnimals.filter((animal) => animal.isFavorite)
-  );
+  const [animals, setAnimals] = useState<Animal[]>([]);
+  const [favoriteAnimals, setFavoriteAnimals] = useState<Animal[]>([]);
 
-  const handleToggleFavorite = (id: number) => {
+  useEffect(() => {
+    animals.forEach((animal) => {
+      if (animal.isFavorite === true) {
+        favoriteAnimals.push(animal)
+      }
+    })
+  }, [animals])
+
+  useEffect(() => {
+    const fetchingData = async () => {
+      const response = await getAllPetData();
+      const animalData = response.data.petData.map((animal) => ({
+        ...animal,
+        breed: getBreedListByType(animal.type).includes(animal.breed)
+          ? animal.breed
+          : "", // If the breed is not found in the breed list, set it to an empty string
+      }));
+      setAnimals(animalData);
+    };
+
+    fetchingData(); 
+  }, []); 
+
+
+
+  const handleToggleFavorite = (_id: ObjectId) => {
     const updatedAnimals = animals.map((animal) =>
-      animal.id === id ? { ...animal, isFavorite: !animal.isFavorite } : animal
+      animal._id === _id ? { ...animal, isFavorite: !animal.isFavorite } : animal
     );
     setAnimals(updatedAnimals);
 
@@ -110,7 +159,7 @@ export const PetSliderCarousel: React.FC = () => {
         >
           {favoriteAnimals.map((animal) => (
             <PetCard
-              key={animal.id}
+              key={parseInt(animal._id.toString(), 16)}
               animal={animal}
               onToggleFavorite={handleToggleFavorite}
             />

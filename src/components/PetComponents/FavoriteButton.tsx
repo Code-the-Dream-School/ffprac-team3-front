@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Box, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { ObjectId } from 'mongodb';
 
 interface FavoriteButtonProps {
   isFavorite: boolean;
   onToggleFavorite: (newState: boolean) => void;
-  animalId: number;
+  animalId: ObjectId;
 }
 
 const FavoriteButton: React.FC<FavoriteButtonProps> = ({
@@ -20,7 +21,7 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({
   useEffect(() => {
     const storedFavorites = localStorage.getItem("favorites");
     if (storedFavorites) {
-      const favorites: number[] = JSON.parse(storedFavorites);
+      const favorites: ObjectId[] = JSON.parse(storedFavorites);
       if (favorites.includes(animalId)) {
         // Update local state only if the favorite status has changed
         if (isFavorite) {
@@ -35,13 +36,13 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({
 
     // Update localStorage with the new list of favorites
     const storedFavorites = localStorage.getItem("favorites");
-    let favorites: number[] = [];
+    let favorites: ObjectId[] = [];
     if (storedFavorites) {
       favorites = JSON.parse(storedFavorites);
     }
     if (!isFavorite) {
       // If the animal is unliked, remove it from favorites
-      favorites = favorites.filter((id: number) => id !== animalId);
+      favorites = favorites.filter((_id: ObjectId) => _id !== animalId);
     } else {
       favorites.push(animalId);
     }

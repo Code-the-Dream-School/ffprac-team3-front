@@ -39,22 +39,22 @@ const TempResourcesLink = () => {
 function App() {
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const myData = await getAllData(URL);
-        if (myData) {
-          setMessage(myData.data);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    })();
+  //useEffect(() => {
+    //(async () => {
+      //try {
+        //const myData = await getAllData(URL);
+        //if (myData) {
+          //setMessage(myData.data);
+        //}
+      //} catch (error) {
+        //console.error("Error fetching data:", error);
+      //}
+    //})();
 
-    return () => {
-      console.log("unmounting");
-    };
-  }, []);
+    //return () => {
+      //console.log("unmounting");
+    //};
+  //}, []);
 
   return (
     <BrowserRouter>

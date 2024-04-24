@@ -11,30 +11,56 @@ import FavoriteButton from "./FavoriteButton";
 import PetsIcon from "@mui/icons-material/Pets";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
+import { ObjectId } from 'mongodb';
+
+interface Animal {
+  _id: ObjectId;
+  type: string;
+  breed: string;
+  age: string;
+  sex: string;
+  name: string;
+  description: string;
+  isFavorite: boolean;
+  fileImages: FileImages;
+  location: Location; 
+}
+
+interface FileImages {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  id: ObjectId;
+  filename: string;
+  metadata: null;
+  bucketName: string;
+  chunkSize: number;
+  size: number;
+  uploadDate: Date;
+  contentType: string;
+}
 
 interface Location {
   state: string;
   city: string;
   zip: string;
 }
-interface Animal {
-  id: number;
-  type: string;
-  age: string;
-  sex: string;
-  name: string;
-  description: string;
-  isFavorite: boolean;
-}
+
 interface PetCardProps {
   animal: Animal;
-  onToggleFavorite: (id: number) => void;
+  onToggleFavorite: (_id: ObjectId) => void;
 }
 
+
+
 const PetCard: React.FC<PetCardProps> = ({ animal, onToggleFavorite }) => {
+  
   const handleToggleFavorite = () => {
-    onToggleFavorite(animal.id);
+    onToggleFavorite(animal._id);
   };
+
+
 
   return (
     <Card
@@ -45,7 +71,7 @@ const PetCard: React.FC<PetCardProps> = ({ animal, onToggleFavorite }) => {
     >
       <AspectRatio ratio="1" sx={{ width: 200 }}>
         <img
-          src="https://cdn.mos.cms.futurecdn.net/ASHH5bDmsp6wnK6mEfZdcU-650-80.jpg"
+          src={'http://localhost:8000/api/v1/pets/uploads/' + animal.fileImages.filename}
           loading="lazy"
           alt={animal.name}
         />
@@ -64,7 +90,7 @@ const PetCard: React.FC<PetCardProps> = ({ animal, onToggleFavorite }) => {
         <FavoriteButton
           isFavorite={animal.isFavorite}
           onToggleFavorite={handleToggleFavorite}
-          animalId={animal.id}
+          animalId={animal._id}
         />
       </AspectRatio>
 
