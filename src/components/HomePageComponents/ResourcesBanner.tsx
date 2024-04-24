@@ -66,6 +66,7 @@ export const ResourcesBanner = () => {
       >
         <Grid item xs={12} sm={6} sx={{ justifyContent: "center" }}>
           <Card
+            onClick={handleDogClick}
             sx={{
               backgroundColor: "#E6E4D6",
               border: "2px solid #506C60",
@@ -74,6 +75,7 @@ export const ResourcesBanner = () => {
               "&:hover": {
                 border: "5px solid #EE633E",
                 backgroundColor: "rgba(238, 99, 62, 0.09)",
+                cursor: "pointer",
               },
             }}
           >
@@ -86,7 +88,6 @@ export const ResourcesBanner = () => {
               }}
             >
               <DogIcon
-                onClick={handleDogClick}
                 sx={{
                   fontSize: "8rem",
                 }}
@@ -104,6 +105,7 @@ export const ResourcesBanner = () => {
 
         <Grid item xs={12} sm={6} sx={{ justifyContent: "center" }}>
           <Card
+            onClick={handleCatClick}
             sx={{
               backgroundColor: "#E6E4D6",
               border: "2px solid #506C60",
@@ -112,6 +114,7 @@ export const ResourcesBanner = () => {
               "&:hover": {
                 border: "5px solid #EE633E",
                 backgroundColor: "rgba(238, 99, 62, 0.09)",
+                cursor: "pointer",
               },
             }}
           >
@@ -124,7 +127,6 @@ export const ResourcesBanner = () => {
               }}
             >
               <CatIcon
-                onClick={handleCatClick}
                 sx={{
                   fontSize: "8rem",
                 }}
@@ -142,6 +144,7 @@ export const ResourcesBanner = () => {
 
         <Grid item xs={12} sm={6} sx={{ justifyContent: "center" }}>
           <Card
+            onClick={handleContactClick}
             sx={{
               backgroundColor: "#E6E4D6",
               border: "2px solid #506C60",
@@ -150,6 +153,7 @@ export const ResourcesBanner = () => {
               "&:hover": {
                 border: "5px solid #EE633E",
                 backgroundColor: "rgba(238, 99, 62, 0.09)",
+                cursor: "pointer",
               },
             }}
           >
@@ -162,7 +166,6 @@ export const ResourcesBanner = () => {
               }}
             >
               <ContactIcon
-                onClick={handleContactClick}
                 sx={{
                   fontSize: "8rem",
                 }}
@@ -180,6 +183,7 @@ export const ResourcesBanner = () => {
 
         <Grid item xs={12} sm={6} sx={{ justifyContent: "center" }}>
           <Card
+            onClick={handleResourcesClick}
             sx={{
               backgroundColor: "#E6E4D6",
               border: "2px solid #506C60",
@@ -188,6 +192,7 @@ export const ResourcesBanner = () => {
               "&:hover": {
                 border: "5px solid #EE633E",
                 backgroundColor: "rgba(238, 99, 62, 0.09)",
+                cursor: "pointer",
               },
             }}
           >
@@ -201,7 +206,6 @@ export const ResourcesBanner = () => {
             >
               <ResourcesIcon
                 aria-label="Resources"
-                onClick={handleResourcesClick}
                 sx={{
                   fontSize: "8rem",
                 }}
