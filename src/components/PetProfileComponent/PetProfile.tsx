@@ -266,6 +266,7 @@ export const PetProfile: React.FC = () => {
                 variant="contained"
                 size="large"
                 aria-label="adopt pet"
+                href="/contactus"
                 sx={{
                   backgroundColor: "#EE633E",
                   py: "1rem",

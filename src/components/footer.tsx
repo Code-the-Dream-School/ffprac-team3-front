@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Grid, Typography } from "@mui/material";
-import { PetLogoIcon } from "../img/PetLogoIcon";
+import { PetLogoIcon } from "../img/icons/PetLogoIcon";
 
 export const Footer: React.FC = () => {
   return (

@@ -51,7 +51,10 @@ const PetCard: React.FC<PetCardProps> = ({ animal, onToggleFavorite }) => {
       size="lg"
       sx={{ width: "auto", alignItems: "center" }}
     >
-      <AspectRatio ratio="1" sx={{ width: 200 }}>
+      <AspectRatio
+        ratio="1"
+        sx={{ width: { xs: 250, sm: 225, lg: 200 }, pt: "1rem" }}
+      >
         <img src={animal.imageUrl} loading="lazy" alt={animal.name} />
         <IconButton
           onClick={handleToggleFavorite}
@@ -75,7 +78,7 @@ const PetCard: React.FC<PetCardProps> = ({ animal, onToggleFavorite }) => {
       <CardContent
         sx={{
           textAlign: "left",
-          pb: 2,
+          pb: "1rem",
           color: "#0F2117",
           backgroundColor: "#FBFCFE",
           "&>*": {
@@ -115,8 +118,9 @@ const PetCard: React.FC<PetCardProps> = ({ animal, onToggleFavorite }) => {
             aria-label="pet profile"
             endIcon={<PetsIcon />}
             sx={{
-              mt: 2,
-              px: 6,
+              mt: "1rem",
+              px: "4rem",
+              py: ".65rem",
               alignSelf: "center",
               fontWeight: 500,
               color: "#F7F4F0",

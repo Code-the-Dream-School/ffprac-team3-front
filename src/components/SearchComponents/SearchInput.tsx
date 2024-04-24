@@ -168,7 +168,10 @@ const SearchInput: React.FC<SearchInputProps> = ({
 
   return (
     <Box sx={{ mx: "1rem", mb: "3rem" }}>
-      <Stack spacing={2} sx={{ ml: "1rem", pt: "2rem" }}>
+      <Stack
+        spacing={2}
+        sx={{ width: { xs: "80vw", md: "50vw" }, ml: "1rem", pt: "2rem" }}
+      >
         <TextField
           variant="outlined"
           id="search-by-keyword"
@@ -195,10 +198,10 @@ const SearchInput: React.FC<SearchInputProps> = ({
         onClick={clearFilters}
         aria-label="Clear Filters"
         sx={{
-          mt: 2,
+          mt: "1rem",
           ml: "1rem",
-          px: 3,
-          py: 1,
+          px: "2rem",
+          py: ".65rem",
           alignSelf: "center",
           fontWeight: 500,
           color: "#F7F4F0",
@@ -211,7 +214,14 @@ const SearchInput: React.FC<SearchInputProps> = ({
         New Search
       </Button>
 
-      <Card sx={{ mt: "2rem", py: 5, px: 3, backgroundColor: "#0E2728" }}>
+      <Card
+        sx={{
+          mt: "2rem",
+          py: "3rem",
+          px: "1.5rem",
+          backgroundColor: "#0E2728",
+        }}
+      >
         <Stack gap={4}>
           <FilterDropdowns
             type={type}

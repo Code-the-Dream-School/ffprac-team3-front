@@ -323,7 +323,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
           </Typography>
 
           <Grid container>
-            <Grid item xs={12} md={3} lg={3}>
+            <Grid item xs={12} md={4} lg={3}>
               <SearchInput
                 filters={filters}
                 onFilterChange={handleFilterChange}
@@ -334,7 +334,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
                 setPageTitle={setPageTitle}
               />
             </Grid>
-            <Grid item xs={12} md={6} lg={8}>
+            <Grid item xs={12} md={6} lg={9}>
               <Stack
                 direction="column"
                 sx={{
@@ -342,8 +342,8 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
                   display: "grid",
                   gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
                   gap: 3,
-                  px: "5rem",
-                  mt: "4rem",
+                  px: "6rem",
+                  mt: { md: "9rem" },
                   mb: "4rem",
                 }}
               >
