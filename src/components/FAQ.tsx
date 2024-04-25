@@ -6,17 +6,29 @@ import {
     AccordionDetails,
     AccordionSummary
 } from "@mui/material";
-import { KeyboardArrowDown, Margin } from "@mui/icons-material";
+import { KeyboardArrowDown } from "@mui/icons-material";
+
+
 
 const FAQAccordion = ({ question, answer }) => {
     return (
         <>
-            <Accordion disableGutters sx={{margin:1}}>
-                <AccordionSummary
-                    expandIcon={<KeyboardArrowDown />}
-                    sx={{margin:3}}
-                >
-                    <Typography>{question}</Typography>
+            <Accordion
+                disableGutters
+                elevation={0}
+                sx={{
+                    backgroundColor: "transparent",
+                    '&:before': {
+                        display: 'none',
+                    }
+                }}
+
+            >
+                <AccordionSummary expandIcon={<KeyboardArrowDown />}
+                                sx={{
+                                    flexDirection:"row-reverse"
+                                }}>
+                    <Typography fontWeight={"bold"}>{question}</Typography>
                 </AccordionSummary>
 
                 <AccordionDetails>
@@ -31,16 +43,16 @@ const FAQ = () => {
     return (
         <>
             <Typography
-                variant="h2"
+                variant="h3"
                 textAlign="center"
                 my={4}
+                sx={{ letterSpacing: .5, fontWeight: 600 }}
             >
-                FAQ
+                Do you have questions?
             </Typography>
 
-            <Box display="flex" pb={10} my={3}>
+            <Box pb={10} my={3}>
 
-                <Box display="flex" flexDirection="column">
                     <FAQAccordion
                         question={"Am I ready to adopt a pet?"}
                         answer={"We're glad you asked! Check out the Pet Readiness Checklists above for more information."}
@@ -55,9 +67,7 @@ const FAQ = () => {
                         question={"I have a question about a specific pet..."}
                         answer={"Please contact the adoption agency or breeder. PetPals makes it super easy to do this!"}
                     />
-                </Box>
 
-                <Box display="flex" flexDirection="column" >
                     <FAQAccordion
                        question={"Am I ready to adopt an animal?"}
                        answer={"We're glad you asked! Check out the Pet Readiness Checklists above for more information."}
@@ -72,7 +82,6 @@ const FAQ = () => {
                         question={"Do you have any axolotls?"}
                         answer={"Answer..."}
                     />
-                </Box>
 
             </Box >
         </>
