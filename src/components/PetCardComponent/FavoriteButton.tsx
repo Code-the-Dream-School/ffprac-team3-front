@@ -8,7 +8,6 @@ interface FavoriteButtonProps {
   isFavorite: boolean;
   onToggleFavorite: (newState: boolean, animalId: ObjectId) => void;
   animalId: ObjectId;
-
 }
 
 const FavoriteButton: React.FC<FavoriteButtonProps> = ({

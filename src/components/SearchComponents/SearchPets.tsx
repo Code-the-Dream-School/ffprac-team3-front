@@ -3,11 +3,10 @@ import { Box, Grid, Stack, Typography } from "@mui/material";
 import SearchInput from "./SearchInput";
 import PetCard from "../PetComponents/PetCard";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getAllPetData } from "../../util/index.js";
-import { ObjectId } from 'mongodb';
-import  getBreedListByType from '../../components/PetComponents/PetData/PetData.js'
-import CircularProgress from "@mui/material/CircularProgress";
-
+import { ObjectId } from "mongodb";
+import { getAllPetData } from "../../util";
+import getBreedListByType from "../PetComponents/PetData/PetData";
+import { CircularProgress } from "@mui/material";
 
 interface Location {
   state: string;
@@ -25,7 +24,7 @@ interface Animal {
   description: string;
   isFavorite: boolean;
   fileImages: FileImages;
-  location: Location; 
+  location: Location;
 }
 
 interface FileImages {
@@ -358,7 +357,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
           </Typography>
 
           <Grid container>
-            <Grid item xs={12} md={3} lg={3}>
+            <Grid item xs={12} md={4} lg={3}>
               <SearchInput
                 filters={filters}
                 onFilterChange={handleFilterChange}
@@ -369,7 +368,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
                 setPageTitle={setPageTitle}
               />
             </Grid>
-            <Grid item xs={12} md={6} lg={8}>
+            <Grid item xs={12} md={8}>
               <Stack
                 direction="column"
                 sx={{
@@ -377,9 +376,8 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
                   display: "grid",
                   gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
                   gap: 3,
-                  px: "5rem",
-                  mt: "4rem",
-                  mb: "4rem",
+                  m: 4,
+                  marginTop: "4rem",
                 }}
               >
                 {filteredAnimals?.map((animal) => (

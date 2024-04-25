@@ -39,6 +39,7 @@ interface Location {
   state: string;
   city: string;
   zip: string;
+
 }
 
 export const PetSliderCarousel: React.FC = () => {
@@ -69,14 +70,13 @@ export const PetSliderCarousel: React.FC = () => {
   }, []); 
 
 
-
-
   const [scrollPosition, setScrollPosition] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [showLeftScroll, setShowLeftScroll] = useState<boolean>(false);
   const [showRightScroll, setShowRightScroll] = useState<boolean>(false);
 
   const handleToggleFavorite = (_id: ObjectId) => {
+
     const updatedAnimals = animals.map((animal) =>
       animal._id === _id ? { ...animal, isFavorite: !animal.isFavorite } : animal
     );
@@ -129,14 +129,14 @@ export const PetSliderCarousel: React.FC = () => {
   };
 
   return (
-    <Container fixed id="favorites">
-      <Box sx={{ p: 5 }}>
+    <Container fixed sx={{ pb: "2rem" }}>
+      <Box sx={{ p: "2rem" }}>
         <Typography
           variant="h3"
           component="h2"
           color="#0F2117"
           textAlign="center"
-          sx={{ fontWeight: 600 }}
+          sx={{ fontWeight: 600, mt: "2rem", pb: "1rem" }}
           gutterBottom
         >
           Favorited Pets

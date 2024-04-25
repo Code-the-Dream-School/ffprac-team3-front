@@ -6,55 +6,34 @@ import { HeroBanner } from "./components/HomePageComponents/HeroBanner";
 import { PetSliderCarousel } from "./components/HomePageComponents/PetSliderCarousel";
 import { SearchPets } from "./components/SearchComponents/SearchPets";
 import ResourcesPage from "./pages/ResourcesPage.tsx";
-import { Box, Button } from "@mui/material";
 import { LoginForm } from "./components/LoginForm/LoginForm";
 import { Footer } from "./components/footer";
 import { SignUpForm } from "./components/SignUpForm/SignUpForm";
 import { PetProfile } from "./components/PetProfileComponent/PetProfile";
 import { ContactForm } from "./components/ContactForm";
+import { ResourcesBanner } from "./components/HomePageComponents/ResourcesBanner.tsx";
 
 const URL = "http://localhost:8000/api/v1/";
-const TempResourcesLink = () => {
-  return (
-    <Box display={"flex"} justifyContent={"center"}>
-      <Button
-        href="/resources"
-        variant="contained"
-        sx={{
-          mt: 4,
-          textTransform: "none",
-          fontStyle: "italic",
-          color: "#F7F4F0",
-          backgroundColor: "#EE633E",
-          "&:hover": {
-            backgroundColor: "#F8AF3F",
-          },
-        }}
-      >
-        Temporary shortcut to Resources page
-      </Button>
-    </Box>
-  );
-};
 
 function App() {
   const [message, setMessage] = useState("");
 
-  //useEffect(() => {
-    //(async () => {
-      //try {
-        //const myData = await getAllData(URL);
-        //if (myData) {
-          //setMessage(myData.data);
-        //}
-      //} catch (error) {
-        //console.error("Error fetching data:", error);
-      //}
-    //})();
-    //return () => {
-      //console.log("unmounting");
-    //};
-  //}, []);
+  useEffect(() => {
+    (async () => {
+      try {
+        const myData = await getData(URL);
+        if (myData) {
+          setMessage(myData.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    })();
+
+    return () => {
+      console.log("unmounting");
+    };
+  }, []);
 
   return (
     <BrowserRouter>
@@ -65,7 +44,8 @@ function App() {
             <>
               <Navbar />
               <HeroBanner />
-              <TempResourcesLink />
+              <ResourcesBanner />
+              {/* <TempResourcesLink /> */}
               <PetSliderCarousel />
               <Footer />
             </>
@@ -85,7 +65,9 @@ function App() {
         />
 
         <Route
+
           path="/pet-profile/:_id/:type/:name"
+
           element={
             <>
               <Navbar />

@@ -80,6 +80,13 @@ export const PetProfile: React.FC = () => {
 
   console.log(_id)
 
+
+
+interface PetCardProps {
+  animal: Animal;
+  onToggleFavorite: (_id: string) => void;
+}
+
   const formatAge = (age: string) => {
     const ageNum = parseFloat(age);
     if (ageNum >= 2) {
@@ -265,6 +272,7 @@ export const PetProfile: React.FC = () => {
               mx: "1rem",
               mt: "2rem",
             }}
+
             image={'http://localhost:8000/api/v1/pets/uploads/' + animal.fileImages.filename}
             title={animal.name}
           />
@@ -322,7 +330,7 @@ export const PetProfile: React.FC = () => {
               <Button
                 variant="contained"
                 size="large"
-                aria-label="adopt pet"
+                href="/contactus"
                 sx={{
                   backgroundColor: "#EE633E",
                   py: "1rem",

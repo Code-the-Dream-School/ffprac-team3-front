@@ -339,6 +339,7 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
   }
   }, [type, sex, age, breed, location, favorite, animals]);
 
+
   return (
     <FormControl variant="outlined" sx={{ gap: 2 }}>
       <Typography variant="h6" gutterBottom sx={{ color: "#F8AF3F", pl: 1 }}>
