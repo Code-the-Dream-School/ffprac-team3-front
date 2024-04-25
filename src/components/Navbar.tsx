@@ -175,7 +175,11 @@ export const Navbar: React.FC = () => {
               </MenuItem>
 
               <MenuItem onClick={handleClose}>
-                <Link href="/settings" color="#0E2728" underline="none">
+                <Link
+                  href="/profile/#settings"
+                  color="#0E2728"
+                  underline="none"
+                >
                   Account Settings
                 </Link>
               </MenuItem>
