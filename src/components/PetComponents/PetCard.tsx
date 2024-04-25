@@ -7,7 +7,7 @@ import {
   Button,
 } from "@mui/material";
 import AspectRatio from "@mui/joy/AspectRatio";
-import FavoriteButton from "./FavoriteButton";
+import FavoriteButton from "../PetCardComponent/FavoriteButton";
 import PetsIcon from "@mui/icons-material/Pets";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";

@@ -1,5 +1,3 @@
-//FILTERS
-
 import React, { useState, useEffect, useMemo } from "react";
 import {
   MenuItem,
@@ -320,6 +318,7 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
       (animal) => animal.isFavorite
     ).length;
     setFavoriteCount(favoriteCount);
+
  // Update the filter counts only if there are filtered animals
   if (filteredAnimals.length > 0) {
     setTypeCounts(
@@ -338,8 +337,6 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
       countFilterOptions(filteredAnimals.map((animal) => animal.location.state))
     );
   }
-
-
   }, [type, sex, age, breed, location, favorite, animals]);
 
   return (
@@ -462,8 +459,9 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
             <MenuItem value="" disabled>
               Favorites
             </MenuItem>
+            {/* <MenuItem value="true">{`Favorites (${favoriteCount})`}</MenuItem> */}
 
-            <MenuItem value="true">{`Favorites (${favoriteCount})`}</MenuItem>
+            <MenuItem value="true">{`Favorites`}</MenuItem>
           </Select>
         </FormControl>
       </Stack>

@@ -72,6 +72,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = event.target;
+
     if (name === "keyword") {
       setKeyword(value);
       onFilterChange({
@@ -167,7 +168,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
   }, [keyword, location, type, sex, age, breed, favorite]);
 
   return (
-    <Box sx={{ mx: "1rem" }}>
+    <Box sx={{ mx: "1rem", mb: "3rem" }}>
       <Stack spacing={2} sx={{ ml: "1rem", pt: "2rem" }}>
         <TextField
           variant="outlined"
@@ -211,10 +212,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
         New Search
       </Button>
 
-      <Card
-        sx={{ marginTop: "2rem", py: 5, px: 3, backgroundColor: "#0E2728" }}
-      >
-        <Stack gap={3}>
+      <Card sx={{ mt: "2rem", py: 5, px: 3, backgroundColor: "#0E2728" }}>
+        <Stack gap={4}>
           <FilterDropdowns
             type={type}
             breed={breed}

@@ -1,8 +1,8 @@
-import DogBreeds from "./DogBreeds";
-import CatBreeds from "./CatBreeds";
-import RabbitBreeds from "./RabbitBreeds";
-import HamsterBreeds from "./HamsterBreeds";
-import GuineaPigBreeds from "./GuineaPigBreeds";
+import DogBreeds from "../../../util/PetData/DogBreeds";
+import CatBreeds from "../../../util/PetData/CatBreeds";
+import RabbitBreeds from "../../../util/PetData/RabbitBreeds";
+import HamsterBreeds from "../../../util/PetData/HamsterBreeds";
+import GuineaPigBreeds from "../../../util/PetData/GuineaPigBreeds";
 
 interface Location {
   state: string | StateAbbreviation;

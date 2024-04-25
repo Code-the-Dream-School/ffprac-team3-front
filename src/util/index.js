@@ -69,4 +69,25 @@ const getAllPetData = async (url) => {
   }
 };
 
-export { registerUser, loginUser, getData, getAllPetData };
+const uploadPdf = async (_id, file) => {
+  const jwtToken = localStorage.getItem("jwtToken");
+  const config = {
+    method: 'patch',
+    url: `http://localhost:8000/api/v1/pets/update/${_id}`,
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+      'Content-Type': 'multipart/form-data',
+    },
+    file: file
+  }
+
+  try {
+    let response = await axios(config);
+    return response;
+  } catch (error) {
+    const msg = error.response.data.msg;
+    return msg;
+  }
+}
+
+export { registerUser, loginUser, getData, getAllPetData, uploadPdf };
