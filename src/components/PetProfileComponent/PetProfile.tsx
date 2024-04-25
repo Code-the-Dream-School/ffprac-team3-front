@@ -12,10 +12,56 @@ import {
   Breadcrumbs,
   Link,
 } from "@mui/material";
-import initialAnimals from "../../util/PetData/PetData";
 import FavoriteButton from "../PetCardComponent/FavoriteButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CircularProgress from "@mui/material/CircularProgress";
+import { getAllPetData, uploadPdf } from "../../util/index";
+import  getBreedListByType from '../PetComponents/PetData/PetData'
+import { ObjectId } from 'mongodb';
+
+interface Animal {
+  _id: string | ObjectId;
+  type: string;
+  breed: string;
+  age: string;
+  sex: string;
+  name: string;
+  description: string;
+  isFavorite: boolean;
+  fileImages: FileImages;
+  location: Location; 
+  fileMedical: FileMedical;
+}
+
+interface FileImages {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  id: ObjectId;
+  filename: string;
+  metadata: null;
+  bucketName: string;
+  chunkSize: number;
+  size: number;
+  uploadDate: Date;
+  contentType: string;
+}
+
+interface FileMedical {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  id: ObjectId;
+  filename: string;
+  metadata: null;
+  bucketName: string;
+  chunkSize: number;
+  size: number;
+  uploadDate: Date;
+  contentType: string;
+}
 
 interface Location {
   state: string;
@@ -23,28 +69,23 @@ interface Location {
   zip: string;
 }
 
-interface Animal {
-  id: number;
-  name: string;
-  type: string;
-  breed: string;
-  age: string;
-  sex: string;
-  description: string;
-  isFavorite: boolean;
-  imageUrl: string;
-}
-
-interface PetCardProps {
-  animal: Animal;
-  onToggleFavorite: (id: number) => void;
-}
 
 export const PetProfile: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const { id } = useParams<{ id: string }>();
+  const {_id, type, name} = useParams<{ _id: string, type: string, name: string }>();
+  const [animals, setAnimals] = useState<Animal[]>([]);
   const [animal, setAnimal] = useState<Animal | undefined>();
+  const [file, setFile] = useState<FileMedical | undefined>()
   const navigate = useNavigate();
+
+  console.log(_id)
+
+
+
+interface PetCardProps {
+  animal: Animal;
+  onToggleFavorite: (_id: string) => void;
+}
 
   const formatAge = (age: string) => {
     const ageNum = parseFloat(age);
@@ -58,14 +99,33 @@ export const PetProfile: React.FC = () => {
     }
   };
 
+
+  useEffect(() => {
+    const fetchingData = async () => {
+      const response = await getAllPetData();
+      const animalData = response.data.petData.map((pet) => ({
+        ...pet,
+        breed: getBreedListByType(pet.type).includes(pet.breed)
+          ? pet.breed
+          : "", // If the breed is not found in the breed list, set it to an empty string
+      }));
+      animalData.map((pet) => {
+        pet._id.toString()
+      })
+      setAnimals(animalData)
+    };
+
+    fetchingData(); 
+  }, []); 
+
   useEffect(() => {
     // Fetch animal details based on the ID from the URL
-    const selectedAnimal = initialAnimals.find(
-      (animal) => animal.id === Number(id)
+    const selectedAnimal = animals.find(
+      (animal) => animal._id === String(_id)
     );
     if (selectedAnimal) {
       // Check if the favorite status is stored in localStorage
-      const storedFavorite = localStorage.getItem(`favorite_${id}`);
+      const storedFavorite = localStorage.getItem(`favorite_${_id}`);
       if (storedFavorite !== null) {
         selectedAnimal.isFavorite = JSON.parse(storedFavorite);
       }
@@ -76,11 +136,11 @@ export const PetProfile: React.FC = () => {
     } else {
       setLoading(false);
     }
-  }, [id]);
+  }, [_id]);
 
   useEffect(() => {
     // Refresh favorite status on component mount
-    const storedFavorite = localStorage.getItem(`favorite_${id}`);
+    const storedFavorite = localStorage.getItem(`favorite_${_id}`);
     if (storedFavorite !== null) {
       setAnimal((prevAnimal) => {
         if (prevAnimal) {
@@ -120,11 +180,15 @@ export const PetProfile: React.FC = () => {
       setAnimal({ ...animal, isFavorite: newFavoriteState });
       // Store the favorite status in localStorage
       localStorage.setItem(
-        `favorite_${animal.id}`,
+        `favorite_${animal._id}`,
         JSON.stringify(newFavoriteState)
       );
     }
   };
+
+  const handlePdfUpload = () => {
+    uploadPdf(_id, )
+  }
 
   if (loading) {
     // Handle case when animal is still loading or not found
@@ -208,7 +272,8 @@ export const PetProfile: React.FC = () => {
               mx: "1rem",
               mt: "2rem",
             }}
-            image={animal.imageUrl}
+
+            image={'http://localhost:8000/api/v1/pets/uploads/' + animal.fileImages.filename}
             title={animal.name}
           />
           <Stack
@@ -231,7 +296,7 @@ export const PetProfile: React.FC = () => {
               <FavoriteButton
                 isFavorite={animal.isFavorite}
                 onToggleFavorite={handleToggleFavorite}
-                animalId={animal.id}
+                animalId={animal._id as ObjectId}
               />
             </Typography>
 
@@ -265,7 +330,6 @@ export const PetProfile: React.FC = () => {
               <Button
                 variant="contained"
                 size="large"
-                aria-label="adopt pet"
                 href="/contactus"
                 sx={{
                   backgroundColor: "#EE633E",
@@ -287,7 +351,7 @@ export const PetProfile: React.FC = () => {
                   "&:hover": { backgroundColor: "#eea535" },
                 }}
               >
-                sponsor this pet
+                upload pet's medical history
               </Button>
             </CardActions>
           </Stack>

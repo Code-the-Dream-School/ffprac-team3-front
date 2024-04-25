@@ -5,10 +5,10 @@ import { Navbar } from "./components/Navbar";
 import { HeroBanner } from "./components/HomePageComponents/HeroBanner";
 import { PetSliderCarousel } from "./components/HomePageComponents/PetSliderCarousel";
 import { SearchPets } from "./components/SearchComponents/SearchPets";
-import { SignUpForm } from "./components/SignUpForm/SignUpForm";
 import ResourcesPage from "./pages/ResourcesPage.tsx";
 import { LoginForm } from "./components/LoginForm/LoginForm";
 import { Footer } from "./components/footer";
+import { SignUpForm } from "./components/SignUpForm/SignUpForm";
 import { PetProfile } from "./components/PetProfileComponent/PetProfile";
 import { ContactForm } from "./components/ContactForm";
 import { ResourcesBanner } from "./components/HomePageComponents/ResourcesBanner.tsx";
@@ -65,7 +65,9 @@ function App() {
         />
 
         <Route
-          path="/pet-profile/:id/:type/:name"
+
+          path="/pet-profile/:_id/:type/:name"
+
           element={
             <>
               <Navbar />
