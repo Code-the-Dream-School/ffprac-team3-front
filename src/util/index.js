@@ -1,42 +1,86 @@
 import axios from 'axios';
 
+// local testing baseURL
+// const baseURL = 'http://localhost:8000/api/v1';
+
 const baseURL = 'https://ffprac-team3-back.onrender.com/api/v1';
 const registerUserRoute = 'users/register';
 const loginUserRoute = 'users/loginUser';
+const getCurrentUserRoute = 'users/getCurrentUser';
+const updateUserRoute = 'users/updateUser';
 
 // * || REGISTRATION AND USER LOGIN *
 
-const registerUser = async (user) => {
+const registerUser = async (userInformation) => {
   const config = {
     method: 'post',
     url: `${baseURL}/${registerUserRoute}`,
-    data: { ...user },
+    data: { ...userInformation },
   };
 
   try {
     const response = await axios(config);
-    console.log(response, 'You have successfully registered! Please log-in');
+    console.log(response.msg);
     return response;
   } catch (error) {
-    const msg = error.response.data.msg;
-    return msg;
+    return error.msg;
   }
 };
 
-const loginUser = async (user) => {
+const loginUser = async (userCredentials) => {
   const config = {
     method: 'post',
     url: `${baseURL}/${loginUserRoute}`,
-    data: { ...user },
+    data: { ...userCredentials },
   };
 
   try {
     const response = await axios(config);
-    console.log(response, 'You have successfully logged-in!');
+    console.log('Successful logged-in!');
     return response;
   } catch (error) {
-    const msg = error.response.data.msg;
-    return msg;
+    return error.msg;
+  }
+};
+
+const getCurrentUser = async () => {
+  const jwtToken = localStorage.getItem('jwtToken');
+
+  const config = {
+    method: 'get',
+    url: `${baseURL}/${getCurrentUserRoute}`,
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+    },
+  };
+
+  try {
+    const response = await axios(config);
+    console.log('User Profile Data: ', response.data);
+    return response;
+  } catch (error) {
+    return error.msg;
+  }
+};
+
+const updateUser = async (userInformation) => {
+  const jwtToken = localStorage.getItem('jwtToken');
+
+  const config = {
+    method: 'patch',
+    url: `${baseURL}/${updateUserRoute}`,
+    data: { ...userInformation },
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+    },
+  };
+
+  try {
+    const response = await axios(config);
+    console.log(response.data.msg);
+    return response;
+  } catch (error) {
+    return error.msg;
   }
 };
 
@@ -51,4 +95,4 @@ const getAllPetData = async (url) => {
   }
 };
 
-export { registerUser, loginUser, getAllPetData };
+export { registerUser, loginUser, updateUser, getCurrentUser, getAllPetData };
