@@ -99,7 +99,6 @@ const ResourcesPage = () => {
         >
             <ResHeroBanner />
             <ResourceCards />
-            <ChecklistCards />
             <FAQ />
         </Box>
 
