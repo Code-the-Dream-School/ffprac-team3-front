@@ -41,18 +41,6 @@ const loginUser = async (user) => {
 };
 
 // * || PET DATA *
-
-// note: not used, but could be used with GET with params
-const getData = async () => {
-  try {
-    // let res = await axios.get(url, params);
-    let data = 'Hello world';
-    return data;
-  } catch (error) {
-    console.log(error, `error - getData in ${url} route`);
-  }
-};
-
 const getAllPetData = async (url) => {
   try {
     let res = await axios.get(url);
@@ -63,4 +51,4 @@ const getAllPetData = async (url) => {
   }
 };
 
-export { registerUser, loginUser, getData, getAllPetData };
+export { registerUser, loginUser, getAllPetData };
