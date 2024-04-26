@@ -35,7 +35,7 @@ export const Navbar: React.FC = () => {
       setIsLoggedIn(false);
       setUserName('');
     }
-  }, []);
+  }, [isLoggedIn]);
 
   const handleAccountClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();

@@ -10,11 +10,9 @@ import {
 import { useRef } from 'react';
 import { loginUser } from '../../util';
 import { DogIcon } from '../../img/icons/DogIcon';
-import { useNavigate } from 'react-router-dom';
 
 export const LoginForm = () => {
   const formRef = useRef(null);
-  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -28,7 +26,7 @@ export const LoginForm = () => {
       const firstName = response.data.firstName;
       localStorage.setItem('jwtToken', token);
       localStorage.setItem('firstName', firstName);
-      navigate('/');
+      window.location.href = '/';
     } else {
       console.log(response);
     }
