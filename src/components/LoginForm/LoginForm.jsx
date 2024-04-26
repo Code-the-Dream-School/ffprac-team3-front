@@ -5,15 +5,16 @@ import {
   Grid,
   TextField,
   Button,
-  Link,
-} from "@mui/material";
+} from '@mui/material';
 
-import { useRef } from "react";
-import { loginUser } from "../../util";
-import { DogIcon } from "../../img/icons/DogIcon";
+import { useRef } from 'react';
+import { loginUser } from '../../util';
+import { DogIcon } from '../../img/icons/DogIcon';
+import { useNavigate } from 'react-router-dom';
 
 export const LoginForm = () => {
   const formRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -24,31 +25,28 @@ export const LoginForm = () => {
 
     if (response && response.status === 200) {
       const token = response.data.token;
-      const name = response.data.user.name;
-      localStorage.setItem("jwtToken", token);
-      localStorage.setItem("userName", name);
+      const firstName = response.data.firstName;
+      localStorage.setItem('jwtToken', token);
+      localStorage.setItem('firstName', firstName);
+      navigate('/');
     } else {
       console.log(response);
     }
-  };
-
-  const handleRegister = () => {
-    navigate.push("/register");
   };
 
   return (
     <Container
       component="main"
       maxWidth="xs"
-      sx={{ display: "flex", flexDirection: "column", minHeight: "85vh" }}
+      sx={{ display: 'flex', flexDirection: 'column', minHeight: '85vh' }}
     >
       <Box
         sx={{
-          marginTop: "8rem",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          color: "#0E2728",
+          marginTop: '8rem',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          color: '#0E2728',
         }}
       >
         <Typography
@@ -56,17 +54,17 @@ export const LoginForm = () => {
           variant="h4"
           sx={{
             fontWeight: 500,
-            color: "#0E2728",
+            color: '#0E2728',
             letterSpacing: 1,
-            textAlign: "center",
+            textAlign: 'center',
           }}
           gutterBottom
         >
           <DogIcon
             sx={{
-              fontSize: "4rem",
-              pr: ".5rem",
-              justifySelf: "center",
+              fontSize: '4rem',
+              pr: '.5rem',
+              justifySelf: 'center',
             }}
           />
           PetPals Login
@@ -77,7 +75,7 @@ export const LoginForm = () => {
         ref={formRef}
         noValidate
         onSubmit={handleSubmit}
-        sx={{ mt: "1.5rem" }}
+        sx={{ mt: '1.5rem' }}
       >
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -107,12 +105,12 @@ export const LoginForm = () => {
           fullWidth
           variant="contained"
           sx={{
-            backgroundColor: "#EE633E",
-            mt: "2.5rem",
-            mb: "1rem",
-            py: ".75rem",
-            "&:hover": {
-              backgroundColor: "#F8AF3F",
+            backgroundColor: '#EE633E',
+            mt: '2.5rem',
+            mb: '1rem',
+            py: '.75rem',
+            '&:hover': {
+              backgroundColor: '#F8AF3F',
             },
           }}
         >
@@ -124,12 +122,12 @@ export const LoginForm = () => {
               variant="text"
               href="/register"
               sx={{
-                color: "#0E2728",
-                textDecoration: "none",
-                pt: ".5rem",
-                "&:hover": {
-                  color: "#EE633E", // Change the hover color if needed
-                  background: "transparent",
+                color: '#0E2728',
+                textDecoration: 'none',
+                pt: '.5rem',
+                '&:hover': {
+                  color: '#EE633E', // Change the hover color if needed
+                  background: 'transparent',
                 },
               }}
             >
