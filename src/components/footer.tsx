@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Grid, Typography } from "@mui/material";
-import { PetLogoIcon } from "../img/PetLogoIcon";
+import { PetLogoIcon } from "../img/icons/PetLogoIcon";
 
 export const Footer: React.FC = () => {
   return (
@@ -8,11 +8,12 @@ export const Footer: React.FC = () => {
       position="relative"
       sx={{
         width: "100%",
-        bottom: "-1rem",
         backgroundColor: "#506C60",
         ml: "-1rem",
         pr: "2rem",
         pb: "1.5rem",
+        mb: "-1rem",
+        marginTop: "auto",
       }}
     >
       <Grid container direction="column" alignItems="center">

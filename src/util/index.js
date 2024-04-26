@@ -3,6 +3,7 @@ import axios from 'axios';
 const baseURL = 'https://ffprac-team3-back.onrender.com/api/v1';
 const registerUserRoute = 'users/register';
 const loginUserRoute = 'users/loginUser';
+const url = 'http://localhost:8000/api/v1/pets'
 
 // * || REGISTRATION AND USER LOGIN *
 
@@ -54,13 +55,39 @@ const getData = async () => {
 };
 
 const getAllPetData = async (url) => {
+  const config = {
+    method: 'get',
+    url: `http://localhost:8000/api/v1/pets/getAllPets`,
+  };
+  
   try {
-    let res = await axios.get(url);
-    let data = await res.data;
-    return data;
+    let response = await axios(config);
+    return response;
   } catch (error) {
-    console.log(error, `error - getAllData in ${url} route`);
+    const msg = error.response.data.msg;
+    return msg;
   }
 };
 
-export { registerUser, loginUser, getData, getAllPetData };
+const uploadPdf = async (_id, file) => {
+  const jwtToken = localStorage.getItem("jwtToken");
+  const config = {
+    method: 'patch',
+    url: `http://localhost:8000/api/v1/pets/update/${_id}`,
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+      'Content-Type': 'multipart/form-data',
+    },
+    file: file
+  }
+
+  try {
+    let response = await axios(config);
+    return response;
+  } catch (error) {
+    const msg = error.response.data.msg;
+    return msg;
+  }
+}
+
+export { registerUser, loginUser, getData, getAllPetData, uploadPdf };
