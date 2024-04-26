@@ -16,23 +16,32 @@ const FAQAccordion = ({ question, answer }) => {
             <Accordion
                 disableGutters
                 elevation={0}
+                
                 sx={{
                     backgroundColor: "transparent",
+                    mx:5,
                     '&:before': {
                         display: 'none',
                     }
                 }}
-
             >
-                <AccordionSummary expandIcon={<KeyboardArrowDown />}
-                                sx={{
-                                    flexDirection:"row-reverse"
-                                }}>
-                    <Typography fontWeight={"bold"}>{question}</Typography>
+                <AccordionSummary
+                    expandIcon={<KeyboardArrowDown />}
+                    sx={{ flexDirection: "row-reverse" }}
+                    
+                >
+                    <Typography
+                        fontWeight="bold"
+                        variant="h6"
+                        pl={2}
+                        color={"#EE633E"}
+                    >
+                        {question}
+                    </Typography>
                 </AccordionSummary>
 
-                <AccordionDetails>
-                    <Typography>{answer}</Typography>
+                <AccordionDetails sx={{backgroundColor:"rgb(248, 175, 63, .2)", borderRadius:3}}>
+                    <Typography pl={5} variant="h6">{answer}</Typography>
                 </AccordionDetails>
             </Accordion>
         </>
@@ -55,17 +64,17 @@ const FAQ = () => {
 
                     <FAQAccordion
                         question={"Am I ready to adopt a pet?"}
-                        answer={"We're glad you asked! Check out the Pet Readiness Checklists above for more information."}
+                        answer={"We're glad you asked! Please check out the guides provided above on preparing and caring for the most common pet types."}
                     />
 
                     <FAQAccordion
                         question={"Does PetPals cost anything?"}
-                        answer={"No, PetPals is completely free to use."}
+                        answer={"No, PetPals is completely free to use. Adoption fees for pets depend on the adoption clinic, breeder, or individual adopting out the pet. Fees may be higher depending on the type of animal and can also be affected by factors such as how much and what kind of care the animal has already received, such as medication, surgery, or other veterinary treatment. We never add our own fees nor do we receive compensation for pet adoptions. We are truly doing this for the animals!... and those that love them."}
                     />
 
                     <FAQAccordion
                         question={"I have a question about a specific pet..."}
-                        answer={"Please contact the adoption agency or breeder. PetPals makes it super easy to do this!"}
+                        answer={"Please contact the adoption agency, breeder, or individual adopting out the pet. PetPals makes it super easy to do this!"}
                     />
 
                     <FAQAccordion
