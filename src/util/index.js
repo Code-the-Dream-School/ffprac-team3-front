@@ -3,6 +3,7 @@ import axios from 'axios';
 const baseURL = 'https://ffprac-team3-back.onrender.com/api/v1';
 const registerUserRoute = 'users/register';
 const loginUserRoute = 'users/loginUser';
+const updateUserRoute = 'users/updateUser';
 
 // * || REGISTRATION AND USER LOGIN *
 
@@ -40,27 +41,39 @@ const loginUser = async (user) => {
   }
 };
 
+const updateUser = async (user) => {
+  const config = {
+    method: 'patch',
+    url: `${baseURL}/${updateUserRoute}`,
+    data: { ...user },
+  };
+
+  try {
+    const response = await axios(config);
+    console.log(response, 'You have successfully updated user information!');
+    return response;
+  } catch (error) {
+    const msg = error.response.data.msg;
+    return msg;
+  }
+};
+
 // * || PET DATA *
 
 // note: not used, but could be used with GET with params
-const getData = async () => {
-  try {
-    // let res = await axios.get(url, params);
-    let data = 'Hello world';
-    return data;
-  } catch (error) {
-    console.log(error, `error - getData in ${url} route`);
-  }
-};
-
 const getAllPetData = async (url) => {
+  const config = {
+    method: 'get',
+    url: `${baseURL}/pets/getAllPets`,
+  };
+
   try {
-    let res = await axios.get(url);
-    let data = await res.data;
-    return data;
+    const response = await axios(config);
+    return response.data.petData;
   } catch (error) {
-    console.log(error, `error - getAllData in ${url} route`);
+    const msg = error.response.data.msg;
+    return msg;
   }
 };
 
-export { registerUser, loginUser, getData, getAllPetData };
+export { registerUser, loginUser, updateUser, getAllPetData };
