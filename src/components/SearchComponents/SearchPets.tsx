@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Grid, Stack, Typography } from "@mui/material";
 import SearchInput from "./SearchInput";
-import PetCard from "../PetComponents/PetCard";
+import PetCard from "../PetCardComponent/PetCard";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ObjectId } from "mongodb";
 import { getAllPetData } from "../../util";
