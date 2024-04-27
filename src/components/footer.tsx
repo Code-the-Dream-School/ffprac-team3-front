@@ -26,8 +26,8 @@ export const Footer: React.FC = () => {
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            pt: "2rem",
-            pb: "1rem",
+            pt: "1.5rem",
+            pb: ".5rem",
           }}
         >
           <IconButton
@@ -48,7 +48,7 @@ export const Footer: React.FC = () => {
                 height: "2rem",
               }}
             />
-            <Typography variant="subtitle2" color="inherit">
+            <Typography variant="overline" color="inherit">
               Home
             </Typography>
           </IconButton>
@@ -76,14 +76,14 @@ export const Footer: React.FC = () => {
                 transition: "color 0.3s",
               }}
             />
-            <Typography variant="subtitle2" color="inherit">
+            <Typography variant="overline" color="inherit">
               Contact
             </Typography>
           </IconButton>
         </Grid>
 
         <Grid item xs={12}>
-          <Typography color="#F7F4F0" variant="body2" sx={{ mb: "1rem" }}>
+          <Typography color="#F7F4F0" variant="overline" sx={{ mb: "1rem" }}>
             {` PetPals © ${new Date().getFullYear()} | Code the Dream FF Practicum Team 3 `}
           </Typography>
         </Grid>
