@@ -99,16 +99,6 @@ function App() {
             </>
           }
         />
-        <Route
-          path="/logout"
-          element={
-            <>
-              <Navbar />
-              {/* Logout component */}
-              <Footer />
-            </>
-          }
-        />
 
         <Route path="/resources" element={<ResourcesPage />} />
       </Routes>
