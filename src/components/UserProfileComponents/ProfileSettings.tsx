@@ -1,25 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from 'react';
 import {
-  CardContent,
-  Stack,
   Typography,
   TextField,
   Button,
-} from "@mui/material";
-import { useNavigate } from "react-router-dom";
+  Box,
+  Container,
+  Grid,
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { updateUser } from '../../util';
 
 // Settings component for updating user profile data
-export const ProfileSettings = ({ updateProfile }) => {
+export const ProfileSettings = ({ userProfileData }) => {
+  const { userPhone } = userProfileData;
+  let formatUserPhone = '';
+
+  if (userPhone) {
+    formatUserPhone = `(${userPhone.slice(0, 3)}) ${userPhone.slice(
+      3,
+      6
+    )}-${userPhone.slice(6)}`;
+  }
+
+  const formRef = useRef<HTMLFormElement | null>(null);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    userEmail: "",
-    userPhone: "",
-    userAddress: "",
-    userCity: "",
-    userState: "",
-    userZip: "",
+    firstName: userProfileData.firstName || '',
+    lastName: userProfileData.lastName || '',
+    userEmail: userProfileData.userEmail || '',
+    userPhone: formatUserPhone || '',
+    userAddress: userProfileData.userAddress || '',
+    userCity: userProfileData.userCity || '',
+    userState: userProfileData.userState || '',
+    userZip: userProfileData.userZip || '',
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,101 +43,138 @@ export const ProfileSettings = ({ updateProfile }) => {
     }));
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Submit the form data to update user profile
-    console.log("Form submitted:", formData);
+    const formData = new FormData(event.target);
+    const formProps = Object.fromEntries(formData);
+    let phoneNumber = formProps.userPhone;
+    let formattedPhone = phoneNumber.toString().replace(/\D/g, '');
+    formProps.userPhone = formattedPhone;
+    const response = await updateUser(formProps);
 
-    updateProfile(formData)
-      .then(() => {
-        navigate("/profile");
-      })
-      .catch((error) => {
-        console.error("Error updating profile:", error);
-      });
+    if (formRef.current) {
+      formRef.current.reset();
+    }
+
+    if (response && response.status === 200) {
+      navigate('/profile#profile');
+    } else {
+      console.log(response);
+    }
   };
 
   return (
-    <CardContent sx={{ mt: "2rem", mx: "2rem" }}>
+    <Container
+      component="main"
+      maxWidth="xs"
+      sx={{ display: 'flex', flexDirection: 'column', minHeight: '85vh' }}
+    >
       <Typography
         variant="h3"
-        sx={{ fontWeight: 500, color: "#0E2728" }}
+        sx={{ fontWeight: 500, color: '#0E2728' }}
         gutterBottom
       >
         Profile Settings
       </Typography>
-
-      <Stack spacing={2}>
-        <TextField
-          fullWidth
-          label="First Name"
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleInputChange}
-        />
-        <TextField
-          fullWidth
-          label="Last Name"
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleInputChange}
-        />
-        <TextField
-          fullWidth
-          label="Email"
-          name="userEmail"
-          value={formData.userEmail}
-          onChange={handleInputChange}
-        />
-        <TextField
-          fullWidth
-          label="Phone"
-          name="userPhone"
-          value={formData.userPhone}
-          onChange={handleInputChange}
-        />
-        <TextField
-          fullWidth
-          label="Address"
-          name="userAddress"
-          value={formData.userAddress}
-          onChange={handleInputChange}
-        />
-        <TextField
-          fullWidth
-          label="City"
-          name="userCity"
-          value={formData.userCity}
-          onChange={handleInputChange}
-        />
-        <TextField
-          fullWidth
-          label="State"
-          name="userState"
-          value={formData.userState}
-          onChange={handleInputChange}
-        />
-        <TextField
-          fullWidth
-          label="Zip"
-          name="userZip"
-          value={formData.userZip}
-          onChange={handleInputChange}
-        />
-        <Button
-          variant="contained"
-          onClick={handleSubmit}
-          sx={{
-            backgroundColor: "#EE633E",
-            py: "1rem",
-            "&:hover": {
-              backgroundColor: "#df522d",
-            },
-          }}
-        >
-          Update Profile
-        </Button>
-      </Stack>
-    </CardContent>
+      <Box
+        component="form"
+        ref={formRef}
+        noValidate
+        onSubmit={handleSubmit}
+        sx={{ mt: '1.5rem' }}
+      >
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              id="firstName"
+              label="First Name"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Last Name"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Email"
+              name="userEmail"
+              value={formData.userEmail}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Phone"
+              name="userPhone"
+              value={formData.userPhone}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Address"
+              name="userAddress"
+              value={formData.userAddress}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="City"
+              name="userCity"
+              value={formData.userCity}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="State"
+              name="userState"
+              value={formData.userState}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Zip"
+              name="userZip"
+              value={formData.userZip}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                backgroundColor: '#EE633E',
+                py: '1rem',
+                '&:hover': {
+                  backgroundColor: '#df522d',
+                },
+              }}
+            >
+              Update Profile
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+    </Container>
   );
 };

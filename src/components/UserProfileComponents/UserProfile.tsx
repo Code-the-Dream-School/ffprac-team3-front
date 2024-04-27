@@ -39,36 +39,6 @@ export const UserProfile: React.FC = () => {
     handleGetUser();
   }, []);
 
-  // placeholder updateProfile function to update from settings
-  const updateProfile = async (formData) => {
-    try {
-      // Validation logic goes here
-
-      // Send Data to Server
-      const response = await fetch('/api/updateProfile', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update profile');
-      }
-
-      // Handle Success Response
-      // Server returns updated profile data
-      const updatedProfile = await response.json();
-
-      return updatedProfile;
-    } catch (error) {
-      // Handle Failure Response
-      console.error('Error updating profile:', error);
-      throw error;
-    }
-  };
-
   return (
     <Box
       sx={{
@@ -145,9 +115,8 @@ export const UserProfile: React.FC = () => {
         {value === 'profile' ? (
           <UserProfileDisplay userProfileData={userProfileData} />
         ) : (
-          <ProfileSettings updateProfile={updateProfile} />
+          <ProfileSettings userProfileData={userProfileData} />
         )}
-        {/* Pass updateProfile as prop */}
       </Card>
     </Box>
   );
