@@ -46,6 +46,11 @@ export const Navbar: React.FC = () => {
     setAnchorEl(null);
   };
 
+  const handleLogOut = async () => {
+    localStorage.clear();
+    window.location.href = '/';
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -180,8 +185,8 @@ export const Navbar: React.FC = () => {
               {isLoggedIn && <Divider />}
 
               {isLoggedIn && (
-                <MenuItem onClick={handleClose}>
-                  <Link href="/logout" color="#0E2728" underline="none">
+                <MenuItem onClick={handleLogOut}>
+                  <Link color="#0E2728" underline="none">
                     Logout
                   </Link>
                 </MenuItem>
