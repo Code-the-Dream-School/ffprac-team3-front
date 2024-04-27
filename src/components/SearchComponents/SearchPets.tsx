@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Grid, Stack, Typography } from "@mui/material";
 import SearchInput from "./SearchInput";
-import PetCard from "../PetComponents/PetCard";
+import PetCard from "../PetCardComponent/PetCard";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ObjectId } from "mongodb";
 import { getAllPetData } from "../../util";
@@ -59,7 +59,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
   useEffect(() => {
     const fetchingData = async () => {
       const response = await getAllPetData();
-      const animalData = response.data.petData.map((animal) => ({
+      const animalData = response?.data?.petData?.map((animal) => ({
         ...animal,
         breed: getBreedListByType(animal.type).includes(animal.breed)
           ? animal.breed

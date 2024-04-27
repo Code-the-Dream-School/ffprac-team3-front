@@ -64,29 +64,30 @@ const getAllPetData = async (url) => {
     let response = await axios(config);
     return response;
   } catch (error) {
-    const msg = error.response.data.msg;
-    return msg;
+    // const msg = error.response?.data.msg;
+    // return msg;
   }
 };
 
 const uploadPdf = async (_id, file) => {
-  const jwtToken = localStorage.getItem("jwtToken");
+  console.log(file)
+  const formData = new FormData();
+  formData.append('fileMedical', file);
   const config = {
     method: 'patch',
-    url: `http://localhost:8000/api/v1/pets/update/${_id}`,
+    url: `http://localhost:8000/api/v1/pets/medical/update/${_id}`,
     headers: {
-      Authorization: `Bearer ${jwtToken}`,
       'Content-Type': 'multipart/form-data',
     },
-    file: file
+    data: formData
   }
 
   try {
     let response = await axios(config);
     return response;
   } catch (error) {
-    const msg = error.response.data.msg;
-    return msg;
+    console.error('Error uploading PDF:', error);
+    throw error;
   }
 }
 
