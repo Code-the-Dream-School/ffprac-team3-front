@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 // local testing baseURL
-const baseURL = 'http://localhost:8000/api/v1';
+// const baseURL = 'http://localhost:8000/api/v1';
 
-// const baseURL = 'https://ffprac-team3-back.onrender.com/api/v1';
+const baseURL = 'https://ffprac-team3-back.onrender.com/api/v1';
 const registerUserRoute = 'users/register';
 const loginUserRoute = 'users/loginUser';
 const getCurrentUserRoute = 'users/getCurrentUser';
