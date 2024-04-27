@@ -12,6 +12,8 @@ import { SignUpForm } from "./components/SignUpForm/SignUpForm";
 import { PetProfile } from "./components/PetProfileComponent/PetProfile";
 import { ContactForm } from "./components/ContactForm";
 import { ResourcesBanner } from "./components/HomePageComponents/ResourcesBanner.tsx";
+import { UserProfile } from "./components/UserProfileComponents/UserProfile";
+import { ProfileSettings } from "./components/UserProfileComponents/ProfileSettings";
 
 const URL = "http://localhost:8000/api/v1/";
 
@@ -83,18 +85,7 @@ function App() {
           element={
             <>
               <Navbar />
-              {/* User Profile Component */}
-              <Footer />
-            </>
-          }
-        />
-
-        <Route
-          path="/settings"
-          element={
-            <>
-              <Navbar />
-              {/* Settings Component */}
+              <UserProfile />
               <Footer />
             </>
           }

@@ -6,10 +6,11 @@ import {
   TextField,
   Button,
   Link,
-} from '@mui/material';
+} from "@mui/material";
 
-import { useRef } from 'react';
-import { loginUser } from '../../util';
+import { useRef } from "react";
+import { loginUser } from "../../util";
+import { YellowDogIcon } from "../../img/icons/YellowDogIcon";
 
 export const LoginForm = () => {
   const formRef = useRef(null);
@@ -24,25 +25,49 @@ export const LoginForm = () => {
     if (response && response.status === 200) {
       const token = response.data.token;
       const name = response.data.user.name;
-      localStorage.setItem('jwtToken', token);
-      localStorage.setItem('userName', name);
+      localStorage.setItem("jwtToken", token);
+      localStorage.setItem("userName", name);
     } else {
       console.log(response);
     }
   };
 
+  const handleRegister = () => {
+    navigate.push("/register");
+  };
+
   return (
-    <Container component="main" maxWidth="xs">
+    <Container
+      component="main"
+      maxWidth="xs"
+      sx={{ display: "flex", flexDirection: "column", minHeight: "85vh" }}
+    >
       <Box
         sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          marginTop: "8rem",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          color: "#0E2728",
         }}
       >
-        <Typography component="h1" variant="h5">
-          Sign In
+        <Typography
+          component="h2"
+          variant="h4"
+          sx={{
+            fontWeight: 600,
+            color: "#0E2728",
+            letterSpacing: 1,
+          }}
+          gutterBottom
+        >
+          <YellowDogIcon
+            sx={{
+              fontSize: "4rem",
+              pr: ".5rem",
+            }}
+          />
+          PetPals Login
         </Typography>
       </Box>
       <Box
@@ -50,9 +75,9 @@ export const LoginForm = () => {
         ref={formRef}
         noValidate
         onSubmit={handleSubmit}
-        sx={{ mt: 3 }}
+        sx={{ mt: "1.5rem" }}
       >
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
           <Grid item xs={12}>
             <TextField
               required
@@ -79,15 +104,35 @@ export const LoginForm = () => {
           type="submit"
           fullWidth
           variant="contained"
-          sx={{ mt: 3, mb: 2 }}
+          sx={{
+            backgroundColor: "#EE633E",
+            mt: "2.5rem",
+            mb: "1rem",
+            py: ".75rem",
+            "&:hover": {
+              backgroundColor: "#F8AF3F",
+            },
+          }}
         >
           Sign In
         </Button>
         <Grid container justifyContent="center">
           <Grid item>
-            <Link href="/register" variant="body2">
+            <Button
+              variant="text"
+              href="/register"
+              sx={{
+                color: "#0E2728",
+                textDecoration: "none",
+                pt: ".5rem",
+                "&:hover": {
+                  color: "#EE633E", // Change the hover color if needed
+                  background: "transparent",
+                },
+              }}
+            >
               Don't have an account? Sign up
-            </Link>
+            </Button>
           </Grid>
         </Grid>
       </Box>
