@@ -56,7 +56,6 @@ const getCurrentUser = async () => {
 
   try {
     const response = await axios(config);
-    console.log('User Profile Data: ', response.data);
     return response;
   } catch (error) {
     return error.msg;
