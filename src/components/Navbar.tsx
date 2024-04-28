@@ -9,13 +9,13 @@ import {
   MenuItem,
   Link,
   MenuList,
+  Typography,
 } from "@mui/material";
 import { PetLogoIcon } from "../img/icons/PetLogoIcon";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Divider from "@mui/material/Divider";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { loginUser } from "../util/index";
 import { useNavigate } from "react-router-dom";
 
 export const Navbar: React.FC = () => {
@@ -28,7 +28,8 @@ export const Navbar: React.FC = () => {
   useEffect(() => {
     // Check if the user is logged in by checking if jwtToken exists in localStorage
     const jwtToken = localStorage.getItem("jwtToken");
-    const storedUserName = localStorage.getItem("userName");
+    const storedUserName = localStorage.getItem("firstName");
+
     if (jwtToken) {
       setIsLoggedIn(true);
       setUserName(storedUserName || "");
@@ -36,7 +37,7 @@ export const Navbar: React.FC = () => {
       setIsLoggedIn(false);
       setUserName("");
     }
-  }, []);
+  }, [isLoggedIn]);
 
   const handleAccountClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -45,14 +46,11 @@ export const Navbar: React.FC = () => {
 
   const handleClose = async () => {
     setAnchorEl(null);
+  };
 
-    try {
-      // Call the loginUser function to check if the user is logged in
-      const response = await loginUser(loginUser);
-      setIsLoggedIn(true);
-    } catch (error) {
-      setIsLoggedIn(false);
-    }
+  const handleLogOut = async () => {
+    localStorage.clear();
+    window.location.href = "/";
   };
 
   return (
@@ -89,24 +87,24 @@ export const Navbar: React.FC = () => {
             justifyContent="flex-end"
             sx={{ flexGrow: 1 }}
           >
-            {/* {isLoggedIn && ( // Render only if logged in */}
-
             <>
-              <IconButton
-                id="favorites"
-                color="inherit"
-                onClick={(event) => {
-                  navigate("/search?favorites=true");
-                }}
-                sx={{
-                  "&:hover": {
-                    color: "#F8AF3F",
-                    backgroundColor: "transparent",
-                  },
-                }}
-              >
-                <FavoriteIcon />
-              </IconButton>
+              {isLoggedIn && (
+                <IconButton
+                  id="favorites"
+                  color="inherit"
+                  onClick={(event) => {
+                    navigate("/search?favorites=true");
+                  }}
+                  sx={{
+                    "&:hover": {
+                      color: "#F8AF3F",
+                      backgroundColor: "transparent",
+                    },
+                  }}
+                >
+                  <FavoriteIcon />
+                </IconButton>
+              )}
             </>
             <Divider
               color="#F8AF3F"
@@ -114,8 +112,6 @@ export const Navbar: React.FC = () => {
               variant="middle"
               flexItem
             />
-
-            {/* )} */}
 
             <IconButton
               color="inherit"
@@ -131,11 +127,12 @@ export const Navbar: React.FC = () => {
                 },
               }}
             >
-              <AccountCircleIcon />
-              <KeyboardArrowDownIcon />
-
+              <AccountCircleIcon sx={{ pr: ".5rem" }} />
               {/* {/* Display user's name if logged in */}
-              {/* {isLoggedIn && <span>{userName}</span>} */}
+              {isLoggedIn && (
+                <Typography variant="overline">{userName}</Typography>
+              )}
+              <KeyboardArrowDownIcon />
             </IconButton>
           </Stack>
 
@@ -157,40 +154,46 @@ export const Navbar: React.FC = () => {
             }}
           >
             <MenuList dense>
-              {/* {!isLoggedIn && ( // Render only if not logged in */}
-              <MenuItem onClick={handleClose}>
-                <Link href="/login" underline="none">
-                  Login
-                </Link>
-              </MenuItem>
-              {/* )} */}
+              {/* Render only if not logged in */}
+              {!isLoggedIn && (
+                <MenuItem onClick={handleClose}>
+                  <Link href="/login" underline="none">
+                    Login
+                  </Link>
+                </MenuItem>
+              )}
 
               {/* These options will be hidden when logged out */}
-              {/* {isLoggedIn && ( // Render only if logged in */}
 
-              <MenuItem onClick={handleClose}>
-                <Link href="/profile" color="#0E2728" underline="none">
-                  Profile
-                </Link>
-              </MenuItem>
+              {isLoggedIn && (
+                <MenuItem onClick={handleClose}>
+                  <Link href="/profile" color="#0E2728" underline="none">
+                    Profile
+                  </Link>
+                </MenuItem>
+              )}
 
-              <MenuItem onClick={handleClose}>
-                <Link
-                  href="/profile/#settings"
-                  color="#0E2728"
-                  underline="none"
-                >
-                  Account Settings
-                </Link>
-              </MenuItem>
-              <Divider />
-              <MenuItem onClick={handleClose}>
-                <Link href="/logout" color="#0E2728" underline="none">
-                  Logout
-                </Link>
-              </MenuItem>
+              {isLoggedIn && (
+                <MenuItem onClick={handleClose}>
+                  <Link
+                    href="/profile/#settings"
+                    color="#0E2728"
+                    underline="none"
+                  >
+                    Account Settings
+                  </Link>
+                </MenuItem>
+              )}
 
-              {/* )} */}
+              {isLoggedIn && <Divider />}
+
+              {isLoggedIn && (
+                <MenuItem onClick={handleLogOut}>
+                  <Link color="#0E2728" underline="none">
+                    Logout
+                  </Link>
+                </MenuItem>
+              )}
             </MenuList>
           </Menu>
         </Toolbar>

@@ -1,59 +1,91 @@
 import axios from 'axios';
 
+// local testing baseURL
+// const baseURL = 'http://localhost:8000/api/v1';
+
 const baseURL = 'https://ffprac-team3-back.onrender.com/api/v1';
 const registerUserRoute = 'users/register';
 const loginUserRoute = 'users/loginUser';
-const url = 'http://localhost:8000/api/v1/pets'
+
+const getCurrentUserRoute = 'users/getCurrentUser';
+const updateUserRoute = 'users/updateUser';
+
 
 // * || REGISTRATION AND USER LOGIN *
 
-const registerUser = async (user) => {
+const registerUser = async (userInformation) => {
   const config = {
     method: 'post',
     url: `${baseURL}/${registerUserRoute}`,
-    data: { ...user },
+    data: { ...userInformation },
   };
 
   try {
     const response = await axios(config);
-    console.log(response, 'You have successfully registered! Please log-in');
+    console.log(response.msg);
     return response;
   } catch (error) {
-    const msg = error.response.data.msg;
-    return msg;
+    return error.msg;
   }
 };
 
-const loginUser = async (user) => {
+const loginUser = async (userCredentials) => {
   const config = {
     method: 'post',
     url: `${baseURL}/${loginUserRoute}`,
-    data: { ...user },
+    data: { ...userCredentials },
   };
 
   try {
     const response = await axios(config);
-    console.log(response, 'You have successfully logged-in!');
+    console.log('Successful logged-in!');
     return response;
   } catch (error) {
-    const msg = error.response.data.msg;
-    return msg;
+    return error.msg;
+  }
+};
+
+const getCurrentUser = async () => {
+  const jwtToken = localStorage.getItem('jwtToken');
+
+  const config = {
+    method: 'get',
+    url: `${baseURL}/${getCurrentUserRoute}`,
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+    },
+  };
+
+  try {
+    const response = await axios(config);
+    return response;
+  } catch (error) {
+    return error.msg;
+  }
+};
+
+const updateUser = async (userInformation) => {
+  const jwtToken = localStorage.getItem('jwtToken');
+
+  const config = {
+    method: 'patch',
+    url: `${baseURL}/${updateUserRoute}`,
+    data: { ...userInformation },
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+    },
+  };
+
+  try {
+    const response = await axios(config);
+    console.log(response.data.msg);
+    return response;
+  } catch (error) {
+    return error.msg;
   }
 };
 
 // * || PET DATA *
-
-// note: not used, but could be used with GET with params
-const getData = async () => {
-  try {
-    // let res = await axios.get(url, params);
-    let data = 'Hello world';
-    return data;
-  } catch (error) {
-    console.log(error, `error - getData in ${url} route`);
-  }
-};
-
 const getAllPetData = async (url) => {
   const config = {
     method: 'get',
@@ -68,6 +100,7 @@ const getAllPetData = async (url) => {
     // return msg;
   }
 };
+
 
 const uploadPdf = async (_id, file) => {
   console.log(file)
@@ -91,4 +124,5 @@ const uploadPdf = async (_id, file) => {
   }
 }
 
-export { registerUser, loginUser, getData, getAllPetData, uploadPdf };
+export { registerUser, loginUser, getAllPetData, uploadPdf, updateUser, getCurrentUser };
+

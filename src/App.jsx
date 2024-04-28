@@ -1,42 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { getData } from "./util/index";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Navbar } from "./components/Navbar";
-import { HeroBanner } from "./components/HomePageComponents/HeroBanner";
-import { PetSliderCarousel } from "./components/HomePageComponents/PetSliderCarousel";
-import { SearchPets } from "./components/SearchComponents/SearchPets";
-import ResourcesPage from "./pages/ResourcesPage.tsx";
-import { LoginForm } from "./components/LoginForm/LoginForm";
-import { Footer } from "./components/footer";
-import { SignUpForm } from "./components/SignUpForm/SignUpForm";
-import { PetProfile } from "./components/PetProfileComponent/PetProfile";
-import { ContactForm } from "./components/ContactForm";
-import { ResourcesBanner } from "./components/HomePageComponents/ResourcesBanner.tsx";
-import { UserProfile } from "./components/UserProfileComponents/UserProfile";
-import { ProfileSettings } from "./components/UserProfileComponents/ProfileSettings";
 
-const URL = "http://localhost:8000/api/v1/";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Navbar } from './components/Navbar';
+import { HeroBanner } from './components/HomePageComponents/HeroBanner';
+import { PetSliderCarousel } from './components/HomePageComponents/PetSliderCarousel';
+import { SearchPets } from './components/SearchComponents/SearchPets';
+import { SignUpForm } from './components/SignUpForm/SignUpForm';
+import ResourcesPage from './pages/ResourcesPage.tsx';
+import { LoginForm } from './components/LoginForm/LoginForm';
+import { Footer } from './components/footer';
+import { PetProfile } from './components/PetProfileComponent/PetProfile';
+import { ContactForm } from './components/ContactForm';
+import { ResourcesBanner } from './components/HomePageComponents/ResourcesBanner.tsx';
+import { UserProfile } from './components/UserProfileComponents/UserProfile';
+import { ProfileSettings } from './components/UserProfileComponents/ProfileSettings';
+
 
 function App() {
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const myData = await getData(URL);
-        if (myData) {
-          setMessage(myData.data);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    })();
-
-    return () => {
-      console.log("unmounting");
-    };
-  }, []);
-
   return (
     <BrowserRouter>
       <Routes>
@@ -119,16 +99,6 @@ function App() {
             <>
               <Navbar />
               <ContactForm />
-              <Footer />
-            </>
-          }
-        />
-        <Route
-          path="/logout"
-          element={
-            <>
-              <Navbar />
-              {/* Logout component */}
               <Footer />
             </>
           }

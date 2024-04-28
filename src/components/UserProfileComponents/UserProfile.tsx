@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Card, Button, Breadcrumbs } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import HomeIcon from "@mui/icons-material/Home";
 import { UserProfileDisplay } from "./UserProfileDisplay";
 import { ProfileSettings } from "./ProfileSettings";
+import { getCurrentUser } from "../../util";
 
 // UserProfile component
 export const UserProfile: React.FC = () => {
@@ -14,59 +15,40 @@ export const UserProfile: React.FC = () => {
     return hash === "settings" ? "settings" : "profile";
   });
 
+  const [userProfileData, setUserProfileData] = useState({});
+  const [userName, setUserName] = useState("");
+
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
     // Update the URL hash based on the selected tab
     window.location.hash = newValue;
   };
 
-  // Define default userProfileData
-  const userProfileData = {
-    firstName: "John",
-    lastName: "Doe",
-    userEmail: "john.doe@example.com",
-    userPhone: "123-456-7890",
-    userAddress: "123 Main St",
-    userCity: "Anytown",
-    userState: "State",
-    userZip: "12345",
-  };
-
-  // placeholder updateProfile function to update from settings
-  const updateProfile = async (formData) => {
+  const handleGetUser = async () => {
     try {
-      // Validation logic goes here
+      const response = await getCurrentUser();
 
-      // Send Data to Server
-      const response = await fetch("/api/updateProfile", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update profile");
+      if (response && response.status === 200) {
+        setUserProfileData(response.data);
+        setUserName(response.data.firstName || ""); // Set initial userName
+        localStorage.setItem("firstName", response.data.firstName || "");
       }
-
-      // Handle Success Response
-      // Server returns updated profile data
-      const updatedProfile = await response.json();
-
-      return updatedProfile;
     } catch (error) {
-      // Handle Failure Response
-      console.error("Error updating profile:", error);
-      throw error;
+      console.log(error.msg);
     }
   };
 
+  useEffect(() => {
+    handleGetUser();
+  }, []);
+
   return (
     <Box
+      flexGrow={1}
       sx={{
         backgroundColor: "#0E2728",
         width: "100vw",
+        minHeight: "75vh",
         pt: "7rem",
         pb: "4rem",
         ml: "-8px",
@@ -80,6 +62,8 @@ export const UserProfile: React.FC = () => {
           border: "1px solid #0E2728",
           borderRadius: "5px",
           backgroundColor: "#F4F2EA",
+          overflowY: "auto", // Enable vertical scrolling within the card
+          maxHeight: "calc(100vh - 11rem)", // Adjust max height to fit within available viewport
         }}
       >
         <Breadcrumbs aria-label="breadcrumb">
@@ -138,9 +122,11 @@ export const UserProfile: React.FC = () => {
         {value === "profile" ? (
           <UserProfileDisplay userProfileData={userProfileData} />
         ) : (
-          <ProfileSettings updateProfile={updateProfile} />
+          <ProfileSettings
+            userProfileData={userProfileData}
+            setUserName={setUserName}
+          />
         )}
-        {/* Pass updateProfile as prop */}
       </Card>
     </Box>
   );
