@@ -11,37 +11,62 @@ import FavoriteButton from "./FavoriteButton";
 import PetsIcon from "@mui/icons-material/Pets";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
+import { ObjectId } from 'mongodb';
 import { useNavigate } from "react-router-dom";
 
-interface Location {
-  state: string;
-  city: string;
-  zip: string;
-}
+
 interface Animal {
-  id: number;
+  _id: ObjectId;
   type: string;
+  breed: string;
   age: string;
   sex: string;
   name: string;
   description: string;
   isFavorite: boolean;
-  imageUrl: string;
+  fileImages: FileImages;
+  location: Location; 
 }
+
+interface FileImages {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  id: ObjectId;
+  filename: string;
+  metadata: null;
+  bucketName: string;
+  chunkSize: number;
+  size: number;
+  uploadDate: Date;
+  contentType: string;
+}
+
+interface Location {
+  state: string;
+  city: string;
+  zip: string;
+
+}
+
 interface PetCardProps {
   animal: Animal;
-  onToggleFavorite: (id: number) => void;
+  onToggleFavorite: (_id: ObjectId) => void;
 }
+
+
 
 const PetCard: React.FC<PetCardProps> = ({ animal, onToggleFavorite }) => {
   const navigate = useNavigate();
 
   const handleToggleFavorite = () => {
-    onToggleFavorite(animal.id);
+    onToggleFavorite(animal._id);
   };
 
+
   const handleProfileClick = () => {
-    navigate(`/pet-profile/${animal.id}/${animal.type}/${animal.name}`);
+    navigate(`/pet-profile/${animal._id}/${animal.type}/${animal.name}`);
   };
 
   return (
@@ -51,11 +76,13 @@ const PetCard: React.FC<PetCardProps> = ({ animal, onToggleFavorite }) => {
       size="lg"
       sx={{ width: "auto", alignItems: "center" }}
     >
-      <AspectRatio
-        ratio="1"
-        sx={{ width: { xs: 250, sm: 225, lg: 200 }, pt: "1rem" }}
-      >
-        <img src={animal.imageUrl} loading="lazy" alt={animal.name} />
+
+      <AspectRatio ratio="1" sx={{ width: 200 }}>
+        <img
+          src={'http://localhost:8000/api/v1/pets/uploads/' + animal.fileImages.filename}
+          loading="lazy"
+          alt={animal.name}
+        />
         <IconButton
           onClick={handleToggleFavorite}
           aria-label="heart icon"
@@ -71,7 +98,7 @@ const PetCard: React.FC<PetCardProps> = ({ animal, onToggleFavorite }) => {
         <FavoriteButton
           isFavorite={animal.isFavorite}
           onToggleFavorite={handleToggleFavorite}
-          animalId={animal.id}
+          animalId={animal._id}
         />
       </AspectRatio>
 

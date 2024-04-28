@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Box, Grid, Stack, Typography } from "@mui/material";
 import SearchInput from "./SearchInput";
-import initialAnimals from "../../util/PetData/PetData";
-import PetCard from "../PetCardComponent/PetCard";
+import PetCard from "../PetComponents/PetCard";
 import { useLocation, useNavigate } from "react-router-dom";
-import CircularProgress from "@mui/material/CircularProgress";
+import { ObjectId } from "mongodb";
+import { getAllPetData } from "../../util";
+import getBreedListByType from "../PetComponents/PetData/PetData";
+import { CircularProgress } from "@mui/material";
 
 interface Location {
   state: string;
@@ -13,17 +15,33 @@ interface Location {
 }
 
 interface Animal {
-  id: number;
+  _id: ObjectId;
   type: string;
+  breed: string;
   age: string;
   sex: string;
   name: string;
-  breed: string;
   description: string;
   isFavorite: boolean;
+  fileImages: FileImages;
   location: Location;
-  imageUrl: string;
 }
+
+interface FileImages {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  id: ObjectId;
+  filename: string;
+  metadata: null;
+  bucketName: string;
+  chunkSize: number;
+  size: number;
+  uploadDate: Date;
+  contentType: string;
+}
+
 interface SearchPetsProps {
   keyword: string;
 }
@@ -31,12 +49,28 @@ interface SearchPetsProps {
 export const SearchPets: React.FC<SearchPetsProps> = () => {
   const [loading, setLoading] = useState(true);
   const [pageTitle, setPageTitle] = useState<string>("Search Results"); // State to hold the title
-  const [animals, setAnimals] = useState<Animal[]>(initialAnimals);
+  const [animals, setAnimals] = useState<Animal[]>([]);
   const [filteredAnimals, setFilteredAnimals] =
-    useState<Animal[]>(initialAnimals);
+    useState<Animal[]>([]);
   const [availableStates, setAvailableStates] = useState<string[]>([]);
   const [noResults, setNoResults] = useState(false); // State to track if no results found
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchingData = async () => {
+      const response = await getAllPetData();
+      const animalData = response.data.petData.map((animal) => ({
+        ...animal,
+        breed: getBreedListByType(animal.type).includes(animal.breed)
+          ? animal.breed
+          : "", // If the breed is not found in the breed list, set it to an empty string
+      }));
+      setAnimals(animalData);
+      setFilteredAnimals(animalData)
+    };
+
+    fetchingData(); 
+  }, []); 
 
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
@@ -267,9 +301,9 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
   };
 
   // Function to toggle favorite status of an animal
-  const handleToggleFavorite = (id: number) => {
+  const handleToggleFavorite = (_id: ObjectId) => {
     const updatedAnimals = animals.map((animal) =>
-      animal.id === id ? { ...animal, isFavorite: !animal.isFavorite } : animal
+      animal._id === _id ? { ...animal, isFavorite: !animal.isFavorite } : animal
     );
     setAnimals(updatedAnimals);
 
@@ -328,13 +362,13 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
                 filters={filters}
                 onFilterChange={handleFilterChange}
                 availableStates={availableStates}
-                initialAnimals={initialAnimals}
+                animals={animals}
                 initialKeyword={initialKeyword}
                 location={location}
                 setPageTitle={setPageTitle}
               />
             </Grid>
-            <Grid item xs={12} md={6} lg={9}>
+            <Grid item xs={12} md={8}>
               <Stack
                 direction="column"
                 sx={{
@@ -342,14 +376,13 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
                   display: "grid",
                   gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
                   gap: 3,
-                  px: "6rem",
-                  mt: { md: "9rem" },
-                  mb: "4rem",
+                  m: 4,
+                  marginTop: "4rem",
                 }}
               >
-                {filteredAnimals.map((animal) => (
+                {filteredAnimals?.map((animal) => (
                   <PetCard
-                    key={animal.id}
+                    key={parseInt(animal._id.toString(), 16)}
                     animal={animal}
                     onToggleFavorite={handleToggleFavorite}
                   />

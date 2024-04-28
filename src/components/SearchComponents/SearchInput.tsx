@@ -5,6 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import FilterDropdowns from "./FilterDropdowns";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useNavigate } from "react-router-dom";
+import { ObjectId } from 'mongodb';
 
 interface Location {
   state: string;
@@ -12,15 +13,15 @@ interface Location {
   zip: string;
 }
 interface Animal {
-  id: number;
+  _id: ObjectId;
   type: string;
+  breed: string;
   age: string;
   sex: string;
   name: string;
   description: string;
   isFavorite: boolean;
-  location: Location;
-  breed: string;
+  location: Location; 
 }
 interface SearchInputProps {
   filters: {
@@ -42,7 +43,7 @@ interface SearchInputProps {
     favorite: boolean;
   }) => void;
   availableStates: string[];
-  initialAnimals: Animal[];
+  animals: Animal[];
   initialKeyword: string; //  initialKeyword prop from homepage search
   location: Location; // location prop from homepage search
   setPageTitle: React.Dispatch<React.SetStateAction<string>>; // Define setPageTitle prop
@@ -52,7 +53,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
   filters,
   onFilterChange,
   availableStates,
-  initialAnimals,
+  animals,
   initialKeyword,
   setPageTitle,
 }) => {
@@ -238,7 +239,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
             handleClearFilters={clearFilters}
             setLocation={setLocation}
             availableStates={availableStates}
-            initialAnimals={initialAnimals}
+            animals={animals}
             setPageTitle={setPageTitle}
           />
         </Stack>

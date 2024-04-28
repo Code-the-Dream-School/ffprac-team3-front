@@ -84,14 +84,27 @@ const updateUser = async (userInformation) => {
 };
 
 // * || PET DATA *
+
 const getAllPetData = async (url) => {
+  const config = {
+    method: 'get',
+    url: `http://localhost:8000/api/v1/pets/getAllPets`,
+  };
+
   try {
-    let res = await axios.get(url);
-    let data = await res.data;
-    return data;
+    let response = await axios(config);
+    return response;
   } catch (error) {
-    console.log(error, `error - getAllData in ${url} route`);
+    const msg = error.response.data.msg;
+    return msg;
   }
 };
 
-export { registerUser, loginUser, updateUser, getCurrentUser, getAllPetData };
+export {
+  registerUser,
+  loginUser,
+  updateUser,
+  getCurrentUser,
+  getAllPetData,
+  uploadPdf,
+};
