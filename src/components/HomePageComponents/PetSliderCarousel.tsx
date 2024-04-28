@@ -57,7 +57,7 @@ export const PetSliderCarousel: React.FC = () => {
   useEffect(() => {
     const fetchingData = async () => {
       const response = await getAllPetData();
-      const animalData = response.data.petData.map((animal) => ({
+      const animalData = response?.data?.petData?.map((animal) => ({
         ...animal,
         breed: getBreedListByType(animal.type).includes(animal.breed)
           ? animal.breed

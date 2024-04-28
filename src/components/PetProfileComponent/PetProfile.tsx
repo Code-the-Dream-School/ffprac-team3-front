@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -10,7 +10,8 @@ import {
   Stack,
   Button,
   Breadcrumbs,
-  Link,
+  Modal,
+  TextField
 } from "@mui/material";
 import FavoriteButton from "../PetCardComponent/FavoriteButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -70,15 +71,22 @@ interface Location {
 }
 
 
+
 export const PetProfile: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const {_id, type, name} = useParams<{ _id: string, type: string, name: string }>();
   const [animals, setAnimals] = useState<Animal[]>([]);
   const [animal, setAnimal] = useState<Animal | undefined>();
-  const [file, setFile] = useState<FileMedical | undefined>()
+  const [file, setFile] = useState<string | Blob>('')
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const fileRef = useRef(null);
+  const formRef = useRef(null);
   const navigate = useNavigate();
 
   console.log(_id)
+
 
 
 
@@ -103,13 +111,13 @@ interface PetCardProps {
   useEffect(() => {
     const fetchingData = async () => {
       const response = await getAllPetData();
-      const animalData = response.data.petData.map((pet) => ({
+      const animalData = response?.data?.petData?.map((pet) => ({
         ...pet,
         breed: getBreedListByType(pet.type).includes(pet.breed)
           ? pet.breed
           : "", // If the breed is not found in the breed list, set it to an empty string
       }));
-      animalData.map((pet) => {
+      animalData?.map((pet) => {
         pet._id.toString()
       })
       setAnimals(animalData)
@@ -120,15 +128,18 @@ interface PetCardProps {
 
   useEffect(() => {
     // Fetch animal details based on the ID from the URL
-    const selectedAnimal = animals.find(
+    const selectedAnimal = animals?.find(
       (animal) => animal._id === String(_id)
     );
+    
     if (selectedAnimal) {
       // Check if the favorite status is stored in localStorage
       const storedFavorite = localStorage.getItem(`favorite_${_id}`);
       if (storedFavorite !== null) {
         selectedAnimal.isFavorite = JSON.parse(storedFavorite);
       }
+
+     
       setAnimal(selectedAnimal);
       setLoading(false);
       // Scroll to the top of the page
@@ -136,7 +147,7 @@ interface PetCardProps {
     } else {
       setLoading(false);
     }
-  }, [_id]);
+  }, [_id, animals]);
 
   useEffect(() => {
     // Refresh favorite status on component mount
@@ -186,8 +197,16 @@ interface PetCardProps {
     }
   };
 
-  const handlePdfUpload = () => {
-    uploadPdf(_id, )
+  const handlePdfUpload = async (event) => {
+    event.preventDefault()
+    console.log(file)
+      await uploadPdf(_id, file);
+      setFile('')
+  }
+
+  const handleSetFile = (e) => {
+    console.log(e.target.files[0])
+    setFile(e.target.files[0])
   }
 
   if (loading) {
@@ -350,9 +369,76 @@ interface PetCardProps {
                   py: "1rem",
                   "&:hover": { backgroundColor: "#eea535" },
                 }}
+                onClick={handleOpen}
               >
-                upload pet's medical history
+                pet's medical history
               </Button>
+                <Modal
+                  open={open}
+                  onClose={() => setOpen(false)}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                <Box sx={{
+                    py: "8rem",
+                    ml: "-8px",
+                    pr: "8px",
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 400,
+                    boxShadow: 24,
+                    p: 4,
+                    backgroundColor: "#F4F2EA",
+                    textAlign: 'center',
+                    borderRadius: "5px",
+                }}>
+                <Typography id="modal-modal-title" variant="h6" component="h2"
+                sx={{color: "#EE633E",
+                fontWeight: 600,
+                letterSpacing: 1}}>
+                  Upload Pet's Medical History
+                </Typography>
+                <form action="/upload" method="patch" ref={formRef} onSubmit={handlePdfUpload} >
+                <TextField id="file" label="" variant="filled" type="file" name="fileMedical" ref={fileRef} onChange={(e) => handleSetFile(e)}/>
+                <Button 
+                variant="contained" 
+                type="submit"
+                sx={{
+                  backgroundColor: "#F8AF3F",
+                  py: "0.3rem",
+                  px: "3rem",
+                  "&:hover": { backgroundColor: "#eea535" },
+                  my: "0.3rem"
+                }}
+                >
+                  Upload
+                </Button>
+                </form>
+                { animal.fileMedical ?
+                <div>
+                  <Typography id="modal-modal-title" variant="h6" component="h2" 
+                  sx={{color: "#EE633E",
+                        fontWeight: 600,
+                        fontSize: '1rem',
+                        letterSpacing: 1}}>
+                  This pet already has a Medical Record
+                  </Typography>
+                  <Typography id="modal-modal-title" variant="h6" component="h2"
+                  sx={{color: "#EE633E",
+                  fontWeight: 600,
+                  fontSize: '1rem',
+                  letterSpacing: 1}}
+                  >
+                  <a href={'http://localhost:8000/api/v1/pets/history/uploads/' + animal.fileMedical.filename} download={animal.name + ' Medical History'}>View/Download Medical History</a>
+                  </Typography>
+                </div>
+                :
+                <p></p>
+                }
+                </Box>
+              </Modal>
             </CardActions>
           </Stack>
         </CardContent>
