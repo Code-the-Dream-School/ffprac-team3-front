@@ -6,8 +6,10 @@ import axios from 'axios';
 const baseURL = 'https://ffprac-team3-back.onrender.com/api/v1';
 const registerUserRoute = 'users/register';
 const loginUserRoute = 'users/loginUser';
+
 const getCurrentUserRoute = 'users/getCurrentUser';
 const updateUserRoute = 'users/updateUser';
+
 
 // * || REGISTRATION AND USER LOGIN *
 
@@ -85,13 +87,42 @@ const updateUser = async (userInformation) => {
 
 // * || PET DATA *
 const getAllPetData = async (url) => {
+  const config = {
+    method: 'get',
+    url: `http://localhost:8000/api/v1/pets/getAllPets`,
+  };
+  
   try {
-    let res = await axios.get(url);
-    let data = await res.data;
-    return data;
+    let response = await axios(config);
+    return response;
   } catch (error) {
-    console.log(error, `error - getAllData in ${url} route`);
+    // const msg = error.response?.data.msg;
+    // return msg;
   }
 };
 
-export { registerUser, loginUser, updateUser, getCurrentUser, getAllPetData };
+
+const uploadPdf = async (_id, file) => {
+  console.log(file)
+  const formData = new FormData();
+  formData.append('fileMedical', file);
+  const config = {
+    method: 'patch',
+    url: `http://localhost:8000/api/v1/pets/medical/update/${_id}`,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data: formData
+  }
+
+  try {
+    let response = await axios(config);
+    return response;
+  } catch (error) {
+    console.error('Error uploading PDF:', error);
+    throw error;
+  }
+}
+
+export { registerUser, loginUser, getAllPetData, uploadPdf, updateUser, getCurrentUser };
+

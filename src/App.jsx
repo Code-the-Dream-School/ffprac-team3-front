@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
@@ -13,6 +14,7 @@ import { ContactForm } from './components/ContactForm';
 import { ResourcesBanner } from './components/HomePageComponents/ResourcesBanner.tsx';
 import { UserProfile } from './components/UserProfileComponents/UserProfile';
 import { ProfileSettings } from './components/UserProfileComponents/ProfileSettings';
+
 
 function App() {
   return (
@@ -45,7 +47,9 @@ function App() {
         />
 
         <Route
-          path="/pet-profile/:id/:type/:name"
+
+          path="/pet-profile/:_id/:type/:name"
+
           element={
             <>
               <Navbar />
