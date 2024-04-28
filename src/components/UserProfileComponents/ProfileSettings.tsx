@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from "react";
 import {
   Typography,
   TextField,
@@ -6,33 +6,30 @@ import {
   Box,
   Container,
   Grid,
-} from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { updateUser } from '../../util';
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { updateUser } from "../../util";
 
 // Settings component for updating user profile data
-export const ProfileSettings = ({ userProfileData }) => {
+export const ProfileSettings = ({ userProfileData, setUserName }) => {
   const { userPhone } = userProfileData;
-  let formatUserPhone = '';
-
-  if (userPhone) {
-    formatUserPhone = `(${userPhone.slice(0, 3)}) ${userPhone.slice(
-      3,
-      6
-    )}-${userPhone.slice(6)}`;
-  }
+  let formatUserPhone = userPhone
+    ? `(${userPhone.slice(0, 3)}) ${userPhone.slice(3, 6)}-${userPhone.slice(
+        6
+      )}`
+    : "";
 
   const formRef = useRef<HTMLFormElement | null>(null);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    firstName: userProfileData.firstName || '',
-    lastName: userProfileData.lastName || '',
-    userEmail: userProfileData.userEmail || '',
-    userPhone: formatUserPhone || '',
-    userAddress: userProfileData.userAddress || '',
-    userCity: userProfileData.userCity || '',
-    userState: userProfileData.userState || '',
-    userZip: userProfileData.userZip || '',
+    firstName: userProfileData.firstName || "",
+    lastName: userProfileData.lastName || "",
+    userEmail: userProfileData.userEmail || "",
+    userPhone: formatUserPhone || "",
+    userAddress: userProfileData.userAddress || "",
+    userCity: userProfileData.userCity || "",
+    userState: userProfileData.userState || "",
+    userZip: userProfileData.userZip || "",
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,23 +38,42 @@ export const ProfileSettings = ({ userProfileData }) => {
       ...prevFormData,
       [name]: value,
     }));
+
+    // Update the userName state in the localStorage
+    if (name === "firstName") {
+      setUserName(value); // Pass the updated first name to the parent component
+      localStorage.setItem("firstName", value);
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData(event.target);
-    const formProps = Object.fromEntries(formData);
-    let phoneNumber = formProps.userPhone;
-    let formattedPhone = phoneNumber.toString().replace(/\D/g, '');
-    formProps.userPhone = formattedPhone;
-    const response = await updateUser(formProps);
+    // const formData = new FormData(event.target);
+    // const formProps = Object.fromEntries(formData);
 
-    if (formRef.current) {
-      formRef.current.reset();
-    }
+    let phoneNumber = formData.userPhone;
+    let formattedPhone = phoneNumber.toString().replace(/\D/g, "");
+
+    const updatedFormData = {
+      ...formData,
+      userPhone: formattedPhone,
+    };
+    // formProps.userPhone = formattedPhone;
+
+    const response = await updateUser(updatedFormData);
+
+    // if (formRef.current) {
+    //   formRef.current.reset();
+    // }
 
     if (response && response.status === 200) {
-      navigate('/profile#profile');
+      // Update the userName state in the parent component (UserProfile) and localStorage
+      setUserName(updatedFormData.firstName);
+      localStorage.setItem("firstName", updatedFormData.firstName);
+
+      navigate("/profile#profile");
+      // Refresh the page
+      window.location.reload();
     } else {
       console.log(response);
     }
@@ -67,11 +83,11 @@ export const ProfileSettings = ({ userProfileData }) => {
     <Container
       component="main"
       maxWidth="xs"
-      sx={{ display: 'flex', flexDirection: 'column', minHeight: '85vh' }}
+      sx={{ display: "flex", flexDirection: "column", minHeight: "85vh" }}
     >
       <Typography
         variant="h3"
-        sx={{ fontWeight: 500, color: '#0E2728' }}
+        sx={{ fontWeight: 500, color: "#0E2728" }}
         gutterBottom
       >
         Profile Settings
@@ -81,7 +97,7 @@ export const ProfileSettings = ({ userProfileData }) => {
         ref={formRef}
         noValidate
         onSubmit={handleSubmit}
-        sx={{ mt: '1.5rem' }}
+        sx={{ mt: "1.5rem" }}
       >
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -94,6 +110,7 @@ export const ProfileSettings = ({ userProfileData }) => {
               onChange={handleInputChange}
             />
           </Grid>
+
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -160,13 +177,14 @@ export const ProfileSettings = ({ userProfileData }) => {
           <Grid item xs={12}>
             <Button
               type="submit"
+              onClick={handleSubmit}
               fullWidth
               variant="contained"
               sx={{
-                backgroundColor: '#EE633E',
-                py: '1rem',
-                '&:hover': {
-                  backgroundColor: '#df522d',
+                backgroundColor: "#EE633E",
+                py: "1rem",
+                "&:hover": {
+                  backgroundColor: "#df522d",
                 },
               }}
             >
