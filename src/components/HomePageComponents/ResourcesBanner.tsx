@@ -73,7 +73,8 @@ export const ResourcesBanner = () => {
               borderRadius: "5px",
               position: "relative",
               "&:hover": {
-                border: "5px solid #EE633E",
+                outline: "5px solid #EE633E",
+                border: "1px solid #EE633E",
                 backgroundColor: "rgba(238, 99, 62, 0.09)",
                 cursor: "pointer",
               },
@@ -112,7 +113,8 @@ export const ResourcesBanner = () => {
               borderRadius: "5px",
               position: "relative",
               "&:hover": {
-                border: "5px solid #EE633E",
+                outline: "5px solid #EE633E",
+                border: "1px solid #EE633E",
                 backgroundColor: "rgba(238, 99, 62, 0.09)",
                 cursor: "pointer",
               },
@@ -151,7 +153,8 @@ export const ResourcesBanner = () => {
               borderRadius: "5px",
               position: "relative",
               "&:hover": {
-                border: "5px solid #EE633E",
+                outline: "5px solid #EE633E",
+                border: "1px solid #EE633E",
                 backgroundColor: "rgba(238, 99, 62, 0.09)",
                 cursor: "pointer",
               },
@@ -190,7 +193,8 @@ export const ResourcesBanner = () => {
               borderRadius: "5px",
               position: "relative",
               "&:hover": {
-                border: "5px solid #EE633E",
+                outline: "5px solid #EE633E",
+                border: "1px solid #EE633E",
                 backgroundColor: "rgba(238, 99, 62, 0.09)",
                 cursor: "pointer",
               },

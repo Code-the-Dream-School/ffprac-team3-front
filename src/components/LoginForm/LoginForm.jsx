@@ -9,7 +9,7 @@ import {
 
 import { useRef } from 'react';
 import { loginUser } from '../../util';
-import { DogIcon } from '../../img/icons/DogIcon';
+import { YellowDogIcon } from '../../img/icons/YellowDogIcon';
 
 export const LoginForm = () => {
   const formRef = useRef(null);
@@ -48,17 +48,17 @@ export const LoginForm = () => {
         }}
       >
         <Typography
-          component="h1"
+          component="h2"
           variant="h4"
           sx={{
-            fontWeight: 500,
+            fontWeight: 600,
             color: '#0E2728',
             letterSpacing: 1,
             textAlign: 'center',
           }}
           gutterBottom
         >
-          <DogIcon
+          <YellowDogIcon
             sx={{
               fontSize: '4rem',
               pr: '.5rem',

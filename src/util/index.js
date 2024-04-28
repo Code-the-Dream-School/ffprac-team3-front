@@ -95,11 +95,34 @@ const getAllPetData = async (url) => {
     let response = await axios(config);
     return response;
   } catch (error) {
-    const msg = error.response.data.msg;
-    return msg;
+    // const msg = error.response?.data.msg;
+    // return msg;
   }
 };
 
+const uploadPdf = async (_id, file) => {
+  console.log(file);
+  const formData = new FormData();
+  formData.append('fileMedical', file);
+  const config = {
+    method: 'patch',
+    url: `http://localhost:8000/api/v1/pets/medical/update/${_id}`,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data: formData,
+  };
+
+  try {
+    let response = await axios(config);
+    return response;
+  } catch (error) {
+    console.error('Error uploading PDF:', error);
+    throw error;
+  }
+};
+
+export { registerUser, loginUser, getData, getAllPetData, uploadPdf };
 export {
   registerUser,
   loginUser,

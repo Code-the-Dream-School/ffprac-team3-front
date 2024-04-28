@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import React, { useState, useRef } from "react";
 import { registerUser } from "../../util";
-import { DogIcon } from "../../img/icons/DogIcon";
+import { YellowDogIcon } from "../../img/icons/YellowDogIcon";
 
 export const SignUpForm = () => {
   const formRef = useRef(null);
@@ -51,10 +51,10 @@ export const SignUpForm = () => {
         <Typography
           component="h1"
           variant="h4"
-          sx={{ fontWeight: 500, color: "#0E2728", letterSpacing: 1 }}
+          sx={{ fontWeight: 600, color: "#0E2728", letterSpacing: 1 }}
           gutterBottom
         >
-          <DogIcon
+          <YellowDogIcon
             sx={{
               fontSize: "4rem",
               pr: ".5rem",
