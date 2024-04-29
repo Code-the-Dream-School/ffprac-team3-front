@@ -2,7 +2,6 @@ import React from "react";
 import { Typography, Box, Card, CardContent, CardMedia, Link } from "@mui/material";
 import ResHeroBanner from "../components/ResHeroBanner";
 import FAQ from "../components/FAQ";
-import ChecklistCards from "../components/ChecklistCards";
 
 const ResourceCards = () => {
     return (

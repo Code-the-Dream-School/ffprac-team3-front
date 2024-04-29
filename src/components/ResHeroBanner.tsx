@@ -8,7 +8,7 @@ const ResHeroBanner = () => {
     return (
         <Grid
             container
-            columnSpacing={{ xs: 6, md: 8, xl: 26 }}
+            columnSpacing={{ xs: 6, md: 8 }}
             mt={15}
             mb={10}
             display="flex"
@@ -36,7 +36,17 @@ const ResHeroBanner = () => {
             </Grid>
 
             <Grid xs={3.2} md={3.3} xl={3}>
-                <AspectRatio ratio=".7" sx={{ borderRadius: 6 }}>
+                <AspectRatio
+                    ratio="1"
+                    minHeight={200}
+                    sx={{
+                        boxShadow: "-1px 1px 7px 2px rgb(80, 108, 96, .4)",
+                        borderRadius: 13,
+                        outline: "ridge 1px",
+                        outlineOffset:4,
+                        outlineColor:"rgb(80, 108, 96, .1)"
+                    }}
+                >
                     <img src={wellReadDog} />
                 </AspectRatio>
             </Grid>
