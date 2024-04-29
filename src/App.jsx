@@ -104,7 +104,16 @@ function App() {
           }
         />
 
-        <Route path="/resources" element={<ResourcesPage />} />
+        <Route
+          path="/resources"
+          element={
+            <>
+              <Navbar />
+              <ResourcesPage />
+              <Footer />
+            </>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
