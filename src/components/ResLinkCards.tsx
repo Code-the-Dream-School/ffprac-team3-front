@@ -8,6 +8,16 @@ const ResLinkCard = ({ link, image, title, description }) => {
             href={link}
             target="_blank"
             rel="noopener"
+            sx={{
+                transition: "ease-in-out .1s",
+                '&:hover':{
+                outline: "5px solid rgb(248, 175, 63)",
+                outlineOffset:-1,
+                borderRadius:3,
+                transform: "scale(1.1)",
+                transition: "ease-in-out .1s"
+            }
+        }}
         >
             <Card square variant="outlined">
                 <CardMedia
