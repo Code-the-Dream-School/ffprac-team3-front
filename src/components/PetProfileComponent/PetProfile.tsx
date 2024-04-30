@@ -165,7 +165,7 @@ export const PetProfile: React.FC = () => {
     //}
   }, [_id, animals]);
 
-  useEffect(() => {
+  // useEffect(() => {
     // Refresh favorite status on component mount
     //const storedFavorite = localStorage.getItem(`favorite_${_id}`);
     //if (storedFavorite !== null) {
@@ -177,7 +177,7 @@ export const PetProfile: React.FC = () => {
       //});
     //}
     //() => onToggleFavorite(animal?._id)
-  }, []);
+  // }, []);
 
   useEffect(() => {
     // Remember scroll position when component unmounts

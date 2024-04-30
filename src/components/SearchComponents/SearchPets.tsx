@@ -50,8 +50,8 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
   const [loading, setLoading] = useState(true);
   const [pageTitle, setPageTitle] = useState<string>("Search Results"); // State to hold the title
   const [animals, setAnimals] = useState<Animal[]>([]);
-  const [filteredAnimals, setFilteredAnimals] =useState<Animal[]>([]);
-  const [favoriteAnimals, setFavoriteAnimals] = useState<any>([])
+  const [filteredAnimals, setFilteredAnimals] = useState<Animal[]>([]);
+  const [favoriteAnimals, setFavoriteAnimals] = useState<any>([]);
   const [availableStates, setAvailableStates] = useState<string[]>([]);
   const [noResults, setNoResults] = useState(false); // State to track if no results found
   const navigate = useNavigate();
@@ -70,6 +70,13 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
     };
 
     fetchingData();
+  }, []);
+
+  useEffect(() => {
+    const storedFavorites = JSON.parse(
+      localStorage.getItem("favoriteAnimals") || "[]"
+    );
+    setFavoriteAnimals(storedFavorites);
   }, []);
 
   const { search } = useLocation();
@@ -110,7 +117,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
     favorite: boolean;
   }) => {
     // Check if any new filters are active
-    console.log(newFilters)
+    console.log(newFilters);
     const filtersActive =
       newFilters.keyword ||
       newFilters.type ||
@@ -261,18 +268,21 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
             .toLowerCase()
             .includes(location.zip.toLowerCase()));
 
-      const storedFavoriteAnimals = JSON.parse(localStorage.getItem('favoriteAnimals') || '[]');
-      const favoriteMatches = storedFavoriteAnimals.find(favorite => favorite._id === animal._id);
+      const isFavorite = favoriteAnimals.some(
+        (favAnimal) => favAnimal._id === animal._id
+      );
 
-      return (
+      const matchesFilterCriteria =
         (isLocationKeyword || nameAndTypeMatches) &&
         typeFilterMatches &&
         sexMatches &&
         ageMatches &&
         breedMatches &&
         locationMatches &&
-        favoriteMatches
-      );
+        (!favorite || isFavorite);
+
+      // Return the animal if it matches the filter criteria (no need to check favorite status here)
+      return matchesFilterCriteria;
     });
 
     // Set filtered animals and available states
@@ -303,15 +313,18 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
 
   // Function to toggle favorite status of an animal
   const handleToggleFavorite = (_id: ObjectId) => {
-
-    const jwtToken = localStorage.getItem('jwtToken');
-    const storedFavoriteAnimals = JSON.parse(localStorage.getItem('favoriteAnimals') || '[]');
+    const jwtToken = localStorage.getItem("jwtToken");
+    const storedFavoriteAnimals = JSON.parse(
+      localStorage.getItem("favoriteAnimals") || "[]"
+    );
     let newFavoriteAnimals = [...storedFavoriteAnimals];
 
-    const animalIndex = storedFavoriteAnimals.findIndex(animal => animal._id === _id);
+    const animalIndex = storedFavoriteAnimals.findIndex(
+      (animal) => animal._id === _id
+    );
 
     if (animalIndex === -1) {
-      const animalToAdd = animals.find(animal => animal._id === _id);
+      const animalToAdd = animals.find((animal) => animal._id === _id);
       if (animalToAdd) {
         newFavoriteAnimals.push(animalToAdd);
       }
@@ -320,8 +333,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
     }
 
     setFavoriteAnimals(newFavoriteAnimals);
-    localStorage.setItem('favoriteAnimals', JSON.stringify(newFavoriteAnimals));
-
+    localStorage.setItem("favoriteAnimals", JSON.stringify(newFavoriteAnimals));
 
     const filtered = applyFilters(animals);
     setFilteredAnimals(filtered);
@@ -332,7 +344,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
     updateTitle(); // Call the function to update title whenever filters change
     setLoading(false); // Set loading to false after filtering
     console.log("Filters State:", filters);
-  }, [filters, animals]);
+  }, [filters, animals, favoriteAnimals]);
 
   return (
     <Box component="form" sx={{ mt: "5rem" }}>
