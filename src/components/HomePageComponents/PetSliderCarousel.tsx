@@ -44,14 +44,11 @@ interface Location {
 export const PetSliderCarousel: React.FC = () => {
   const [animals, setAnimals] = useState<Animal[]>([]);
   const [favoriteAnimals, setFavoriteAnimals] = useState<Animal[]>([]);
+  const storedFavoriteAnimals = JSON.parse(localStorage.getItem('favoriteAnimals') || '[]');
 
   useEffect(() => {
-    animals.forEach((animal) => {
-      if (animal.isFavorite === true) {
-        favoriteAnimals.push(animal);
-      }
-    });
-  }, [animals]);
+    setFavoriteAnimals(storedFavoriteAnimals)
+  }, [])
 
   useEffect(() => {
     const fetchingData = async () => {
@@ -74,17 +71,23 @@ export const PetSliderCarousel: React.FC = () => {
   const [showRightScroll, setShowRightScroll] = useState<boolean>(false);
 
   const handleToggleFavorite = (_id: ObjectId) => {
-    const updatedAnimals = animals.map((animal) =>
-      animal._id === _id
-        ? { ...animal, isFavorite: !animal.isFavorite }
-        : animal
-    );
-    setAnimals(updatedAnimals);
-
-    const updatedFavoriteAnimals = updatedAnimals.filter(
-      (animal) => animal.isFavorite
-    );
-    setFavoriteAnimals(updatedFavoriteAnimals);
+    const jwtToken = localStorage.getItem('jwtToken');
+    const storedFavoriteAnimals = JSON.parse(localStorage.getItem('favoriteAnimals') || '[]');
+    let newFavoriteAnimals = [...storedFavoriteAnimals];
+  
+    const animalIndex = storedFavoriteAnimals.findIndex(animal => animal._id === _id);
+  
+    if (animalIndex === -1) {
+      const animalToAdd = animals.find(animal => animal._id === _id);
+      if (animalToAdd) {
+        newFavoriteAnimals.push(animalToAdd);
+      }
+    } else {
+      newFavoriteAnimals.splice(animalIndex, 1);
+    }
+  
+    setFavoriteAnimals(newFavoriteAnimals);
+    localStorage.setItem('favoriteAnimals', JSON.stringify(newFavoriteAnimals));
   };
 
   useEffect(() => {
@@ -157,7 +160,8 @@ export const PetSliderCarousel: React.FC = () => {
             "::-webkit-scrollbar": { display: "none" },
           }}
         >
-          {favoriteAnimals.map((animal) => (
+          {
+          favoriteAnimals?.map((animal) => (
             <PetCard
               key={parseInt(animal._id.toString(), 16)}
               animal={animal}

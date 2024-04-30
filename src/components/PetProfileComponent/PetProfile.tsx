@@ -70,6 +70,11 @@ interface Location {
   zip: string;
 }
 
+interface PetCardProps {
+  animal: Animal;
+  onToggleFavorite: (_id: string) => void;
+}
+
 export const PetProfile: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const { _id, type, name } = useParams<{
@@ -79,7 +84,8 @@ export const PetProfile: React.FC = () => {
   }>();
   const [animals, setAnimals] = useState<Animal[]>([]);
   const [animal, setAnimal] = useState<Animal | undefined>();
-  const [file, setFile] = useState<string | Blob>("");
+  const [favoriteAnimals, setFavoriteAnimals] = useState<Animal[]>([]);
+  const [file, setFile] = useState<string | Blob>('')
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -87,12 +93,27 @@ export const PetProfile: React.FC = () => {
   const formRef = useRef(null);
   const navigate = useNavigate();
 
-  console.log(_id);
+  console.log(_id)
 
-  interface PetCardProps {
-    animal: Animal;
-    onToggleFavorite: (_id: string) => void;
-  }
+  const handleToggleFavorite = (_id: ObjectId) => {
+    const jwtToken = localStorage.getItem('jwtToken');
+    const storedFavoriteAnimals = JSON.parse(localStorage.getItem('favoriteAnimals') || '[]');
+    let newFavoriteAnimals = [...storedFavoriteAnimals];
+  
+    const animalIndex = storedFavoriteAnimals.findIndex(animal => animal._id === _id);
+  
+    if (animalIndex === -1) {
+      const animalToAdd = animals.find(animal => animal._id === _id);
+      if (animalToAdd) {
+        newFavoriteAnimals.push(animalToAdd);
+      }
+    } else {
+      newFavoriteAnimals.splice(animalIndex, 1);
+    }
+  
+    setFavoriteAnimals(newFavoriteAnimals);
+    localStorage.setItem('favoriteAnimals', JSON.stringify(newFavoriteAnimals));
+  };
 
   const formatAge = (age: string) => {
     const ageNum = parseFloat(age);
@@ -135,33 +156,27 @@ export const PetProfile: React.FC = () => {
       (animal) => animal._id === String(_id)
     );
 
-    if (selectedAnimal) {
-      // Check if the favorite status is stored in localStorage
-      const storedFavorite = localStorage.getItem(`favorite_${_id}`);
-      if (storedFavorite !== null) {
-        selectedAnimal.isFavorite = JSON.parse(storedFavorite);
-      }
-
       setAnimal(selectedAnimal);
       setLoading(false);
       // Scroll to the top of the page
       window.scrollTo(0, 0);
-    } else {
-      setLoading(false);
-    }
+    //} else {
+      //setLoading(false);
+    //}
   }, [_id, animals]);
 
   useEffect(() => {
     // Refresh favorite status on component mount
-    const storedFavorite = localStorage.getItem(`favorite_${_id}`);
-    if (storedFavorite !== null) {
-      setAnimal((prevAnimal) => {
-        if (prevAnimal) {
-          return { ...prevAnimal, isFavorite: JSON.parse(storedFavorite) };
-        }
-        return prevAnimal;
-      });
-    }
+    //const storedFavorite = localStorage.getItem(`favorite_${_id}`);
+    //if (storedFavorite !== null) {
+      //setAnimal((prevAnimal) => {
+        //if (prevAnimal) {
+          //return { ...prevAnimal, isFavorite: JSON.parse(storedFavorite) };
+        //}
+        //return prevAnimal;
+      //});
+    //}
+    //() => onToggleFavorite(animal?._id)
   }, []);
 
   useEffect(() => {
@@ -185,22 +200,6 @@ export const PetProfile: React.FC = () => {
 
   const handleGoBack = () => {
     navigate(-1);
-  };
-
-  const handleToggleFavorite = () => {
-    if (animal) {
-      const newFavoriteState = !animal.isFavorite;
-      setAnimal((prevAnimal) =>
-        prevAnimal
-          ? { ...prevAnimal, isFavorite: newFavoriteState }
-          : prevAnimal
-      );
-      // Store the favorite status in localStorage
-      localStorage.setItem(
-        `favorite_${animal._id}`,
-        JSON.stringify(newFavoriteState)
-      );
-    }
   };
 
   const handlePdfUpload = async (event) => {
@@ -323,7 +322,6 @@ export const PetProfile: React.FC = () => {
               {animal.name}
 
               <FavoriteButton
-                isFavorite={animal.isFavorite}
                 onToggleFavorite={handleToggleFavorite}
                 animalId={animal._id as ObjectId}
               />

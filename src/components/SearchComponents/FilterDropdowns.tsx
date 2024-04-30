@@ -73,7 +73,7 @@ interface FilterDropdownsProps {
   age: string;
   breed: string;
   location: Location;
-  favorite: boolean;
+  favorite: any;
   handleTypeChange: (event: SelectChangeEvent<string>) => void;
   handleSexChange: (event: SelectChangeEvent<string>) => void;
   handleBreedChange: (event: SelectChangeEvent<string>) => void;
@@ -111,6 +111,8 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
   const [ageCounts, setAgeCounts] = useState<{ [key: string]: number }>({});
   const [stateCounts, setStateCounts] = useState<{ [key: string]: number }>({});
   const [favoriteCount, setFavoriteCount] = useState<number>(0);
+  const storedFavoriteAnimals = JSON.parse(localStorage.getItem('favoriteAnimals') || '[]');
+  
 
   // Memoize available states
   const availableStates = useMemo(
@@ -158,7 +160,7 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
       countAgeGroups(filteredAnimalsByType.map((animal) => animal.age))
     );
     setFavoriteCount(
-      animals.filter((animal) => animal.isFavorite).length
+      storedFavoriteAnimals.length
     );
     setStateCounts(
       countFilterOptions(animals.map((animal) => animal.location.state))
@@ -251,10 +253,10 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
       countAgeGroups(filteredAnimalsByType.map((animal) => animal.age))
     );
 
-    const favoriteCount = filteredAnimalsByState.filter(
-      (animal) => animal.isFavorite
+    const favoriteCountlength = filteredAnimalsByState.filter(
+      (animal) => storedFavoriteAnimals.includes(animal)
     ).length;
-    setFavoriteCount(favoriteCount);
+    setFavoriteCount(favoriteCountlength);
 
     // Update state counts
     setStateCounts(
@@ -279,7 +281,7 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
 
     // Reset favorite count
     setFavoriteCount(
-      animals.filter((animal) => animal.isFavorite).length
+      storedFavoriteAnimals.length
     );
 
     // Reset state counts
@@ -312,12 +314,9 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
         (age === "" || checkAgeGroup(animal, age)) &&
         (breed === "" || animal.breed === breed) &&
         (location.state === "" || animal.location.state === location.state) &&
-        (favorite || !favorite || animal.isFavorite)
+        (storedFavoriteAnimals.find((favorite) => favorite._id === animal._id))
     );
-    const favoriteCount = filteredAnimals.filter(
-      (animal) => animal.isFavorite
-    ).length;
-    setFavoriteCount(favoriteCount);
+    setFavoriteCount(storedFavoriteAnimals.length);
 
  // Update the filter counts only if there are filtered animals
   if (filteredAnimals.length > 0) {
@@ -458,11 +457,9 @@ const FilterDropdowns: React.FC<FilterDropdownsProps> = ({
             sx={{ backgroundColor: "#fff" }}
           >
             <MenuItem value="" disabled>
-              Favorites
+              Favorited
             </MenuItem>
-            {/* <MenuItem value="true">{`Favorites (${favoriteCount})`}</MenuItem> */}
-
-            <MenuItem value="true">{`Favorites`}</MenuItem>
+            <MenuItem value="true">{`Favorites (${favoriteCount})`}</MenuItem>
           </Select>
         </FormControl>
       </Stack>
