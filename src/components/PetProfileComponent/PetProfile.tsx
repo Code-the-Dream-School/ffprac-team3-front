@@ -76,11 +76,12 @@ interface PetCardProps {
   onToggleFavorite: (_id: string) => void;
 }
 
-export const PetProfile: React.FC = (onToggleFavorite) => {
+export const PetProfile: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const {_id, type, name} = useParams<{ _id: string, type: string, name: string }>();
   const [animals, setAnimals] = useState<Animal[]>([]);
   const [animal, setAnimal] = useState<Animal | undefined>();
+  const [favoriteAnimals, setFavoriteAnimals] = useState<Animal[]>([]);
   const [file, setFile] = useState<string | Blob>('')
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -90,6 +91,26 @@ export const PetProfile: React.FC = (onToggleFavorite) => {
   const navigate = useNavigate();
 
   console.log(_id)
+
+  const handleToggleFavorite = (_id: ObjectId) => {
+    const jwtToken = localStorage.getItem('jwtToken');
+    const storedFavoriteAnimals = JSON.parse(localStorage.getItem('favoriteAnimals') || '[]');
+    let newFavoriteAnimals = [...storedFavoriteAnimals];
+  
+    const animalIndex = storedFavoriteAnimals.findIndex(animal => animal._id === _id);
+  
+    if (animalIndex === -1) {
+      const animalToAdd = animals.find(animal => animal._id === _id);
+      if (animalToAdd) {
+        newFavoriteAnimals.push(animalToAdd);
+      }
+    } else {
+      newFavoriteAnimals.splice(animalIndex, 1);
+    }
+  
+    setFavoriteAnimals(newFavoriteAnimals);
+    localStorage.setItem('favoriteAnimals', JSON.stringify(newFavoriteAnimals));
+  };
 
 
 
@@ -143,15 +164,16 @@ export const PetProfile: React.FC = (onToggleFavorite) => {
 
   useEffect(() => {
     // Refresh favorite status on component mount
-    const storedFavorite = localStorage.getItem(`favorite_${_id}`);
-    if (storedFavorite !== null) {
-      setAnimal((prevAnimal) => {
-        if (prevAnimal) {
-          return { ...prevAnimal, isFavorite: JSON.parse(storedFavorite) };
-        }
-        return prevAnimal;
-      });
-    }
+    //const storedFavorite = localStorage.getItem(`favorite_${_id}`);
+    //if (storedFavorite !== null) {
+      //setAnimal((prevAnimal) => {
+        //if (prevAnimal) {
+          //return { ...prevAnimal, isFavorite: JSON.parse(storedFavorite) };
+        //}
+        //return prevAnimal;
+      //});
+    //}
+    //() => onToggleFavorite(animal?._id)
   }, []);
 
   useEffect(() => {
@@ -294,7 +316,7 @@ export const PetProfile: React.FC = (onToggleFavorite) => {
               {animal.name}
 
               <FavoriteButton
-                onToggleFavorite={() => onToggleFavorite}
+                onToggleFavorite={handleToggleFavorite}
                 animalId={animal._id as ObjectId}
               />
             </Typography>

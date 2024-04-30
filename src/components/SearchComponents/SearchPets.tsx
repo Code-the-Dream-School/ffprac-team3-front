@@ -110,6 +110,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
     favorite: boolean;
   }) => {
     // Check if any new filters are active
+    console.log(newFilters)
     const filtersActive =
       newFilters.keyword ||
       newFilters.type ||
@@ -259,9 +260,9 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
           animal.location.zip
             .toLowerCase()
             .includes(location.zip.toLowerCase()));
-      console.log("Location Matches:", locationMatches);
 
-      const favoriteMatches = !favorite || animal.isFavorite === true;
+      const storedFavoriteAnimals = JSON.parse(localStorage.getItem('favoriteAnimals') || '[]');
+      const favoriteMatches = storedFavoriteAnimals.find(favorite => favorite._id === animal._id);
 
       return (
         (isLocationKeyword || nameAndTypeMatches) &&
