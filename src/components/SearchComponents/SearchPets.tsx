@@ -50,8 +50,8 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
   const [loading, setLoading] = useState(true);
   const [pageTitle, setPageTitle] = useState<string>("Search Results"); // State to hold the title
   const [animals, setAnimals] = useState<Animal[]>([]);
-  const [filteredAnimals, setFilteredAnimals] =
-    useState<Animal[]>([]);
+  const [filteredAnimals, setFilteredAnimals] =useState<Animal[]>([]);
+  const [favoriteAnimals, setFavoriteAnimals] = useState<any>([])
   const [availableStates, setAvailableStates] = useState<string[]>([]);
   const [noResults, setNoResults] = useState(false); // State to track if no results found
   const navigate = useNavigate();
@@ -110,6 +110,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
     favorite: boolean;
   }) => {
     // Check if any new filters are active
+    console.log(newFilters)
     const filtersActive =
       newFilters.keyword ||
       newFilters.type ||
@@ -259,9 +260,9 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
           animal.location.zip
             .toLowerCase()
             .includes(location.zip.toLowerCase()));
-      console.log("Location Matches:", locationMatches);
 
-      const favoriteMatches = !favorite || animal.isFavorite === true;
+      const storedFavoriteAnimals = JSON.parse(localStorage.getItem('favoriteAnimals') || '[]');
+      const favoriteMatches = storedFavoriteAnimals.find(favorite => favorite._id === animal._id);
 
       return (
         (isLocationKeyword || nameAndTypeMatches) &&
@@ -302,13 +303,27 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
 
   // Function to toggle favorite status of an animal
   const handleToggleFavorite = (_id: ObjectId) => {
-    const updatedAnimals = animals.map((animal) =>
-      animal._id === _id ? { ...animal, isFavorite: !animal.isFavorite } : animal
-    );
-    setAnimals(updatedAnimals);
 
-    // Update filtered animals based on the current filters
-    const filtered = applyFilters(updatedAnimals);
+    const jwtToken = localStorage.getItem('jwtToken');
+    const storedFavoriteAnimals = JSON.parse(localStorage.getItem('favoriteAnimals') || '[]');
+    let newFavoriteAnimals = [...storedFavoriteAnimals];
+
+    const animalIndex = storedFavoriteAnimals.findIndex(animal => animal._id === _id);
+
+    if (animalIndex === -1) {
+      const animalToAdd = animals.find(animal => animal._id === _id);
+      if (animalToAdd) {
+        newFavoriteAnimals.push(animalToAdd);
+      }
+    } else {
+      newFavoriteAnimals.splice(animalIndex, 1);
+    }
+
+    setFavoriteAnimals(newFavoriteAnimals);
+    localStorage.setItem('favoriteAnimals', JSON.stringify(newFavoriteAnimals));
+
+
+    const filtered = applyFilters(animals);
     setFilteredAnimals(filtered);
   };
 
