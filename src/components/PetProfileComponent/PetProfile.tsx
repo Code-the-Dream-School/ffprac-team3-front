@@ -131,13 +131,6 @@ export const PetProfile: React.FC = (onToggleFavorite) => {
     const selectedAnimal = animals?.find(
       (animal) => animal._id === String(_id)
     );
-    
-    //if (selectedAnimal) {
-      // Check if the favorite status is stored in localStorage
-      //const storedFavorite = localStorage.getItem(`favorite_${_id}`);
-      //if (storedFavorite !== null) {
-        //selectedAnimal.isFavorite = JSON.parse(storedFavorite);
-      //}
 
       setAnimal(selectedAnimal);
       setLoading(false);
@@ -183,18 +176,6 @@ export const PetProfile: React.FC = (onToggleFavorite) => {
   const handleGoBack = () => {
     navigate(-1);
   };
-
-  //const handleToggleFavorite = () => {
-    //if (animal) {
-      //const newFavoriteState = !animal.isFavorite;
-      //setAnimal({ ...animal, isFavorite: newFavoriteState });
-      // Store the favorite status in localStorage
-      //localStorage.setItem(
-        //`favorite_${animal._id}`,
-        //JSON.stringify(newFavoriteState)
-      //);
-    //}
-  //};
 
 
   const handlePdfUpload = async (event) => {

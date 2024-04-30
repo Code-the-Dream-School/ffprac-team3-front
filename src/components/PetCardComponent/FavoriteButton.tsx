@@ -17,39 +17,6 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = (
 ) => {
   const [isHovered, setIsHovered] = useState(false);
   const favoriteAnimalsStorage = localStorage.getItem('favoriteAnimals')
-  //const favoriteAnimals = JSON.parse(favoriteAnimalsStorage)
-
-  // Load favorite status from localStorage on component mount
-  //useEffect(() => {
-    //const storedFavorites = localStorage.getItem("favoriteAnimals");
-      //if (favorites.includes(animalId)) {
-        // Update local state only if the favorite status has changed
-        //if (isFavorite) {
-          //onToggleFavorite(animalId); // Mark as favorite if found in localStorage
-        //}
-      //}
-    //}
-  //}, [animalId, isFavorite, onToggleFavorite]);
-
-  //const handleToggleFavorite = () => {
-    //onToggleFavorite(animalId); // Pass the new state and animalId to onToggleFavorite
-
-    // Update localStorage with the new list of favorites
-    //const storedFavorites = localStorage.getItem("favorites");
-    //let favorites: ObjectId[] = [];
-    //if (storedFavorites) {
-     // favorites = JSON.parse(storedFavorites);
-    //}
-    //if (!isFavorite) {
-      // If the animal is unliked, remove it from favorites
-     // favorites = favorites.filter((_id: ObjectId) => _id !== animalId);
-    //} else {
-      //favorites.push(animalId);
-    //}
-    //localStorage.setItem("favorites", JSON.stringify(favorites));
-  //};
-
-  //const handleToggleFavorite = (_id: ObjectId) => {
 
   const handleMouseEnter = () => {
     setIsHovered(true);
