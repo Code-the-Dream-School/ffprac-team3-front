@@ -72,13 +72,6 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
     fetchingData();
   }, []);
 
-  useEffect(() => {
-    const storedFavorites = JSON.parse(
-      localStorage.getItem("favoriteAnimals") || "[]"
-    );
-    setFavoriteAnimals(storedFavorites);
-  }, []);
-
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const initialKeyword = searchParams.get("keyword") || "";
