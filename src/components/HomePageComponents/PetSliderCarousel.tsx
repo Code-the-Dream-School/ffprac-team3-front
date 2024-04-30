@@ -4,8 +4,8 @@ import { Container, Box, Typography, IconButton } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { getAllPetData } from "../../util/index";
-import { ObjectId } from 'mongodb';
-import  getBreedListByType from '../PetComponents/PetData/PetData'
+import { ObjectId } from "mongodb";
+import getBreedListByType from "../PetComponents/PetData/PetData";
 
 interface Animal {
   _id: ObjectId;
@@ -17,7 +17,7 @@ interface Animal {
   description: string;
   isFavorite: boolean;
   fileImages: FileImages;
-  location: Location; 
+  location: Location;
 }
 
 interface FileImages {
@@ -39,7 +39,6 @@ interface Location {
   state: string;
   city: string;
   zip: string;
-
 }
 
 export const PetSliderCarousel: React.FC = () => {
@@ -63,9 +62,8 @@ export const PetSliderCarousel: React.FC = () => {
       setAnimals(animalData);
     };
 
-    fetchingData(); 
-  }, []); 
-
+    fetchingData();
+  }, []);
 
   const [scrollPosition, setScrollPosition] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);

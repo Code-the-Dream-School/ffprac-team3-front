@@ -11,14 +11,14 @@ import {
   Button,
   Breadcrumbs,
   Modal,
-  TextField
+  TextField,
 } from "@mui/material";
 import FavoriteButton from "../PetCardComponent/FavoriteButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CircularProgress from "@mui/material/CircularProgress";
 import { getAllPetData, uploadPdf } from "../../util/index";
-import  getBreedListByType from '../PetComponents/PetData/PetData'
-import { ObjectId } from 'mongodb';
+import getBreedListByType from "../PetComponents/PetData/PetData";
+import { ObjectId } from "mongodb";
 
 interface Animal {
   _id: string | ObjectId;
@@ -30,7 +30,7 @@ interface Animal {
   description: string;
   isFavorite: boolean;
   fileImages: FileImages;
-  location: Location; 
+  location: Location;
   fileMedical: FileMedical;
 }
 
@@ -70,7 +70,6 @@ interface Location {
   zip: string;
 }
 
-
 interface PetCardProps {
   animal: Animal;
   onToggleFavorite: (_id: string) => void;
@@ -78,7 +77,11 @@ interface PetCardProps {
 
 export const PetProfile: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const {_id, type, name} = useParams<{ _id: string, type: string, name: string }>();
+  const { _id, type, name } = useParams<{
+    _id: string;
+    type: string;
+    name: string;
+  }>();
   const [animals, setAnimals] = useState<Animal[]>([]);
   const [animal, setAnimal] = useState<Animal | undefined>();
   const [favoriteAnimals, setFavoriteAnimals] = useState<Animal[]>([]);
@@ -112,12 +115,13 @@ export const PetProfile: React.FC = () => {
     localStorage.setItem('favoriteAnimals', JSON.stringify(newFavoriteAnimals));
   };
 
-
-
-
-
   const formatAge = (age: string) => {
     const ageNum = parseFloat(age);
+
+    // Check if ageNum is NaN
+    if (isNaN(ageNum)) {
+      return age; // Return the original age string if it's not a valid number
+    }
     if (ageNum >= 2) {
       return age + " years";
     } else if (ageNum === 1) {
@@ -127,7 +131,6 @@ export const PetProfile: React.FC = () => {
       return months + " months";
     }
   };
-
 
   useEffect(() => {
     const fetchingData = async () => {
@@ -139,13 +142,13 @@ export const PetProfile: React.FC = () => {
           : "", // If the breed is not found in the breed list, set it to an empty string
       }));
       animalData?.map((pet) => {
-        pet._id.toString()
-      })
-      setAnimals(animalData)
+        pet._id.toString();
+      });
+      setAnimals(animalData);
     };
 
-    fetchingData(); 
-  }, []); 
+    fetchingData();
+  }, []);
 
   useEffect(() => {
     // Fetch animal details based on the ID from the URL
@@ -162,7 +165,7 @@ export const PetProfile: React.FC = () => {
     //}
   }, [_id, animals]);
 
-  useEffect(() => {
+  // useEffect(() => {
     // Refresh favorite status on component mount
     //const storedFavorite = localStorage.getItem(`favorite_${_id}`);
     //if (storedFavorite !== null) {
@@ -174,7 +177,7 @@ export const PetProfile: React.FC = () => {
       //});
     //}
     //() => onToggleFavorite(animal?._id)
-  }, []);
+  // }, []);
 
   useEffect(() => {
     // Remember scroll position when component unmounts
@@ -199,18 +202,19 @@ export const PetProfile: React.FC = () => {
     navigate(-1);
   };
 
-
   const handlePdfUpload = async (event) => {
-    event.preventDefault()
-    console.log(file)
-      await uploadPdf(_id, file);
-      setFile('')
-  }
+    event.preventDefault();
+    console.log(file);
+    await uploadPdf(_id, file);
+    setFile("");
+    window.location.reload();
+    setOpen(true);
+  };
 
   const handleSetFile = (e) => {
-    console.log(e.target.files[0])
-    setFile(e.target.files[0])
-  }
+    console.log(e.target.files[0]);
+    setFile(e.target.files[0]);
+  };
 
   if (loading) {
     // Handle case when animal is still loading or not found
@@ -294,8 +298,10 @@ export const PetProfile: React.FC = () => {
               mx: "1rem",
               mt: "2rem",
             }}
-
-            image={'http://localhost:8000/api/v1/pets/uploads/' + animal.fileImages.filename}
+            image={
+              "http://localhost:8000/api/v1/pets/uploads/" +
+              animal.fileImages.filename
+            }
             title={animal.name}
           />
           <Stack
@@ -326,7 +332,9 @@ export const PetProfile: React.FC = () => {
               sx={{ color: "#0E2728", fontWeight: 400, pt: "1.5rem" }}
             >
               {animal.type} &nbsp;|&nbsp; {animal.breed}
-              &nbsp;|&nbsp; {formatAge(animal.age)} &nbsp;|&nbsp; {animal.sex}
+              &nbsp;|&nbsp; {formatAge(
+                animal.age.toString()
+              )} &nbsp;|&nbsp; {animal.sex}
             </Typography>
 
             <Typography
@@ -375,70 +383,106 @@ export const PetProfile: React.FC = () => {
               >
                 pet's medical history
               </Button>
-                <Modal
-                  open={open}
-                  onClose={() => setOpen(false)}
-                  aria-labelledby="modal-modal-title"
-                  aria-describedby="modal-modal-description"
-                >
-                <Box sx={{
+              <Modal
+                open={open}
+                onClose={() => setOpen(false)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box
+                  sx={{
                     py: "8rem",
                     ml: "-8px",
                     pr: "8px",
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
                     width: 400,
                     boxShadow: 24,
                     p: 4,
                     backgroundColor: "#F4F2EA",
-                    textAlign: 'center',
+                    textAlign: "center",
                     borderRadius: "5px",
-                }}>
-                <Typography id="modal-modal-title" variant="h6" component="h2"
-                sx={{color: "#EE633E",
-                fontWeight: 600,
-                letterSpacing: 1}}>
-                  Upload Pet's Medical History
-                </Typography>
-                <form action="/upload" method="patch" ref={formRef} onSubmit={handlePdfUpload} >
-                <TextField id="file" label="" variant="filled" type="file" name="fileMedical" ref={fileRef} onChange={(e) => handleSetFile(e)}/>
-                <Button 
-                variant="contained" 
-                type="submit"
-                sx={{
-                  backgroundColor: "#F8AF3F",
-                  py: "0.3rem",
-                  px: "3rem",
-                  "&:hover": { backgroundColor: "#eea535" },
-                  my: "0.3rem"
-                }}
+                  }}
                 >
-                  Upload
-                </Button>
-                </form>
-                { animal.fileMedical ?
-                <div>
-                  <Typography id="modal-modal-title" variant="h6" component="h2" 
-                  sx={{color: "#EE633E",
-                        fontWeight: 600,
-                        fontSize: '1rem',
-                        letterSpacing: 1}}>
-                  This pet already has a Medical Record
-                  </Typography>
-                  <Typography id="modal-modal-title" variant="h6" component="h2"
-                  sx={{color: "#EE633E",
-                  fontWeight: 600,
-                  fontSize: '1rem',
-                  letterSpacing: 1}}
+                  <Typography
+                    id="modal-modal-title"
+                    variant="h6"
+                    component="h2"
+                    sx={{ color: "#EE633E", fontWeight: 600, letterSpacing: 1 }}
                   >
-                  <a href={'http://localhost:8000/api/v1/pets/history/uploads/' + animal.fileMedical.filename} download={animal.name + ' Medical History'}>View/Download Medical History</a>
+                    Upload Pet's Medical History
                   </Typography>
-                </div>
-                :
-                <p></p>
-                }
+                  <form
+                    action="/upload"
+                    method="patch"
+                    ref={formRef}
+                    onSubmit={handlePdfUpload}
+                  >
+                    <TextField
+                      id="file"
+                      label=""
+                      variant="filled"
+                      type="file"
+                      name="fileMedical"
+                      ref={fileRef}
+                      onChange={(e) => handleSetFile(e)}
+                    />
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      sx={{
+                        backgroundColor: "#F8AF3F",
+                        py: "0.3rem",
+                        px: "3rem",
+                        "&:hover": { backgroundColor: "#eea535" },
+                        my: "0.3rem",
+                      }}
+                    >
+                      Upload
+                    </Button>
+                  </form>
+                  {animal.fileMedical ? (
+                    <div>
+                      <Typography
+                        id="modal-modal-title"
+                        variant="h6"
+                        component="h2"
+                        sx={{
+                          color: "#EE633E",
+                          fontWeight: 600,
+                          fontSize: "1rem",
+                          letterSpacing: 1,
+                        }}
+                      >
+                        This pet already has a Medical Record
+                      </Typography>
+                      <Typography
+                        id="modal-modal-title"
+                        variant="h6"
+                        component="h2"
+                        sx={{
+                          color: "#EE633E",
+                          fontWeight: 600,
+                          fontSize: "1rem",
+                          letterSpacing: 1,
+                        }}
+                      >
+                        <a
+                          href={
+                            "http://localhost:8000/api/v1/pets/history/uploads/" +
+                            animal.fileMedical.filename
+                          }
+                          download={animal.name + " Medical History"}
+                        >
+                          View/Download Medical History
+                        </a>
+                      </Typography>
+                    </div>
+                  ) : (
+                    <p></p>
+                  )}
                 </Box>
               </Modal>
             </CardActions>
