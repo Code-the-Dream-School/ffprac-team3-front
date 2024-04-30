@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Box,
   Grid,
   TextField,
   Button,
@@ -10,35 +11,52 @@ import {
 
 export const ContactForm: React.FC = () => {
   return (
-    <div className="contactform">
-      <Typography gutterBottom variant="h3" align="center">
-        Contact Us
-      </Typography>
-      <Grid container justifyContent="center" alignItems="center">
+    <Box
+      className="contactform"
+      sx={{
+        backgroundColor: "#0E2728",
+        py: "8rem",
+        ml: "-8px",
+        mr: "8px",
+        pl: "8px",
+        width: "100vw",
+        justifyContent: "center",
+      }}
+    >
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        sx={{ px: "1.5rem" }}
+      >
         <Card
           sx={{
-            backgroundColor: "transparent",
-            shadowOpacity: 0,
+            backgroundColor: "#F4F2EA",
             boxShadow: "none",
+            borderRadius: "5px",
+            px: "2rem",
+            py: "3rem",
           }}
         >
+          <Typography
+            gutterBottom
+            variant="h2"
+            component="h1"
+            align="center"
+            sx={{ color: "#0E2728", fontWeight: 600 }}
+          >
+            Contact PetPals
+          </Typography>
           <CardContent>
-            <Typography gutterBottom variant="h5">
-              Contact the PetPals team
+            <Typography variant="body1" gutterBottom sx={{ color: "#506C60" }}>
+              The PetPals team is here to answer your questions. Let's talk!
             </Typography>
-            <Typography
-              variant="body2"
-              color="textSecondary"
-              component="p"
-              gutterBottom
-            >
-              We're here to answer your questions. Let's talk!
-            </Typography>
+
             <form
               action="https://formsubmit.co/petpalspracticum@gmail.com"
               method="POST"
             >
-              <Grid container spacing={1}>
+              <Grid container spacing={2}>
                 <Grid xs={12} sm={6} item>
                   <TextField
                     placeholder="Enter first name"
@@ -99,6 +117,14 @@ export const ContactForm: React.FC = () => {
                     variant="contained"
                     color="primary"
                     fullWidth
+                    sx={{
+                      mt: "1.5rem",
+                      py: ".65rem",
+                      backgroundColor: "#EE633E",
+                      "&:hover": {
+                        backgroundColor: "#F8AF3F",
+                      },
+                    }}
                   >
                     Submit
                   </Button>
@@ -108,6 +134,6 @@ export const ContactForm: React.FC = () => {
           </CardContent>
         </Card>
       </Grid>
-    </div>
+    </Box>
   );
 };
