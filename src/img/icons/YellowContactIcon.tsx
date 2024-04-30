@@ -91,4 +91,3 @@ export const CustomYellowContactIcon = createSvgIcon(
   </YellowContactIcon>,
   "YellowContactIcon"
 );
-export default CustomYellowContactIcon;

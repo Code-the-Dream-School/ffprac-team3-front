@@ -1,21 +1,20 @@
-import axios from 'axios';
+import axios from "axios";
 
 // local testing baseURL
 // const baseURL = 'http://localhost:8000/api/v1';
 
-const baseURL = 'https://ffprac-team3-back.onrender.com/api/v1';
-const registerUserRoute = 'users/register';
-const loginUserRoute = 'users/loginUser';
+const baseURL = "https://ffprac-team3-back.onrender.com/api/v1";
+const registerUserRoute = "users/register";
+const loginUserRoute = "users/loginUser";
 
-const getCurrentUserRoute = 'users/getCurrentUser';
-const updateUserRoute = 'users/updateUser';
-
+const getCurrentUserRoute = "users/getCurrentUser";
+const updateUserRoute = "users/updateUser";
 
 // * || REGISTRATION AND USER LOGIN *
 
 const registerUser = async (userInformation) => {
   const config = {
-    method: 'post',
+    method: "post",
     url: `${baseURL}/${registerUserRoute}`,
     data: { ...userInformation },
   };
@@ -31,14 +30,14 @@ const registerUser = async (userInformation) => {
 
 const loginUser = async (userCredentials) => {
   const config = {
-    method: 'post',
+    method: "post",
     url: `${baseURL}/${loginUserRoute}`,
     data: { ...userCredentials },
   };
 
   try {
     const response = await axios(config);
-    console.log('Successful logged-in!');
+    console.log("Successful logged-in!");
     return response;
   } catch (error) {
     return error.msg;
@@ -46,10 +45,10 @@ const loginUser = async (userCredentials) => {
 };
 
 const getCurrentUser = async () => {
-  const jwtToken = localStorage.getItem('jwtToken');
+  const jwtToken = localStorage.getItem("jwtToken");
 
   const config = {
-    method: 'get',
+    method: "get",
     url: `${baseURL}/${getCurrentUserRoute}`,
     headers: {
       Authorization: `Bearer ${jwtToken}`,
@@ -65,10 +64,10 @@ const getCurrentUser = async () => {
 };
 
 const updateUser = async (userInformation) => {
-  const jwtToken = localStorage.getItem('jwtToken');
+  const jwtToken = localStorage.getItem("jwtToken");
 
   const config = {
-    method: 'patch',
+    method: "patch",
     url: `${baseURL}/${updateUserRoute}`,
     data: { ...userInformation },
     headers: {
@@ -88,10 +87,10 @@ const updateUser = async (userInformation) => {
 // * || PET DATA *
 const getAllPetData = async (url) => {
   const config = {
-    method: 'get',
+    method: "get",
     url: `http://localhost:8000/api/v1/pets/getAllPets`,
   };
-  
+
   try {
     let response = await axios(config);
     return response;
@@ -101,28 +100,36 @@ const getAllPetData = async (url) => {
   }
 };
 
-
 const uploadPdf = async (_id, file) => {
-  console.log(file)
+  const jwtToken = localStorage.getItem("jwtToken");
+
+  console.log(file);
   const formData = new FormData();
-  formData.append('fileMedical', file);
+  formData.append("fileMedical", file);
   const config = {
-    method: 'patch',
+    method: "patch",
     url: `http://localhost:8000/api/v1/pets/medical/update/${_id}`,
     headers: {
-      'Content-Type': 'multipart/form-data',
+      Authorization: `Bearer ${jwtToken}`,
+      "Content-Type": "multipart/form-data",
     },
-    data: formData
-  }
+    data: formData,
+  };
 
   try {
     let response = await axios(config);
     return response;
   } catch (error) {
-    console.error('Error uploading PDF:', error);
+    console.error("Error uploading PDF:", error);
     throw error;
   }
-}
+};
 
-export { registerUser, loginUser, getAllPetData, uploadPdf, updateUser, getCurrentUser };
-
+export {
+  registerUser,
+  loginUser,
+  getAllPetData,
+  uploadPdf,
+  updateUser,
+  getCurrentUser,
+};

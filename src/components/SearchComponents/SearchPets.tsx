@@ -50,8 +50,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
   const [loading, setLoading] = useState(true);
   const [pageTitle, setPageTitle] = useState<string>("Search Results"); // State to hold the title
   const [animals, setAnimals] = useState<Animal[]>([]);
-  const [filteredAnimals, setFilteredAnimals] =
-    useState<Animal[]>([]);
+  const [filteredAnimals, setFilteredAnimals] = useState<Animal[]>([]);
   const [availableStates, setAvailableStates] = useState<string[]>([]);
   const [noResults, setNoResults] = useState(false); // State to track if no results found
   const navigate = useNavigate();
@@ -66,11 +65,11 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
           : "", // If the breed is not found in the breed list, set it to an empty string
       }));
       setAnimals(animalData);
-      setFilteredAnimals(animalData)
+      setFilteredAnimals(animalData);
     };
 
-    fetchingData(); 
-  }, []); 
+    fetchingData();
+  }, []);
 
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
@@ -303,7 +302,9 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
   // Function to toggle favorite status of an animal
   const handleToggleFavorite = (_id: ObjectId) => {
     const updatedAnimals = animals.map((animal) =>
-      animal._id === _id ? { ...animal, isFavorite: !animal.isFavorite } : animal
+      animal._id === _id
+        ? { ...animal, isFavorite: !animal.isFavorite }
+        : animal
     );
     setAnimals(updatedAnimals);
 
@@ -317,7 +318,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
     updateTitle(); // Call the function to update title whenever filters change
     setLoading(false); // Set loading to false after filtering
     console.log("Filters State:", filters);
-  }, [filters]);
+  }, [filters, animals]);
 
   return (
     <Box component="form" sx={{ mt: "5rem" }}>
@@ -368,7 +369,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
                 setPageTitle={setPageTitle}
               />
             </Grid>
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} md={8} sx={{ mt: "5rem" }}>
               <Stack
                 direction="column"
                 sx={{
@@ -376,7 +377,7 @@ export const SearchPets: React.FC<SearchPetsProps> = () => {
                   display: "grid",
                   gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
                   gap: 3,
-                  m: 4,
+                  m: "4rem",
                   marginTop: "4rem",
                 }}
               >

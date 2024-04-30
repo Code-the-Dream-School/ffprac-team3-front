@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { ObjectId } from 'mongodb';
+import { ObjectId } from "mongodb";
 
 interface FavoriteButtonProps {
   isFavorite: boolean;

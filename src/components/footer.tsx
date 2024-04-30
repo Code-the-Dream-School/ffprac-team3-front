@@ -1,7 +1,8 @@
 import React from "react";
-import { Box, Grid, Typography, IconButton, Link } from "@mui/material";
+import { Box, Grid, Typography, IconButton } from "@mui/material";
 
 import { CustomYellowContactIcon } from "../img/icons/YellowContactIcon";
+import { CustomYellowDogIcon } from "../img/icons/CustomYellowDogIcon";
 import HomeIcon from "@mui/icons-material/Home";
 
 export const Footer: React.FC = () => {
@@ -18,7 +19,7 @@ export const Footer: React.FC = () => {
         marginTop: "auto",
       }}
     >
-      <Grid container xs={12} direction="column" alignItems="center">
+      <Grid container direction="column" alignItems="center">
         <Grid
           item
           xs={4}
@@ -50,6 +51,34 @@ export const Footer: React.FC = () => {
             />
             <Typography variant="overline" color="inherit">
               Home
+            </Typography>
+          </IconButton>
+
+          <IconButton
+            href="/search"
+            sx={{
+              flexDirection: "column",
+              color: "#F8AF3F",
+              ml: ".25rem",
+              "&:hover": {
+                color: "#F4F2EA",
+                cursor: "pointer",
+                "& svg": {
+                  fill: "#F4F2EA",
+                },
+              },
+            }}
+          >
+            <CustomYellowDogIcon
+              color="inherit"
+              sx={{
+                width: "5rem",
+                height: "2rem",
+                transition: "color 0.3s",
+              }}
+            />
+            <Typography variant="overline" color="inherit">
+              View Pets
             </Typography>
           </IconButton>
 

@@ -11,9 +11,8 @@ import FavoriteButton from "./FavoriteButton";
 import PetsIcon from "@mui/icons-material/Pets";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
-import { ObjectId } from 'mongodb';
+import { ObjectId } from "mongodb";
 import { useNavigate } from "react-router-dom";
-
 
 interface Animal {
   _id: ObjectId;
@@ -25,7 +24,7 @@ interface Animal {
   description: string;
   isFavorite: boolean;
   fileImages: FileImages;
-  location: Location; 
+  location: Location;
 }
 
 interface FileImages {
@@ -47,7 +46,6 @@ interface Location {
   state: string;
   city: string;
   zip: string;
-
 }
 
 interface PetCardProps {
@@ -55,15 +53,12 @@ interface PetCardProps {
   onToggleFavorite: (_id: ObjectId) => void;
 }
 
-
-
 const PetCard: React.FC<PetCardProps> = ({ animal, onToggleFavorite }) => {
   const navigate = useNavigate();
 
   const handleToggleFavorite = () => {
     onToggleFavorite(animal._id);
   };
-
 
   const handleProfileClick = () => {
     navigate(`/pet-profile/${animal._id}/${animal.type}/${animal.name}`);
@@ -76,10 +71,12 @@ const PetCard: React.FC<PetCardProps> = ({ animal, onToggleFavorite }) => {
       size="lg"
       sx={{ width: "auto", alignItems: "center" }}
     >
-
       <AspectRatio ratio="1" sx={{ width: 200 }}>
         <img
-          src={'http://localhost:8000/api/v1/pets/uploads/' + animal.fileImages.filename}
+          src={
+            "http://localhost:8000/api/v1/pets/uploads/" +
+            animal.fileImages.filename
+          }
           loading="lazy"
           alt={animal.name}
         />
