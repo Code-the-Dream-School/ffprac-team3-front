@@ -5,49 +5,51 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { ObjectId } from 'mongodb';
 
 interface FavoriteButtonProps {
-  isFavorite: boolean;
-  onToggleFavorite: (newState: boolean, animalId: ObjectId) => void;
+  onToggleFavorite: Function;
   animalId: ObjectId;
 }
 
-const FavoriteButton: React.FC<FavoriteButtonProps> = ({
-  isFavorite,
-  onToggleFavorite,
-  animalId,
-}) => {
+const FavoriteButton: React.FC<FavoriteButtonProps> = (
+  {
+    onToggleFavorite,
+    animalId
+  }
+) => {
   const [isHovered, setIsHovered] = useState(false);
+  const favoriteAnimalsStorage = localStorage.getItem('favoriteAnimals')
+  //const favoriteAnimals = JSON.parse(favoriteAnimalsStorage)
 
   // Load favorite status from localStorage on component mount
-  useEffect(() => {
-    const storedFavorites = localStorage.getItem("favorites");
-    if (storedFavorites) {
-      const favorites: ObjectId[] = JSON.parse(storedFavorites);
-      if (favorites.includes(animalId)) {
+  //useEffect(() => {
+    //const storedFavorites = localStorage.getItem("favoriteAnimals");
+      //if (favorites.includes(animalId)) {
         // Update local state only if the favorite status has changed
-        if (isFavorite) {
-          onToggleFavorite(true, animalId); // Mark as favorite if found in localStorage
-        }
-      }
-    }
-  }, [animalId, isFavorite, onToggleFavorite]);
+        //if (isFavorite) {
+          //onToggleFavorite(animalId); // Mark as favorite if found in localStorage
+        //}
+      //}
+    //}
+  //}, [animalId, isFavorite, onToggleFavorite]);
 
-  const handleToggleFavorite = () => {
-    onToggleFavorite(!isFavorite, animalId); // Pass the new state and animalId to onToggleFavorite
+  //const handleToggleFavorite = () => {
+    //onToggleFavorite(animalId); // Pass the new state and animalId to onToggleFavorite
 
     // Update localStorage with the new list of favorites
-    const storedFavorites = localStorage.getItem("favorites");
-    let favorites: ObjectId[] = [];
-    if (storedFavorites) {
-      favorites = JSON.parse(storedFavorites);
-    }
-    if (!isFavorite) {
+    //const storedFavorites = localStorage.getItem("favorites");
+    //let favorites: ObjectId[] = [];
+    //if (storedFavorites) {
+     // favorites = JSON.parse(storedFavorites);
+    //}
+    //if (!isFavorite) {
       // If the animal is unliked, remove it from favorites
-      favorites = favorites.filter((_id: ObjectId) => _id !== animalId);
-    } else {
-      favorites.push(animalId);
-    }
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-  };
+     // favorites = favorites.filter((_id: ObjectId) => _id !== animalId);
+    //} else {
+      //favorites.push(animalId);
+    //}
+    //localStorage.setItem("favorites", JSON.stringify(favorites));
+  //};
+
+  //const handleToggleFavorite = (_id: ObjectId) => {
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -60,11 +62,11 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({
   return (
     <Box>
       <IconButton
-        onClick={handleToggleFavorite}
+        onClick={() => onToggleFavorite(animalId)}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        {isFavorite ? (
+        { favoriteAnimalsStorage?.includes(animalId.toString()) ? (
           <FavoriteIcon
             sx={{
               color: "#F8AF3F",

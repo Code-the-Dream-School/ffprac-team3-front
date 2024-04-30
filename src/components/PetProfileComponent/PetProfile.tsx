@@ -71,8 +71,12 @@ interface Location {
 }
 
 
+interface PetCardProps {
+  animal: Animal;
+  onToggleFavorite: (_id: string) => void;
+}
 
-export const PetProfile: React.FC = () => {
+export const PetProfile: React.FC = (onToggleFavorite) => {
   const [loading, setLoading] = useState(true);
   const {_id, type, name} = useParams<{ _id: string, type: string, name: string }>();
   const [animals, setAnimals] = useState<Animal[]>([]);
@@ -90,10 +94,6 @@ export const PetProfile: React.FC = () => {
 
 
 
-interface PetCardProps {
-  animal: Animal;
-  onToggleFavorite: (_id: string) => void;
-}
 
   const formatAge = (age: string) => {
     const ageNum = parseFloat(age);
@@ -132,21 +132,20 @@ interface PetCardProps {
       (animal) => animal._id === String(_id)
     );
     
-    if (selectedAnimal) {
+    //if (selectedAnimal) {
       // Check if the favorite status is stored in localStorage
-      const storedFavorite = localStorage.getItem(`favorite_${_id}`);
-      if (storedFavorite !== null) {
-        selectedAnimal.isFavorite = JSON.parse(storedFavorite);
-      }
+      //const storedFavorite = localStorage.getItem(`favorite_${_id}`);
+      //if (storedFavorite !== null) {
+        //selectedAnimal.isFavorite = JSON.parse(storedFavorite);
+      //}
 
-     
       setAnimal(selectedAnimal);
       setLoading(false);
       // Scroll to the top of the page
       window.scrollTo(0, 0);
-    } else {
-      setLoading(false);
-    }
+    //} else {
+      //setLoading(false);
+    //}
   }, [_id, animals]);
 
   useEffect(() => {
@@ -185,17 +184,18 @@ interface PetCardProps {
     navigate(-1);
   };
 
-  const handleToggleFavorite = () => {
-    if (animal) {
-      const newFavoriteState = !animal.isFavorite;
-      setAnimal({ ...animal, isFavorite: newFavoriteState });
+  //const handleToggleFavorite = () => {
+    //if (animal) {
+      //const newFavoriteState = !animal.isFavorite;
+      //setAnimal({ ...animal, isFavorite: newFavoriteState });
       // Store the favorite status in localStorage
-      localStorage.setItem(
-        `favorite_${animal._id}`,
-        JSON.stringify(newFavoriteState)
-      );
-    }
-  };
+      //localStorage.setItem(
+        //`favorite_${animal._id}`,
+        //JSON.stringify(newFavoriteState)
+      //);
+    //}
+  //};
+
 
   const handlePdfUpload = async (event) => {
     event.preventDefault()
@@ -313,8 +313,7 @@ interface PetCardProps {
               {animal.name}
 
               <FavoriteButton
-                isFavorite={animal.isFavorite}
-                onToggleFavorite={handleToggleFavorite}
+                onToggleFavorite={() => onToggleFavorite}
                 animalId={animal._id as ObjectId}
               />
             </Typography>

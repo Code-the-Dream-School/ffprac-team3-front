@@ -96,7 +96,6 @@ const PetCard: React.FC<PetCardProps> = ({ animal, onToggleFavorite }) => {
           }}
         />
         <FavoriteButton
-          isFavorite={animal.isFavorite}
           onToggleFavorite={handleToggleFavorite}
           animalId={animal._id}
         />
